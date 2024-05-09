@@ -1,9 +1,7 @@
-using Builders;
 using Components.Health;
 using Components.Interfaces;
 using Components.Settings;
 using Interfaces;
-using Units.Base;
 
 namespace Factories.Decorators
 {
@@ -24,11 +22,7 @@ namespace Factories.Decorators
 
         private HealthComponent CreateHealthController()
         {
-            HealthComponentBuilder builder = new();
-
-            return builder
-                .SetMaxHealth(_healthComponentSettings.BaseHealth)
-                .Build();
+            return new HealthComponent (_healthComponentSettings.BaseHealth);
         }
     }
 }

@@ -1,9 +1,9 @@
-using Builders;
 using Components;
 using Components.Interfaces;
 using Components.Movement;
 using Components.Settings;
 using Interfaces;
+using UnityEngine.AI;
 
 namespace Factories.Decorators
 {
@@ -26,11 +26,14 @@ namespace Factories.Decorators
 
         private NavMeshMovementComponent CreateMovementComponent()
         {
-            NavMeshMovementComponentBuilder builder = new NavMeshMovementComponentBuilder(_entityHolder.SelfTransform.gameObject);
+            var navMeshAgent = _entityHolder.SelfTransform.gameObject.AddComponent<NavMeshAgent>();
 
-            return builder
-                .ApplyNavMeshAgentPreset(_movementComponentSettings.NavMeshAgentTemplate)
-                .Build();
+            if (_movementComponentSettings.NavMeshAgentTemplate!=null)
+            {
+                _movementComponentSettings.NavMeshAgentTemplate.ApplyTo(navMeshAgent);
+            }
+            
+            return new NavMeshMovementComponent(navMeshAgent);
         }
     }
 }

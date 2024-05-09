@@ -11,7 +11,7 @@ namespace Components.Animation
     [Serializable]
     public class AnimationClipData
     {
-        [field: SerializeField, OnValueChanged(nameof(ValidateAnimation))] public AnimationClip AnimationClip { get; private set; }
+        [field: SerializeField] public AnimationClip AnimationClip { get; private set; }
         [field: SerializeField, ValueDropdown(nameof(GetNames))] public string TargetStateName { get; private set; }
         [field: SerializeField] public float TransitionDuration { get; private set; }= 0.25f ;
 
@@ -24,7 +24,8 @@ namespace Components.Animation
         
 #if UNITY_EDITOR
         
-        public void ValidateAnimation()
+        [Button]
+        public void AddDefaultAnimationEvents()
         {
             AnimationUtility.SetAnimationEvents(AnimationClip, Array.Empty<AnimationEvent>());
             AddEvent(nameof(AnimationEventsListener.OnAnimationStart), 0f);
@@ -32,9 +33,11 @@ namespace Components.Animation
 
             void AddEvent(string name, float time)
             {
-                var animEvent = new AnimationEvent();
-                animEvent.functionName = name;
-                animEvent.time = time;
+                var animEvent = new AnimationEvent
+                {
+                    functionName = name,
+                    time = time
+                };
                 AnimationUtility.SetAnimationEvents(AnimationClip, AnimationClip.events.Concat(new []{animEvent}).ToArray());
                 EditorUtility.SetDirty(AnimationClip);
                 AssetDatabase.SaveAssets();

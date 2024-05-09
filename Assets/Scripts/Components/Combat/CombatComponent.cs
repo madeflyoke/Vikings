@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Components.Animation;
 using Components.Combat.Actions;
 using Components.Interfaces;
 
@@ -12,6 +11,10 @@ namespace Components.Combat
         public CombatComponent(List<CombatAction> actions)
         {
             _combatActions = actions;
+            _combatActions.ForEach(x=>
+            {
+                x.Initialize();
+            });
         }
         
         public List<CombatAction> GetCombatActions() => _combatActions;

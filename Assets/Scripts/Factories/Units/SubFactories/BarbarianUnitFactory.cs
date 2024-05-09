@@ -1,7 +1,6 @@
 using System.Linq;
 using Components;
 using Components.Animation;
-using Components.Animation.Interfaces;
 using Components.Combat;
 using Components.Movement;
 using Components.Settings;
@@ -35,10 +34,9 @@ namespace Factories.Units.SubFactories
             var animationComponent = DecorateBy(new AnimationComponentDecorator(entityHolder, Config.ComponentsSettingsHolder
                 .GetComponentSettings<AnimationComponentSettings>())) as AnimationComponent;
             
-            animationComponent.RegisterAnimationCallerMany(combatComponent.GetCombatActions());
-            var movementAnimationCaller = (IAnimationCaller) movementComponent;
+            animationComponent.RegisterAnimationCallerMany(combatComponent.GetCombatActions().Select(x=>x.AnimationCaller));
             
-            animationComponent.RegisterAnimationCaller(ref movementAnimationCaller);
+            animationComponent.RegisterAnimationCaller(movementComponent.AnimationCaller);
             
             return base.CreateProduct();
         }

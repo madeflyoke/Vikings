@@ -3,24 +3,24 @@ using BehaviorDesigner.Runtime.Tasks;
 using BT.Interfaces;
 using Components.Animation;
 using Components.Animation.Enums;
-using Components.Animation.Interfaces;
 using UnityEngine;
 
 namespace Components.Combat.Actions
 {
     [Serializable]
-    public abstract class CombatAction : IBehaviorAction, IAnimationCaller
+    public abstract class CombatAction : IBehaviorAction
     {
-        public Action<IAnimationCaller, AnimationClipData> CallOnAnimation { get; set; }
-        [field: SerializeField] public AnimationClipData AnimationClipData { get; }
+        public AnimationCaller AnimationCaller { get; private set; }
         
-        public virtual void OnAnimationCallback(IAnimationCaller caller, AnimationEventType eventType)
+        [field: SerializeField] public AnimationClipData AnimationClipData { get; }
+
+        public void Initialize()
         {
-            if (caller!=this)
-            {
-                return;
-            }
+            AnimationCaller = new AnimationCaller();
+            AnimationCaller.Callback += OnAnimationCallback;
         }
+        
+        protected virtual void OnAnimationCallback(AnimationEventType eventType) { }
        
         public abstract TaskStatus GetCurrentStatus();
         public abstract void Execute();

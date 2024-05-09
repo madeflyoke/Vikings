@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Components.Animation.Interfaces;
 using Components.Interfaces;
 using Sirenix.Utilities;
 using UnityEngine;
@@ -21,33 +20,32 @@ namespace Components.Animation
       {
          _animator.CrossFadeInFixedTime(name, transitionDuration);
       }
-      
-      private void PlayCustomAnimation(IAnimationCaller caller, AnimationClipData clipData)
+
+      private void PlayCustomAnimation(AnimationCaller caller, AnimationClipData clipData)
       {
-         Debug.LogWarning("PLAYCUSTOM "+clipData);
-         _animationEventsListener.SetCaller(caller);
          if (_animator.runtimeAnimatorController is AnimatorOverrideController overrider)
          {
-            if (clipData.AnimationClip!=null)
+            if (clipData.AnimationClip != null)
             {
                overrider[clipData.TargetStateName] = clipData.AnimationClip;
             }
          }
+
          PlayAnimation(clipData.TargetStateName, clipData.TransitionDuration);
       }
 
-      public void RegisterAnimationCaller(ref IAnimationCaller animationCaller)
+      public void RegisterAnimationCaller(AnimationCaller animationCaller)
       {
-         if (animationCaller!=null)
+         if (animationCaller != null)
          {
             animationCaller.CallOnAnimation += PlayCustomAnimation;
-            _animationEventsListener.AnimationEventFired += animationCaller.OnAnimationCallback;
+            _animationEventsListener.AnimationEventFired += animationCaller.Callback;
          }
       }
-
-      public void RegisterAnimationCallerMany(IEnumerable<IAnimationCaller> animationCallers)
+      
+      public void RegisterAnimationCallerMany(IEnumerable<AnimationCaller> animationCallers)
       {
-         animationCallers.ForEach(x=>RegisterAnimationCaller(ref x));
+         animationCallers.ForEach(RegisterAnimationCaller);
       }
    }
 }

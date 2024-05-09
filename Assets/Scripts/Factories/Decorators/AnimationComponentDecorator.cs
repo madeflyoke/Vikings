@@ -1,8 +1,9 @@
-using Builders;
 using Components;
+using Components.Animation;
 using Components.Interfaces;
 using Components.Settings;
 using Interfaces;
+using UnityEngine;
 
 namespace Factories.Decorators
 {
@@ -19,12 +20,21 @@ namespace Factories.Decorators
 
         public IEntityComponent Decorate()
         {
-            var builder = new AnimationComponentBuilder(_entityHolder.SelfTransform.gameObject);
+            var animationComponent = CreateAnimationComponent();
+            return animationComponent;
+        }
+
+        private AnimationComponent CreateAnimationComponent()
+        {
+            var entityHolderObj = _entityHolder.SelfTransform.gameObject;
             
-            return builder
-                .SetAnimatorData(_animationComponentSettings.Avatar, _animationComponentSettings.OverrideAnimatorController)
-                .AddAnimationEventsListener()
-                .Build();;
+            var animator = entityHolderObj.AddComponent<Animator>();
+            animator.avatar = _animationComponentSettings.Avatar;
+            animator.runtimeAnimatorController = _animationComponentSettings.OverrideAnimatorController;
+
+            var animationEventsListener = entityHolderObj.AddComponent<AnimationEventsListener>();
+            
+            return new AnimationComponent(animator, animationEventsListener);
         }
     }
 }

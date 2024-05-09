@@ -3,13 +3,13 @@ using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 using Sirenix.OdinInspector;
 using Tools;
-using UnityEditor;
 using UnityEngine;
 
 namespace BT.Tools
 {
     public class BehaviorTreeTasksNamesGenerator : MonoBehaviour
     {
+#if UNITY_EDITOR
         [SerializeField] private string _path;
         [SerializeField] private ExternalBehaviorTree _behaviorTree;
     
@@ -26,5 +26,6 @@ namespace BT.Tools
             classGenerator.GenerateStatic(_behaviorTree.name + "TasksNames",
                 finalNames, _path);
         }
+#endif
     }
 }

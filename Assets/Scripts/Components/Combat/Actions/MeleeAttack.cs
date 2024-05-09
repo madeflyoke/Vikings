@@ -1,10 +1,5 @@
-using System;
 using BehaviorDesigner.Runtime.Tasks;
-using Components.Animation;
 using Components.Animation.Enums;
-using Components.Animation.Interfaces;
-using UnityEngine;
-using Utility;
 
 namespace Components.Combat.Actions
 {
@@ -24,8 +19,7 @@ namespace Components.Combat.Actions
         public override void Execute()
         {
             _finished = false;
-            Debug.LogWarning("attack animation...");
-            CallOnAnimation?.Invoke(this, AnimationClipData);
+            AnimationCaller.CallOnAnimation?.Invoke(AnimationCaller, AnimationClipData);
         }
 
         private void SetFinished()
@@ -33,9 +27,8 @@ namespace Components.Combat.Actions
             _finished = true;
         }
 
-        public override void OnAnimationCallback(IAnimationCaller caller, AnimationEventType eventType)
+        protected override void OnAnimationCallback(AnimationEventType eventType)
         {
-            base.OnAnimationCallback(caller, eventType);
             switch (eventType)
             {
                 case AnimationEventType.END:

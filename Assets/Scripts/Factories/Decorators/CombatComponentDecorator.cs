@@ -1,9 +1,8 @@
-using Builders;
-using Components.Animation.Interfaces;
 using Components.Combat;
 using Components.Interfaces;
 using Components.Settings;
 using Interfaces;
+using UnityEngine.EventSystems;
 
 namespace Factories.Decorators
 {
@@ -24,11 +23,7 @@ namespace Factories.Decorators
 
         private CombatComponent CreateCombatComponent()
         {
-            var builder = new CombatComponentBuilder();
-
-            return builder
-                .AddAttackActions(_combatComponentSettings.CombatActions)
-                .Build();
+            return new CombatComponent(_combatComponentSettings.CombatActions);
         }
     }
 }

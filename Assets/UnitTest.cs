@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using BehaviorDesigner.Runtime;
@@ -8,19 +7,15 @@ using BT.Nodes.Conditionals;
 using BT.Shared.Containers;
 using BT.Utility;
 using Components.Animation;
-using Components.Animation.Interfaces;
 using Components.Combat.Actions;
 using Components.Health;
 using Components.Movement;
-using Cysharp.Threading.Tasks;
 using Interfaces;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
-using Sirenix.Utilities;
 using Units.Base;
 using UnityEngine;
 using UnityEngine.AI;
-using Utility;
 
 public class UnitTest : SerializedMonoBehaviour
 {
@@ -48,15 +43,18 @@ public class UnitTest : SerializedMonoBehaviour
     {
         var animationComponent = new AnimationComponent(_animator, gameObject.AddComponent<AnimationEventsListener>());
         
-        _attackActions.Cast<IAnimationCaller>().ForEach(x => animationComponent.RegisterAnimationCaller(ref x));
+        _attackActions.ForEach(x =>
+        {
+            x.Initialize();
+            animationComponent.RegisterAnimationCaller(x.AnimationCaller);
+        });
 
         var entity = gameObject.AddComponent<UnitEntity>();
         var movementComponent = new NavMeshMovementComponent(_agent);
         entity.AddEntityComponent(movementComponent);
 
-        var movementAnimationCaller = (IAnimationCaller) movementComponent;
         
-        animationComponent.RegisterAnimationCaller(ref movementAnimationCaller);
+        animationComponent.RegisterAnimationCaller(movementComponent.AnimationCaller);
 
         MovementSharedContainer movementContainer =
             _behaviorTree.GetCachedVariablesHolder().GetVariable<MovementSharedContainerVariable>().Value;
@@ -93,9 +91,11 @@ public class UnitTest : SerializedMonoBehaviour
             .FindTask<MoveToPoint>(CommonUnitBehaviorTasksNames.MoveToPoint)
             .Initialize(_agent).SetSharedVariables(movementContainer.CurrentDestinationPoint);
         
-        _behaviorTree
-            .FindTask<StopMoving>(CommonUnitBehaviorTasksNames.StopMoving)
-            .Initialize(_agent);
+        _behaviorTree.FindTasks<StopMoving>().ForEach(x=>x.Initialize(_agent));
+        
+        // _behaviorTree
+        //     .FindTask<StopMoving>(CommonUnitBehaviorTasksNames.StopMoving)
+        //     .Initialize(_agent);
 
         _behaviorTree
             .FindTask<ProcessActions>(CommonUnitBehaviorTasksNames.ProcessCombatActions)
