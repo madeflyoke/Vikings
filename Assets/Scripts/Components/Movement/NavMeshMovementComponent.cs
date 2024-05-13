@@ -10,31 +10,33 @@ namespace Components.Movement
     public class NavMeshMovementComponent : IEntityComponent, IDisposable
     {
         public AnimationCaller AnimationCaller { get; }
+        public NavMeshAgent Agent { get; }
         
-        private bool IsAgentMoving => _agent.velocity.magnitude > 0f;
-
-        private readonly NavMeshAgent _agent;
+        private bool IsAgentMoving => Agent.velocity.magnitude > 0f;
         
-        private readonly IDisposable _agentSpeedObserver;
+        private IDisposable _agentSpeedObserver;
 
         public NavMeshMovementComponent(NavMeshAgent agent)
         {
-            _agent = agent;
-
+            Agent = agent;
             AnimationCaller = new AnimationCaller();
+            Initialize();
+        }
 
+        private void Initialize()
+        {
             _agentSpeedObserver = this.ObserveEveryValueChanged(x => x.IsAgentMoving).Skip(1)
                 .Subscribe(x =>
-            {
-                if (x)
                 {
-                    OnAgentMoving();
-                }
-                else
-                {
-                    OnAgentStopped();
-                }
-            });
+                    if (x)
+                    {
+                        OnAgentMoving();
+                    }
+                    else
+                    {
+                        OnAgentStopped();
+                    }
+                });
         }
         
         private void OnAgentMoving()

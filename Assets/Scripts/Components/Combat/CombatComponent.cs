@@ -1,23 +1,24 @@
 using System.Collections.Generic;
 using Components.Combat.Actions;
 using Components.Interfaces;
+using Interfaces;
+using Units.Base;
+using Units.Enums;
+using Utility;
 
 namespace Components.Combat
 {
     public class CombatComponent : IEntityComponent
     {
-        private readonly List<CombatAction> _combatActions;
+        public List<CombatAction> CombatActions { get; }
 
         public CombatComponent(List<CombatAction> actions)
         {
-            _combatActions = actions;
-            _combatActions.ForEach(x=>
+            CombatActions = actions;
+            CombatActions.ForEach(x=>
             {
                 x.Initialize();
             });
         }
-        
-        public List<CombatAction> GetCombatActions() => _combatActions;
-
     }
 }

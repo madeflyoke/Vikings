@@ -1,18 +1,18 @@
 using System;
 using System.Collections.Generic;
-using Components.Health;
 using Components.Interfaces;
 using Factories.Interfaces;
 using Interfaces;
 using Sirenix.OdinInspector;
+using Units.Enums;
 using UnityEngine;
 
 namespace Units.Base
 {
-    public class UnitEntity : MonoBehaviour, IEntity, IFactoryProduct
+    public class UnitEntity : MonoBehaviour, IEntity, IReadOnlyEntity, IFactoryProduct
     {
         [ShowInInspector, ReadOnly] private readonly Dictionary<Type, IEntityComponent> _components = new();
-        
+
         public IEntity AddEntityComponent (IEntityComponent unitEntityComponent)
         {
             var componentType = unitEntityComponent.GetType();

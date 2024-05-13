@@ -11,12 +11,13 @@ using Sirenix.OdinInspector;
 using Units.Base;
 using Units.Configs;
 using Units.Enums;
+using UnityEditor;
 using UnityEngine;
 using Utility;
 
 namespace Factories.Units
 {
-    public class UnitsFactory : SerializedMonoBehaviour, IFactory<UnitEntity>
+    public class UnitsAbstractFactory : SerializedMonoBehaviour, IFactory<UnitEntity>
     {
         [SerializeField] private UnitsConfigsContainer _unitsConfigsContainer;
         [SerializeField, ReadOnly] private Dictionary<UnitVariant, UnitSubFactory> _subFactoriesMap;
@@ -24,9 +25,13 @@ namespace Factories.Units
         private readonly UnitProductRequestData _unitProductRequestData = new ();
         private readonly Dictionary<UnitVariant, UnitEntity> _cachedUnits = new();
         
-        public UnitsFactory SetProductRequestData(UnitVariant unitVariant, Vector3 position = default, Quaternion rotation = default, Transform parent = null)
+        public UnitsAbstractFactory SetProductRequestData(UnitVariant unitVariant, Team team,
+            Vector3 position = default,
+            Quaternion rotation = default, 
+            Transform parent = null)
         {
             _unitProductRequestData.TargetUnitVariant = unitVariant;
+            _unitProductRequestData.TargetUnitTeam = team;
         
             _unitProductRequestData.SpawnData.Position = position;
             _unitProductRequestData.SpawnData.Rotation = rotation;
@@ -47,7 +52,7 @@ namespace Factories.Units
         private UnitEntity CreateTargetUnit()
         {
             return _subFactoriesMap[_unitProductRequestData.TargetUnitVariant]
-                .Initialize(_unitProductRequestData.SpawnData)
+                .Initialize(_unitProductRequestData.SpawnData, _unitProductRequestData.TargetUnitTeam)
                 .CreateProduct();
         }
         
@@ -67,6 +72,7 @@ namespace Factories.Units
         private class UnitProductRequestData
         {
             public UnitVariant TargetUnitVariant = UnitVariant.NONE;
+            public Team TargetUnitTeam = Team.NONE;
             public readonly CustomTransformData SpawnData = new();
         }
         
@@ -105,7 +111,10 @@ namespace Factories.Units
           
         }
 
-        [Button]
+   
+        private bool EDITOR_IsPlayingMode => Application.isPlaying;
+        
+        [Button, ShowIf("EDITOR_IsPlayingMode")]
         private void ValidateSubFactoriesUnits()
         {
             Debug.LogWarning($"Units validation start.");
@@ -134,7 +143,7 @@ namespace Factories.Units
                             {
                                 Parent = parent.transform,
                                 Position = Vector3.zero + new Vector3((int) unitVariant*3,0,0) 
-                            })
+                            }, Team.ALLIES)
                             .CreateProduct();
                     }
                     catch(Exception e)
@@ -148,13 +157,7 @@ namespace Factories.Units
                 }
             }
         }
-
-        private void OnValidate()
-        {
-            // BarbarianUnitFactory.GetRequiredSettings<>()
-        }
-
-
+        
 #endif
     }
 }

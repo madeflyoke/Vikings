@@ -1,34 +1,28 @@
 using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 using BT.Shared;
-using UnityEngine;
 
 namespace BT.Nodes.Conditionals
 {
     public class ValidateDamageableTarget : Conditional
     {
         private SharedDamageable _targetDamageable;
-        private SharedTransform _targetTransform;
+        private SharedTransform _targetTr;
         
-        public void SetSharedVariables(SharedDamageable targetDamageable, SharedTransform targetTransform)
+        public void SetSharedVariables(SharedDamageable targetDamageable, SharedTransform targetTr)
         {
             _targetDamageable = targetDamageable;
-            _targetTransform = targetTransform;
+            _targetTr = targetTr;
         }
 
         public override TaskStatus OnUpdate()
         {
-            return ValidateTransform() && ValidateDamageable() ? TaskStatus.Success : TaskStatus.Failure;
+            return Validate() ? TaskStatus.Success : TaskStatus.Failure;
         }
 
-        private bool ValidateDamageable()
+        private bool Validate()
         {
-            return _targetDamageable.Value.IsAlive;
-        }
-
-        private bool ValidateTransform()
-        {
-            return _targetTransform.Value != null;
+            return _targetTr.Value!=null&&_targetDamageable.Value.IsAlive;
         }
     }
 }

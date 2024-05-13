@@ -1,8 +1,9 @@
+using System;
 using BehaviorDesigner.Runtime;
-using UnityEngine;
 
 namespace BT.Shared.Containers
 {
+    [Serializable]
     public class MovementSharedContainer
     {
         public SharedVector3 CurrentDestinationPoint;

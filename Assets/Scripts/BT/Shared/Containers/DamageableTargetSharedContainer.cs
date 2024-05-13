@@ -1,12 +1,13 @@
+using System;
 using BehaviorDesigner.Runtime;
-using Interfaces;
 
 namespace BT.Shared.Containers
 {
+    [Serializable]
     public class DamageableTargetSharedContainer
     {
-        public SharedDamageable TargetDamageable;
-        public SharedTransform TargetTransform;
+        public SharedDamageable Damageable;
+        public SharedTransform TargetTr;
     }
     
     public class DamageableTargetSharedContainerVariable : SharedVariable<DamageableTargetSharedContainer>

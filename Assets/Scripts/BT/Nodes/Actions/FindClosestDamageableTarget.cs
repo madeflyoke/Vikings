@@ -3,6 +3,7 @@ using System.Linq;
 using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 using BT.Shared;
+using CombatTargetsProviders.Interfaces;
 using Extensions;
 using Interfaces;
 using UnityEngine;
@@ -11,32 +12,40 @@ namespace BT.Nodes.Actions
 {
     public class FindClosestDamageableTarget : Action
     {
-        private SharedDamageable _closestTargetDamageable;
-        private SharedTransform _closestTargetTransform;
-
+        private SharedDamageable _closestDamageable;
+        private SharedTransform _closestTr;
+        
         private SharedTransform _selfTransform;
         
         private Dictionary<Transform, IDamageable> _targets;
+        private ICombatTargetsProvider _combatTargetsProvider;
 
-        public FindClosestDamageableTarget Initialize(Dictionary<Transform, IDamageable> targets)
+        public FindClosestDamageableTarget Initialize(ICombatTargetsProvider combatTargetsProvider)
         {
-            _targets = targets;
+            _combatTargetsProvider = combatTargetsProvider;
             return this;
         }
         
-        public void SetSharedVariables(SharedTransform selfTransform, SharedDamageable resultTargetDamageable, SharedTransform resultTargetTransform)
+        public void SetSharedVariables(SharedTransform selfTransform, SharedDamageable closestDamageable, SharedTransform closestTr)
         {
             _selfTransform = selfTransform;
-            _closestTargetDamageable = resultTargetDamageable;
-            _closestTargetTransform = resultTargetTransform;
+            _closestDamageable = closestDamageable;
+            _closestTr = closestTr;
+        }
+
+        public override void OnStart()
+        {
+            base.OnStart();
+            _targets ??= _combatTargetsProvider.GetCombatTargets()
+                .ToDictionary(x=>x.TargetTr, z=>z.Damageable); //may be not spawned yet?
         }
 
         public override TaskStatus OnUpdate()
         {
             if (UpdateTargets())
             {
-                _closestTargetTransform.Value = _selfTransform.Value.GetClosestTransform(_targets.Keys);
-                _closestTargetDamageable.Value = _targets[_closestTargetTransform.Value];
+                _closestTr.Value =_selfTransform.Value.GetClosestTransform(_targets.Keys);
+                _closestDamageable.Value = _targets[_closestTr.Value];
                 return TaskStatus.Success;
             }
 
@@ -53,7 +62,5 @@ namespace BT.Nodes.Actions
             }
             return _targets.Count != 0;
         }
-
-
     }
 }

@@ -7,7 +7,7 @@ namespace Tools
 {
     public class ClassGenerator
     {
-        public void GenerateStatic(string className, List<string> content, string path)
+        public void GenerateStatic(string className, IEnumerable<string> content, string path)
         {
             string fileName = Path.Combine(path, className + ".cs");
             string classContent = String.Empty;

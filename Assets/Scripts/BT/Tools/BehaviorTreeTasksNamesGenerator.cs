@@ -1,7 +1,9 @@
+using System.Collections.Generic;
 using System.Linq;
 using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 using Sirenix.OdinInspector;
+using Sirenix.Utilities;
 using Tools;
 using UnityEngine;
 
@@ -11,20 +13,35 @@ namespace BT.Tools
     {
 #if UNITY_EDITOR
         [SerializeField] private string _path;
-        [SerializeField] private ExternalBehaviorTree _behaviorTree;
+        [SerializeField] private List<ExternalBehaviorTree> _externalBehaviorTrees;
     
         [Button, UnityEngine.Tooltip("Play Mode only")]
         private void Generate()
         {
             ClassGenerator classGenerator = new ClassGenerator();
 
-            var actionTasksNames = _behaviorTree.FindTasks<Action>().Select(x => x.FriendlyName);
-            var conditionalTasksNames = _behaviorTree.FindTasks<Conditional>().Select(x => x.FriendlyName);
+            Dictionary<string, List<string>> _tasksNamesMap = new();
 
-            var finalNames = actionTasksNames.Concat(conditionalTasksNames).ToList();
-        
-            classGenerator.GenerateStatic(_behaviorTree.name + "TasksNames",
-                finalNames, _path);
+            _tasksNamesMap = _externalBehaviorTrees.ToDictionary(x => x.name,
+                z => z.FindTasks<Action>().Select(x => x.FriendlyName)
+                    .Concat(z.FindTasks<Conditional>().Select(v=>v.FriendlyName)).ToList());
+            
+            var similarElements = _tasksNamesMap.Values.SelectMany(x=>x).ToList()
+                .GroupBy(x => x)
+                .Where(g => g.Count() > 1)
+                .Select(g => g.Key)
+                .ToList();
+            
+            for (int i = 0; i < _tasksNamesMap.Keys.Count; i++)
+            {
+                var key = _tasksNamesMap.Keys.ToList()[i];
+                _tasksNamesMap[key] = _tasksNamesMap[key].Except(similarElements).ToList();
+                classGenerator.GenerateStatic($"{key}TasksNames",
+                        _tasksNamesMap[key], _path);
+            }
+            
+            classGenerator.GenerateStatic("CommonBehaviorTasksNames",
+                similarElements, _path);
         }
 #endif
     }

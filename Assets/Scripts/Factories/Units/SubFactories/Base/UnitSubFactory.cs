@@ -1,9 +1,13 @@
+using Components;
 using Components.Interfaces;
 using Factories.Components;
+using Factories.Decorators;
 using Factories.Interfaces;
 using Interfaces;
 using Units.Base;
+using Units.Components;
 using Units.Configs;
+using Units.Enums;
 using Unity.Collections;
 using UnityEngine;
 using Utility;
@@ -12,12 +16,18 @@ namespace Factories.Units.SubFactories.Base
 {
     public abstract class UnitSubFactory : MonoBehaviour, IFactory<UnitEntity>
     {
+        protected IReadOnlyEntity Entity;
+        
         [field: SerializeField, ReadOnly] protected UnitConfig Config { get; private set; }
+        [SerializeField] private EntityHolder _entityHolder;
         private UnitEntity _unitEntity;
 
-        public UnitSubFactory Initialize(CustomTransformData spawnData)
+        public UnitSubFactory Initialize(CustomTransformData spawnData, Team team)
         {
-            _unitEntity = new EntityFactory<UnitEntity>(spawnData, Config.UnitVariant.ToString()).CreateProduct();
+            _unitEntity = new EntityFactory<UnitEntity>(spawnData, _entityHolder, Config.UnitVariant.ToString()).CreateProduct();
+            DecorateBy(new TagHolderDecorator(new UnitTagHolder(team)));
+            
+            Entity = _unitEntity;
             
 #if UNITY_EDITOR
             Debug.LogWarning($"Unit {Config.UnitVariant} initialized with base entity.");
@@ -40,12 +50,6 @@ namespace Factories.Units.SubFactories.Base
 #endif
             
             return component;
-            
-        }
-        
-        protected TComponent GetEntityComponent<TComponent>() where TComponent : IEntityComponent
-        {
-            return _unitEntity.GetEntityComponent<TComponent>();
         }
 
 #if UNITY_EDITOR
@@ -53,6 +57,8 @@ namespace Factories.Units.SubFactories.Base
         public UnitSubFactory SetRelatedConfig(UnitConfig config)
         {
             Config = config;
+            _entityHolder = Resources.Load<EntityHolder>("EmptyUnitHolder");
+
             return this;
         }
 #endif

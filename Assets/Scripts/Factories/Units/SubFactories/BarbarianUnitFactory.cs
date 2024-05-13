@@ -1,6 +1,7 @@
 using System.Linq;
 using Components;
 using Components.Animation;
+using Components.BT;
 using Components.Combat;
 using Components.Movement;
 using Components.Settings;
@@ -17,7 +18,7 @@ namespace Factories.Units.SubFactories
     {
         public override UnitEntity CreateProduct()
         {
-            var entityHolder = GetEntityComponent<EntityHolder>();
+            var entityHolder = Entity.GetEntityComponent<EntityHolder>();
             
             DecorateBy(new ModelHolderDecorator(entityHolder, Config.ComponentsSettingsHolder
                 .GetComponentSettings<ModelHolderSettings>()));
@@ -34,9 +35,14 @@ namespace Factories.Units.SubFactories
             var animationComponent = DecorateBy(new AnimationComponentDecorator(entityHolder, Config.ComponentsSettingsHolder
                 .GetComponentSettings<AnimationComponentSettings>())) as AnimationComponent;
             
-            animationComponent.RegisterAnimationCallerMany(combatComponent.GetCombatActions().Select(x=>x.AnimationCaller));
+            animationComponent.RegisterAnimationCallerMany(combatComponent.CombatActions.Select(x=>x.AnimationCaller));
             
             animationComponent.RegisterAnimationCaller(movementComponent.AnimationCaller);
+            
+            var behaviorComponent = DecorateBy(new BehaviorTreeComponentDecorator(
+                    Config.ComponentsSettingsHolder.GetComponentSettings<BehaviorTreeComponentSettings>(), Entity)) as BehaviorTreeComponentHolder;
+
+            BattleController.Instance.StartBattleEvent += () => behaviorComponent.StartBehavior();
             
             return base.CreateProduct();
         }

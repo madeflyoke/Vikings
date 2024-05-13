@@ -1,10 +1,13 @@
+using System;
 using BehaviorDesigner.Runtime;
+using UnityEngine;
 
 namespace BT.Shared.Containers
 {
+    [Serializable]
     public class SelfGeneralDataSharedContainer
     {
-        public SharedTransform SelfTransform;
+        public Transform SelfTransform;
     }
     
     public class SelfGeneralDataSharedContainerVariable : SharedVariable<SelfGeneralDataSharedContainer>

@@ -8,9 +8,10 @@ using UnityEngine;
 
 namespace BT.Tools
 {
-    public class BehaviorTreeCachedVariablesHolder : SerializedMonoBehaviour
+    [Serializable]
+    public class BehaviorTreeCachedVariablesHolder
     {
-        [SerializeField] private BehaviorTree _behaviorTree;
+        [SerializeField] private ExternalBehaviorTree _externalBehaviorTree;
         [OdinSerialize, ReadOnly] private Dictionary<Type, SharedVariable> _sharedVariables;
 
         public TVariable GetVariable<TVariable>() where  TVariable : SharedVariable
@@ -23,19 +24,8 @@ namespace BT.Tools
         [Button]
         private void Setup()
         {
-            _sharedVariables = _behaviorTree.GetAllVariables().ToDictionary(x => x.GetType());
+            _sharedVariables = _externalBehaviorTree.BehaviorSource.GetAllVariables().ToDictionary(x => x.GetType(),z=>z);
         }
-        
-        private void OnValidate()
-        {
-            if (_behaviorTree==null)
-            {
-                _behaviorTree = GetComponent<BehaviorTree>();
-            }
-            Setup();
-        }
-        
 #endif
-       
     }
 }

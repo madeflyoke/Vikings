@@ -1,11 +1,17 @@
 using Components.Interfaces;
+using Units.Enums;
 
 namespace Interfaces
 {
     public interface IEntity
     {
-        public abstract IEntity AddEntityComponent(IEntityComponent unitEntityComponent);
+        public IEntity AddEntityComponent(IEntityComponent unitEntityComponent);
 
-        public abstract TComponent GetEntityComponent<TComponent>() where TComponent : IEntityComponent;
+        public TComponent GetEntityComponent<TComponent>() where TComponent : IEntityComponent;
+    }
+
+    public interface IReadOnlyEntity
+    {
+        public TComponent GetEntityComponent<TComponent>() where TComponent : IEntityComponent;
     }
 }

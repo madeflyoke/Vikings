@@ -10,6 +10,5 @@ namespace Extensions
         {
             return values.OrderBy(x => Vector3.Distance(selfTransform.position, x.transform.position)).FirstOrDefault();
         }
-        
     }
 }
