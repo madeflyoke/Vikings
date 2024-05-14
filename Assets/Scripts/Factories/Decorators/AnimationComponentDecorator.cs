@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Components;
 using Components.Animation;
 using Components.Interfaces;
@@ -30,11 +31,22 @@ namespace Factories.Decorators
             
             var animator = entityHolderObj.AddComponent<Animator>();
             animator.avatar = _animationComponentSettings.Avatar;
-            animator.runtimeAnimatorController = _animationComponentSettings.OverrideAnimatorController;
+            animator.runtimeAnimatorController = CreateOverrideController();
 
             var animationEventsListener = entityHolderObj.AddComponent<AnimationEventsListener>();
             
             return new AnimationComponent(animator, animationEventsListener);
+        }
+
+        private AnimatorOverrideController CreateOverrideController()
+        {
+            AnimatorOverrideController controllerCopy =
+                new AnimatorOverrideController(_animationComponentSettings.OverrideAnimatorController); 
+
+            var overrides = new List<KeyValuePair<AnimationClip, AnimationClip>>();
+            _animationComponentSettings.OverrideAnimatorController.GetOverrides(overrides);
+            controllerCopy.ApplyOverrides(overrides);
+            return controllerCopy;
         }
     }
 }

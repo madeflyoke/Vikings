@@ -9,5 +9,10 @@ namespace Components.Settings
     {
         public Avatar Avatar;
         public AnimatorOverrideController OverrideAnimatorController;
+        
+        
+#if UNITY_EDITOR
+        public void OnManualValidate(){}
+#endif
     }
 }

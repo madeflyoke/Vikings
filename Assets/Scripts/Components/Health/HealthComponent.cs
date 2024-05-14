@@ -28,5 +28,10 @@ namespace Components.Health
                 HealthEmptyEvent?.Invoke();
             }
         }
+
+        public void InitializeComponent()
+        {
+            
+        }
     }
 }

@@ -1,15 +1,11 @@
 using BehaviorDesigner.Runtime.Tasks;
+using UnityEngine;
 
 namespace BT.Nodes.Conditionals
 {
     public class InPreparingProcess : Conditional
     {
         private bool _isReady;
-
-        public void Initialize(ref System.Action onReadyAction)
-        {
-            onReadyAction += SetReady;
-        }
         
         public override TaskStatus OnUpdate()
         {

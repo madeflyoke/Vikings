@@ -1,11 +1,13 @@
+using System;
+using System.Text;
 using Components;
 using Components.Interfaces;
+using Components.TagHolder;
 using Factories.Components;
 using Factories.Decorators;
 using Factories.Interfaces;
 using Interfaces;
 using Units.Base;
-using Units.Components;
 using Units.Configs;
 using Units.Enums;
 using Unity.Collections;
@@ -24,7 +26,10 @@ namespace Factories.Units.SubFactories.Base
 
         public UnitSubFactory Initialize(CustomTransformData spawnData, Team team)
         {
-            _unitEntity = new EntityFactory<UnitEntity>(spawnData, _entityHolder, Config.UnitVariant.ToString()).CreateProduct();
+            var uniqueId = Guid.NewGuid().ToString().Substring(0, 5);
+            var unitName = new StringBuilder().Append(Config.UnitVariant).Append("_").Append(uniqueId).ToString();
+            
+            _unitEntity = new EntityFactory<UnitEntity>(spawnData, _entityHolder, unitName).CreateProduct();
             DecorateBy(new TagHolderDecorator(new UnitTagHolder(team)));
             
             Entity = _unitEntity;

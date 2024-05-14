@@ -17,5 +17,9 @@ namespace Components
         }
 
 #endif
+        public void InitializeComponent()
+        {
+            
+        }
     }
 }

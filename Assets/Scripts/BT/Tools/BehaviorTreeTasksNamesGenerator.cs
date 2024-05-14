@@ -15,7 +15,7 @@ namespace BT.Tools
         [SerializeField] private string _path;
         [SerializeField] private List<ExternalBehaviorTree> _externalBehaviorTrees;
     
-        [Button, UnityEngine.Tooltip("Play Mode only")]
+        [Button]
         private void Generate()
         {
             ClassGenerator classGenerator = new ClassGenerator();

@@ -19,6 +19,10 @@ namespace Components.View
             _relatedMaterials = _renderer.sharedMaterials.ToList();
         }
 #endif
+        public void InitializeComponent()
+        {
+            
+        }
     }
 }
 

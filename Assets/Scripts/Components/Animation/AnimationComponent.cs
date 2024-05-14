@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Components.Interfaces;
 using Sirenix.Utilities;
 using UnityEngine;
+using Utility;
 
 namespace Components.Animation
 {
@@ -15,7 +16,15 @@ namespace Components.Animation
          _animator = animator;
          _animationEventsListener = eventsListener;
       }
+      
+      public void InitializeComponent() { }
 
+      public void SetAnimatorStateSpeedMultiplier(string parameterName, float speed)
+      {
+         _animator.SetFloat(parameterName,speed);
+         Debug.LogWarning("Speed "+speed);
+      }
+      
       private void PlayAnimation(string name, float transitionDuration = 0.25f)
       {
          _animator.CrossFadeInFixedTime(name, transitionDuration);

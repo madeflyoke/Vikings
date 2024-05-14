@@ -20,6 +20,7 @@ MonoBehaviour:
     - {fileID: 2655988077585873504, guid: b694cfbed49cce44e8cc48ae6a27e5b4, type: 2}
     - {fileID: 9000000, guid: a58d63122b09e9144938cd6a1ece4824, type: 3}
     - {fileID: 22100000, guid: b6ba0e2dc885e634c927a3d40c352e15, type: 2}
+    - {fileID: 7400000, guid: 6019f1b4a095b0b4396f5561a51fee89, type: 2}
     - {fileID: 7400000, guid: eccbae3cfc77ad245ade46e143aa3200, type: 2}
     - {fileID: 11400000, guid: 07a373a7193ea3647b6fd3e2e150e67f, type: 2}
     SerializedBytesString: 
@@ -79,19 +80,34 @@ MonoBehaviour:
     - Name: 
       Entry: 7
       Data: 6|Components.Settings.CombatComponentSettings, Assembly-CSharp
-    - Name: CombatActions
+    - Name: BaseCombatStats
       Entry: 7
-      Data: 7|System.Collections.Generic.List`1[[Components.Combat.Actions.CombatAction,
+      Data: 7|Components.Combat.CommonCombatStats, Assembly-CSharp
+    - Name: AttackDamage
+      Entry: 3
+      Data: 5
+    - Name: AttackSpeed
+      Entry: 4
+      Data: 1
+    - Name: AttackRange
+      Entry: 4
+      Data: 5
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: CombatActionsSequence
+      Entry: 7
+      Data: 8|System.Collections.Generic.List`1[[Components.Combat.Actions.Setups.CommonCombatActionSetup,
         Assembly-CSharp]], mscorlib
     - Name: 
       Entry: 12
-      Data: 1
+      Data: 3
     - Name: 
       Entry: 7
-      Data: 8|Components.Combat.Actions.MeleeAttack, Assembly-CSharp
-    - Name: <AnimationClipData>k__BackingField
+      Data: 9|Components.Combat.Actions.Setups.MeleeAttackSetup, Assembly-CSharp
+    - Name: AnimationClipData
       Entry: 7
-      Data: 9|Components.Animation.AnimationClipData, Assembly-CSharp
+      Data: 10|Components.Animation.AnimationClipData, Assembly-CSharp
     - Name: <AnimationClip>k__BackingField
       Entry: 10
       Data: 4
@@ -104,6 +120,75 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
+    - Name: AttackDamageMultiplier
+      Entry: 3
+      Data: 1
+    - Name: EDITOR_finalDamage
+      Entry: 4
+      Data: 5
+    - Name: Weapon
+      Entry: 6
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 11|Components.Combat.Actions.Setups.MeleeAttackSetup, Assembly-CSharp
+    - Name: AnimationClipData
+      Entry: 7
+      Data: 12|Components.Animation.AnimationClipData, Assembly-CSharp
+    - Name: <AnimationClip>k__BackingField
+      Entry: 10
+      Data: 5
+    - Name: <TargetStateName>k__BackingField
+      Entry: 1
+      Data: CombatAction
+    - Name: <TransitionDuration>k__BackingField
+      Entry: 4
+      Data: 0.25
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: AttackDamageMultiplier
+      Entry: 3
+      Data: 1
+    - Name: EDITOR_finalDamage
+      Entry: 4
+      Data: 5
+    - Name: Weapon
+      Entry: 6
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 13|Components.Combat.Actions.Setups.MeleeAttackSetup, Assembly-CSharp
+    - Name: AnimationClipData
+      Entry: 7
+      Data: 14|Components.Animation.AnimationClipData, Assembly-CSharp
+    - Name: <AnimationClip>k__BackingField
+      Entry: 10
+      Data: 5
+    - Name: <TargetStateName>k__BackingField
+      Entry: 1
+      Data: CombatAction
+    - Name: <TransitionDuration>k__BackingField
+      Entry: 4
+      Data: 0.25
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: AttackDamageMultiplier
+      Entry: 3
+      Data: 1
+    - Name: EDITOR_finalDamage
+      Entry: 4
+      Data: 5
+    - Name: Weapon
+      Entry: 6
+      Data: 
     - Name: 
       Entry: 8
       Data: 
@@ -118,291 +203,10 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 10|Components.Settings.BehaviorTreeComponentSettings, Assembly-CSharp
+      Data: 15|Components.Settings.BehaviorTreeComponentSettings, Assembly-CSharp
     - Name: ExternalBehaviorTree
       Entry: 10
-      Data: 5
-    - Name: CachedVariablesHolder
-      Entry: 7
-      Data: 11|BT.Tools.BehaviorTreeCachedVariablesHolder, Assembly-CSharp
-    - Name: _externalBehaviorTree
-      Entry: 10
-      Data: 5
-    - Name: _sharedVariables
-      Entry: 7
-      Data: 12|System.Collections.Generic.Dictionary`2[[System.Type, mscorlib],[BehaviorDesigner.Runtime.SharedVariable,
-        BehaviorDesigner.Runtime]], mscorlib
-    - Name: comparer
-      Entry: 7
-      Data: 13|System.Collections.Generic.ObjectEqualityComparer`1[[System.Type,
-        mscorlib]], mscorlib
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 12
-      Data: 3
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 7
-      Data: 14|System.RuntimeType, mscorlib
-    - Name: 
-      Entry: 1
-      Data: BT.Shared.Containers.DamageableTargetSharedContainerVariable, Assembly-CSharp
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: $v
-      Entry: 7
-      Data: 15|BT.Shared.Containers.DamageableTargetSharedContainerVariable, Assembly-CSharp
-    - Name: mIsShared
-      Entry: 5
-      Data: true
-    - Name: mIsGlobal
-      Entry: 5
-      Data: false
-    - Name: mIsDynamic
-      Entry: 5
-      Data: false
-    - Name: mName
-      Entry: 1
-      Data: DamageableTargetContainer
-    - Name: mToolTip
-      Entry: 6
-      Data: 
-    - Name: mPropertyMapping
-      Entry: 6
-      Data: 
-    - Name: mPropertyMappingOwner
-      Entry: 6
-      Data: 
-    - Name: mValue
-      Entry: 7
-      Data: 16|BT.Shared.Containers.DamageableTargetSharedContainer, Assembly-CSharp
-    - Name: TargetDamageableTarget
-      Entry: 7
-      Data: 17|BT.Shared.SharedDamageableTarget, Assembly-CSharp
-    - Name: mIsShared
-      Entry: 5
-      Data: false
-    - Name: mIsGlobal
-      Entry: 5
-      Data: false
-    - Name: mIsDynamic
-      Entry: 5
-      Data: false
-    - Name: mName
-      Entry: 6
-      Data: 
-    - Name: mToolTip
-      Entry: 6
-      Data: 
-    - Name: mPropertyMapping
-      Entry: 6
-      Data: 
-    - Name: mPropertyMappingOwner
-      Entry: 6
-      Data: 
-    - Name: mValue
-      Entry: 6
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 7
-      Data: 18|System.RuntimeType, mscorlib
-    - Name: 
-      Entry: 1
-      Data: BT.Shared.Containers.SelfGeneralDataSharedContainerVariable, Assembly-CSharp
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: $v
-      Entry: 7
-      Data: 19|BT.Shared.Containers.SelfGeneralDataSharedContainerVariable, Assembly-CSharp
-    - Name: mIsShared
-      Entry: 5
-      Data: true
-    - Name: mIsGlobal
-      Entry: 5
-      Data: false
-    - Name: mIsDynamic
-      Entry: 5
-      Data: false
-    - Name: mName
-      Entry: 1
-      Data: SelfGeneralContainer
-    - Name: mToolTip
-      Entry: 6
-      Data: 
-    - Name: mPropertyMapping
-      Entry: 6
-      Data: 
-    - Name: mPropertyMappingOwner
-      Entry: 6
-      Data: 
-    - Name: mValue
-      Entry: 7
-      Data: 20|BT.Shared.Containers.SelfGeneralDataSharedContainer, Assembly-CSharp
-    - Name: SelfTransform
-      Entry: 7
-      Data: 21|BehaviorDesigner.Runtime.SharedTransform, Assembly-CSharp
-    - Name: mIsShared
-      Entry: 5
-      Data: false
-    - Name: mIsGlobal
-      Entry: 5
-      Data: false
-    - Name: mIsDynamic
-      Entry: 5
-      Data: false
-    - Name: mName
-      Entry: 6
-      Data: 
-    - Name: mToolTip
-      Entry: 6
-      Data: 
-    - Name: mPropertyMapping
-      Entry: 6
-      Data: 
-    - Name: mPropertyMappingOwner
-      Entry: 6
-      Data: 
-    - Name: mValue
-      Entry: 6
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 7
-      Data: 22|System.RuntimeType, mscorlib
-    - Name: 
-      Entry: 1
-      Data: BT.Shared.Containers.MovementSharedContainerVariable, Assembly-CSharp
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: $v
-      Entry: 7
-      Data: 23|BT.Shared.Containers.MovementSharedContainerVariable, Assembly-CSharp
-    - Name: mIsShared
-      Entry: 5
-      Data: true
-    - Name: mIsGlobal
-      Entry: 5
-      Data: false
-    - Name: mIsDynamic
-      Entry: 5
-      Data: false
-    - Name: mName
-      Entry: 1
-      Data: MovementContainer
-    - Name: mToolTip
-      Entry: 6
-      Data: 
-    - Name: mPropertyMapping
-      Entry: 6
-      Data: 
-    - Name: mPropertyMappingOwner
-      Entry: 6
-      Data: 
-    - Name: mValue
-      Entry: 7
-      Data: 24|BT.Shared.Containers.MovementSharedContainer, Assembly-CSharp
-    - Name: CurrentDestinationPoint
-      Entry: 7
-      Data: 25|BehaviorDesigner.Runtime.SharedVector3, Assembly-CSharp
-    - Name: mIsShared
-      Entry: 5
-      Data: false
-    - Name: mIsGlobal
-      Entry: 5
-      Data: false
-    - Name: mIsDynamic
-      Entry: 5
-      Data: false
-    - Name: mName
-      Entry: 6
-      Data: 
-    - Name: mToolTip
-      Entry: 6
-      Data: 
-    - Name: mPropertyMapping
-      Entry: 6
-      Data: 
-    - Name: mPropertyMappingOwner
-      Entry: 6
-      Data: 
-    - Name: mValue
-      Entry: 7
-      Data: UnityEngine.Vector3, UnityEngine.CoreModule
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: BehaviorTreeInstaller
-      Entry: 7
-      Data: 26|Components.BT.Units.MeleeUnitBehaviorTreeInstaller, Assembly-CSharp
-    - Name: 
-      Entry: 8
-      Data: 
+      Data: 6
     - Name: 
       Entry: 8
       Data: 

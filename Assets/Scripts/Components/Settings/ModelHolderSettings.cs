@@ -8,5 +8,9 @@ namespace Components.Settings
     public class ModelHolderSettings : IComponentSettings
     {
         public ModelHolder ModelHolderPrefab;
+        
+#if UNITY_EDITOR
+        public void OnManualValidate(){}
+#endif
     }
 }

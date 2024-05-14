@@ -14,5 +14,14 @@ namespace Units.Configs
         
         [BoxGroup("ComponentsSettings")] 
         [field: OdinSerialize] public ComponentsSettingsHolder ComponentsSettingsHolder { get; private set; }= new();
+        
+#if UNITY_EDITOR
+
+        private void OnValidate()
+        {
+            ComponentsSettingsHolder.OnManualValidate();
+        }
+
+#endif
     }
 }

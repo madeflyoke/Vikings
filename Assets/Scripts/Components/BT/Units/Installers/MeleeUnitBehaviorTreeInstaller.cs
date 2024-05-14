@@ -10,44 +10,49 @@ using BT.Tools;
 using BT.Utility;
 using CombatTargetsProviders.Interfaces;
 using Components.BT.Interfaces;
-using Components.Combat;
+using Components.BT.Units.Installers.Data;
 using Components.Combat.Actions;
-using Components.Movement;
-using Interfaces;
-using Units.Components;
+using Components.Combat.Interfaces;
 using UnityEngine.AI;
 
-namespace Components.BT.Units
+namespace Components.BT.Units.Installers
 {
-    public class MeleeUnitBehaviorTreeInstaller : IBehaviorTreeInstaller
+    public class MeleeUnitBehaviorTreeInstaller : IBehaviorTreeInstaller //used in config
     {
         private BehaviorTree _behaviorTree;
         private Dictionary<Type, SharedVariable> _sharedContainers;
-        
-        public IBehaviorTreeInstaller Install(BehaviorTree behaviorTree, BehaviorTreeCachedVariablesHolder cachedVariablesHolder, IReadOnlyEntity entity,
-        out Action startTrigger)
+        private BehaviorTreeCachedVariablesHolder _cachedVariablesHolder;
+
+        public void Install(BehaviorTree behaviorTree, IBehaviorTreeInstallerData behaviorTreeInstallerData)
         {
             _behaviorTree = behaviorTree;
-            SetupSharedContainers(cachedVariablesHolder, entity.GetEntityComponent<EntityHolder>());
-            SetupNavMeshMovementTasks(entity.GetEntityComponent<NavMeshMovementComponent>().Agent);
-            SetupCombatTasks(entity.GetEntityComponent<CombatComponent>().CombatActions, 
-                UnitsTeamSpawnersHolder.Instance.GetOpponentsTargetsProvider(entity.GetEntityComponent<UnitTagHolder>().Team));
             
-            startTrigger = ()=>_behaviorTree.FindTask<InPreparingProcess>().SetReady();
-            return this;
-        }
-        
-        private void SetupSharedContainers(BehaviorTreeCachedVariablesHolder cachedVariablesHolder, EntityHolder entityHolder)
-        {
-            _sharedContainers = new Dictionary<Type, SharedVariable>();
+            if (behaviorTreeInstallerData is not MeleeUnitBehaviorTreeInstallerData installerData)
+            {
+                throw new Exception("Incorrect installer data!");
+            }
 
+            SetupSharedContainers(installerData.EntityHolder);
+            SetupNavMeshMovementTasks(installerData.Agent);
+
+            SetupCombatTasks(installerData.CombatActions, installerData.CombatTargetsProvider,
+                    installerData.CombatStatsCopyProvider);
+            
+            installerData.BehaviorTreeStarter.BehaviorTreeStartEvent += ()=> _behaviorTree.FindTask<InPreparingProcess>().SetReady(); 
+        }
+
+        private void SetupSharedContainers(EntityHolder entityHolder)
+        {
+            _cachedVariablesHolder = new BehaviorTreeCachedVariablesHolder(_behaviorTree);
+            _sharedContainers = new Dictionary<Type, SharedVariable>();
+            
             SetContainer<MovementSharedContainerVariable>();
             SetContainer<DamageableTargetSharedContainerVariable>();
             SetContainer<SelfGeneralDataSharedContainerVariable>().Value.SelfTransform = entityHolder.SelfTransform;
             
             T SetContainer<T>() where T: SharedVariable
             {
-                T container = cachedVariablesHolder.GetVariable<T>();
+                T container = _cachedVariablesHolder.GetVariable<T>();
                 _sharedContainers.Add(container.GetType(), container);
                 return container;
             }
@@ -70,7 +75,8 @@ namespace Components.BT.Units
                     movementSharedContainer.CurrentDestinationPoint);
         }
 
-        private void SetupCombatTasks(IEnumerable<CombatAction> combatActions, ICombatTargetsProvider combatTargetsProvider)
+        private void SetupCombatTasks(IEnumerable<CombatAction> combatActions, ICombatTargetsProvider combatTargetsProvider,
+            ICombatStatsCopyProvider combatStatsCopyProvider)
         {
             var damageableTargetSharedContainer = GetSharedContainer<DamageableTargetSharedContainerVariable>().Value;
             var selfGeneralContainer = GetSharedContainer<SelfGeneralDataSharedContainerVariable>().Value;
@@ -78,18 +84,18 @@ namespace Components.BT.Units
             _behaviorTree
                 .FindTask<ValidateDamageableTarget>(MeleeUnitBehaviorTasksNames.ValidateDamageableTarget)
                 .SetSharedVariables
-                    (damageableTargetSharedContainer.Damageable, damageableTargetSharedContainer.TargetTr);
+                    (damageableTargetSharedContainer.TargetDamageable, damageableTargetSharedContainer.TargetTr);
             
             _behaviorTree
                 .FindTask<FindClosestDamageableTarget>(MeleeUnitBehaviorTasksNames.FindClosestDamageableTarget)
                 .Initialize(combatTargetsProvider)
                 .SetSharedVariables(selfGeneralContainer.SelfTransform,
-                    damageableTargetSharedContainer.Damageable, damageableTargetSharedContainer.TargetTr);
+                    damageableTargetSharedContainer.TargetDamageable, damageableTargetSharedContainer.TargetTr);
             
             _behaviorTree
                 .FindTask<IsTargetWithinRange>(MeleeUnitBehaviorTasksNames.IsTargetWithinRange)
                 .SetSharedVariables(selfGeneralContainer.SelfTransform, damageableTargetSharedContainer.TargetTr,
-                    10f); //TODO 10
+                    combatStatsCopyProvider.GetCurrentCombatStatsCopy().AttackRange);
             
             _behaviorTree
                 .FindTask<ProcessActions>(MeleeUnitBehaviorTasksNames.ProcessCombatActions)
@@ -104,7 +110,5 @@ namespace Components.BT.Units
         {
             return (T)_sharedContainers[typeof(T)];
         }
-
-       
     }
 }

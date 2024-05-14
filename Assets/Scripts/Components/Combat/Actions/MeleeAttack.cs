@@ -1,12 +1,21 @@
 using BehaviorDesigner.Runtime.Tasks;
 using Components.Animation.Enums;
+using Components.Combat.Actions.Setups;
+using Components.Combat.Interfaces;
 
 namespace Components.Combat.Actions
 {
     public class MeleeAttack : CombatAction
     {
         private bool _finished;
+        private MeleeAttackSetup _meleeSetup;
         
+        public override void Initialize(CommonCombatActionSetup commonSetup) 
+        {
+            base.Initialize(commonSetup);
+            _meleeSetup = commonSetup as MeleeAttackSetup;
+        }
+
         public override TaskStatus GetCurrentStatus()
         {
             if (_finished)
@@ -19,7 +28,7 @@ namespace Components.Combat.Actions
         public override void Execute()
         {
             _finished = false;
-            AnimationCaller.CallOnAnimation?.Invoke(AnimationCaller, AnimationClipData);
+            AnimationCaller.CallOnAnimation?.Invoke(AnimationCaller, _meleeSetup.AnimationClipData);
         }
 
         private void SetFinished()

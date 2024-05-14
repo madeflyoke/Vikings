@@ -24,6 +24,7 @@ namespace Components.Settings
                 _navMeshAgentTemplate = null;
             }
         }
+        public void OnManualValidate(){}
         
 #endif
 

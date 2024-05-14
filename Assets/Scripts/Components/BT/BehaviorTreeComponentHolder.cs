@@ -1,23 +1,20 @@
-using System;
-using Components.BT.Interfaces;
+using BehaviorDesigner.Runtime;
 using Components.Interfaces;
 
 namespace Components.BT
 {
     public class BehaviorTreeComponentHolder : IEntityComponent
     {
-        private IBehaviorTreeInstaller _installer;
-        private readonly Action _onStartBehavior;
+        private readonly BehaviorTree _behaviorTree;
 
-        public BehaviorTreeComponentHolder(IBehaviorTreeInstaller installer, Action onStartBehavior)
+        public BehaviorTreeComponentHolder(BehaviorTree behaviorTree)
         {
-            _installer = installer;
-            _onStartBehavior = onStartBehavior;
+            _behaviorTree = behaviorTree;
         }
 
-        public void StartBehavior()
+        public void InitializeComponent()
         {
-            _onStartBehavior?.Invoke();
+            _behaviorTree.EnableBehavior();
         }
     }
 }

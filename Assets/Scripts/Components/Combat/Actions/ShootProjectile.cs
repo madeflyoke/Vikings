@@ -1,14 +1,18 @@
-using System;
 using BehaviorDesigner.Runtime.Tasks;
-using BT.Interfaces;
-using Components.Combat.Projectiles;
-using UnityEngine;
+using Components.Combat.Actions.Setups;
+using Components.Combat.Interfaces;
 
 namespace Components.Combat.Actions
 {
     public class ShootProjectile : CombatAction
     {
-        [SerializeField] private Projectile _projectilePrefab;
+        private ShootProjectileSetup _shootProjectileSetup;
+
+        public override void Initialize(CommonCombatActionSetup commonSetup) 
+        {
+            base.Initialize(commonSetup);
+            _shootProjectileSetup = commonSetup as ShootProjectileSetup;
+        }
 
         public override TaskStatus GetCurrentStatus()
         {
@@ -19,5 +23,7 @@ namespace Components.Combat.Actions
         {
             
         }
+
+       
     }
 }

@@ -11,13 +11,11 @@ namespace Components.Animation
         
         public void OnAnimationStart()
         {
-            Debug.LogWarning("ANIMATION START");
             AnimationEventFired?.Invoke(AnimationEventType.START);
         }
 
         public void OnAnimationEnd()
         {
-            Debug.LogWarning("ANIMATION END");
             AnimationEventFired?.Invoke(AnimationEventType.END);
         }
     }

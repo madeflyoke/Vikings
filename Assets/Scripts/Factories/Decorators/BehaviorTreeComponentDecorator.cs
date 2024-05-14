@@ -1,22 +1,23 @@
 using System;
 using BehaviorDesigner.Runtime;
-using Components;
 using Components.BT;
+using Components.BT.Interfaces;
 using Components.Interfaces;
 using Components.Settings;
 using Interfaces;
 
 namespace Factories.Decorators
 {
-    public class BehaviorTreeComponentDecorator : IEntityDecorator
+    public class BehaviorTreeComponentDecorator<TInstaller> : IEntityDecorator where TInstaller : IBehaviorTreeInstaller
     {
         private readonly BehaviorTreeComponentSettings _behaviorTreeComponentSettings;
-        private readonly IReadOnlyEntity _entity;
+        private readonly IBehaviorTreeInstallerData _installerData;
 
-        public BehaviorTreeComponentDecorator(BehaviorTreeComponentSettings behaviorTreeComponentSettings, IReadOnlyEntity entity)
+        public BehaviorTreeComponentDecorator(BehaviorTreeComponentSettings behaviorTreeComponentSettings, 
+            IBehaviorTreeInstallerData installerData)
         {
             _behaviorTreeComponentSettings = behaviorTreeComponentSettings;
-            _entity = entity;
+            _installerData = installerData;
         }
         
         public IEntityComponent Decorate()
@@ -27,16 +28,20 @@ namespace Factories.Decorators
 
         private BehaviorTreeComponentHolder CreateBehaviorTreeComponentHolder()
         {
-            var bt = _entity.GetEntityComponent<EntityHolder>().SelfTransform.gameObject.AddComponent<BehaviorTree>();
+            var bt = _installerData.EntityHolder.SelfTransform.gameObject.AddComponent<BehaviorTree>();
             bt.StartWhenEnabled = false;
             bt.ExternalBehavior = _behaviorTreeComponentSettings.ExternalBehaviorTree;
             
-            var installer = _behaviorTreeComponentSettings.BehaviorTreeInstaller.Install(bt, 
-                _behaviorTreeComponentSettings.CachedVariablesHolder, _entity, out Action onStartBehavior);
-            
-            bt.EnableBehavior();
+            var installer = Activator.CreateInstance<TInstaller>(); //individual installers from settings for each unit
 
-            return new BehaviorTreeComponentHolder(installer, onStartBehavior);
+            if (installer==null)
+            {
+                throw new Exception("Invalid behavior tree installer, look up in config!");
+            }
+            
+            installer.Install(bt, _installerData);
+            
+            return new BehaviorTreeComponentHolder(bt);
         }
     }
 }

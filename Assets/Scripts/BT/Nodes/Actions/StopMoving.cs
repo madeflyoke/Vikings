@@ -15,7 +15,9 @@ namespace BT.Nodes.Actions
 
         public override TaskStatus OnUpdate()
         {
-            _agent.isStopped = true;
+            _agent.SetDestination(_agent.transform.position);
+            //_agent.ResetPath();
+            //_agent.isStopped = true;
             return TaskStatus.Success;
         }
     }

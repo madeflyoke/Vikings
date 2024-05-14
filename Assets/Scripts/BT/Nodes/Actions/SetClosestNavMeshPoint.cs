@@ -22,7 +22,7 @@ namespace BT.Nodes.Actions
         
         private bool SetClosestDestinationPoint()
         {
-            if (NavMesh.SamplePosition(_originalTransform.Value.position, out NavMeshHit hit, 2f, 1))
+            if (NavMesh.SamplePosition(_originalTransform.Value.position, out NavMeshHit hit, 0.5f, 1))
             {
                 _closestPoint.Value = hit.position;
                 return true;

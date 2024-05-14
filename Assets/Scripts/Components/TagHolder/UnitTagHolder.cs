@@ -1,9 +1,8 @@
-using Components.TagHolder.Base;
 using Units.Enums;
 
-namespace Units.Components
+namespace Components.TagHolder
 {
-    public class UnitTagHolder : TagHolder
+    public class UnitTagHolder : Base.TagHolder
     {
         public Team Team { get; }
 

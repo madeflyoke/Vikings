@@ -17,7 +17,6 @@ namespace BT.Nodes.Actions
 
         public override void OnStart()
         {
-            Debug.LogWarning("Onstart");
             _currentActionIndex = 0;
             _actions[_currentActionIndex].Execute();
         }
@@ -26,7 +25,6 @@ namespace BT.Nodes.Actions
         {
             if (_actions[_currentActionIndex].GetCurrentStatus()!=TaskStatus.Running)
             {
-                Debug.LogWarning("Start new action");
                 _currentActionIndex++;
                 if (_currentActionIndex >= _actions.Count)
                 {

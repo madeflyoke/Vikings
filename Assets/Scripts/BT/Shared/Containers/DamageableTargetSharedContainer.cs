@@ -6,7 +6,7 @@ namespace BT.Shared.Containers
     [Serializable]
     public class DamageableTargetSharedContainer
     {
-        public SharedDamageable Damageable;
+        public SharedDamageable TargetDamageable;
         public SharedTransform TargetTr;
     }
     

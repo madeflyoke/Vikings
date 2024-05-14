@@ -11,7 +11,6 @@ using Sirenix.OdinInspector;
 using Units.Base;
 using Units.Configs;
 using Units.Enums;
-using UnityEditor;
 using UnityEngine;
 using Utility;
 
@@ -53,7 +52,7 @@ namespace Factories.Units
         {
             return _subFactoriesMap[_unitProductRequestData.TargetUnitVariant]
                 .Initialize(_unitProductRequestData.SpawnData, _unitProductRequestData.TargetUnitTeam)
-                .CreateProduct();
+                .CreateProduct().InitializeEntity();
         }
         
         private UnitEntity MakeCopy(UnitEntity original, CustomTransformData spawnData) //TODO Check in the end

@@ -9,7 +9,7 @@ using UnityEngine;
 namespace Components.Settings
 {
     [Serializable]
-    public class ComponentsSettingsHolder
+    public class ComponentsSettingsHolder //The main rule: referenced components should be COPIED to units, not just referenced (because config shared between all units) 
     {
         [field: SerializeField,OnCollectionChanged(nameof(AfterComponentsSettingsChanged))] 
         public List<IComponentSettings> ComponentsSettings { get; private set; }
@@ -45,7 +45,7 @@ namespace Components.Settings
             statsSettings = ComponentsSettings.FirstOrDefault(x => x.GetType() == typeof(TComponentType));
             return statsSettings != null;
         }
-
+        
 #if UNITY_EDITOR
         
         private void AfterComponentsSettingsChanged(CollectionChangeInfo info)
@@ -58,6 +58,11 @@ namespace Components.Settings
             }
         }
         
+        public void OnManualValidate()
+        {
+            ComponentsSettings.ForEach(x=>x.OnManualValidate());
+        }
+
 #endif
     }
 }

@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using Components.Settings;
 using Sirenix.OdinInspector;
 using Sirenix.Utilities;
 using UnityEditor;
@@ -15,7 +14,8 @@ namespace Tools
 #if UNITY_EDITOR
         
         [SerializeField] private AnimatorController _animatorController;
-        [SerializeField] private string _path;
+        [SerializeField] private string _emptyAnimationsPath;
+        [SerializeField] private string _animationsParametersPath;
         
         [Button, Tooltip("Caution! Removes all files except empty animations in folder")]
         public void RecreateAndFillEmptyAnimations()
@@ -49,7 +49,7 @@ namespace Tools
                         
                         var clip = new AnimationClip();
                         clip.name = x.state.name;
-                        AssetDatabase.CreateAsset(clip, $"{_path}\\"+clip.name+".anim");
+                        AssetDatabase.CreateAsset(clip, $"{_emptyAnimationsPath}\\"+clip.name+".anim");
                         AssetDatabase.Refresh();
                         usedClips.Add(clip);
                         _animatorController.SetStateEffectiveMotion(x.state, clip);
@@ -64,7 +64,7 @@ namespace Tools
 
         private AnimationClip TryGetEmptyClip(string targetName)
         {
-            string[] guids = AssetDatabase.FindAssets("t:AnimationClip", new[] { _path });
+            string[] guids = AssetDatabase.FindAssets("t:AnimationClip", new[] { _emptyAnimationsPath });
             
             List<AnimationClip> assets = new();
 
@@ -79,7 +79,7 @@ namespace Tools
         
         private void DeleteUnnecessaryAnimations(List<AnimationClip> usedClips)
         {
-            string[] guids = AssetDatabase.FindAssets("t:AnimationClip", new[] { _path });
+            string[] guids = AssetDatabase.FindAssets("t:AnimationClip", new[] { _emptyAnimationsPath });
             List<AnimationClip> assets = new();
 
             foreach (string guid in guids)
@@ -118,6 +118,39 @@ namespace Tools
                 
             }
             return isOk;
+        }
+        
+        [Button]
+        private void SetAnimatorParameters()
+        {
+            ClassGenerator classGenerator = new ClassGenerator();
+            
+            var allStates = _animatorController.layers
+                .SelectMany(x => x.stateMachine.states.Select(x => x.state));
+            
+            
+            IEnumerable<string> SetSpeedMultiplierParameters()
+            {
+                _animatorController.parameters =
+                    _animatorController.parameters.Where(x => x.name.Contains("SpeedMultiplier") == false).ToArray();
+                
+                return allStates.Where(x=>x.name!=AnimatorStatesNames.None).Select(x =>
+                {
+                    var parameterName = x.name + "SpeedMultiplier";
+                    x.speedParameterActive = true;
+                    AnimatorControllerParameter newParameter = new AnimatorControllerParameter();
+                    newParameter.name = parameterName;
+                    newParameter.type = AnimatorControllerParameterType.Float;
+                    newParameter.defaultFloat = 1f;
+                    
+                    _animatorController.AddParameter(newParameter);
+                    x.speedParameter = parameterName;
+                    return parameterName;
+                });
+            }
+
+            classGenerator.GenerateStatic("AnimatorParametersNames",
+                    SetSpeedMultiplierParameters(), _animationsParametersPath);
         }
         
         private void OnValidate()

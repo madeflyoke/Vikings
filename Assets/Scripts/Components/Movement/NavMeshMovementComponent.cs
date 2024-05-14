@@ -20,10 +20,9 @@ namespace Components.Movement
         {
             Agent = agent;
             AnimationCaller = new AnimationCaller();
-            Initialize();
         }
 
-        private void Initialize()
+        public void InitializeComponent()
         {
             _agentSpeedObserver = this.ObserveEveryValueChanged(x => x.IsAgentMoving).Skip(1)
                 .Subscribe(x =>

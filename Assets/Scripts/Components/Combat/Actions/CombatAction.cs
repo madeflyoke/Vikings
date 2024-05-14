@@ -1,28 +1,38 @@
-﻿using System;
-using BehaviorDesigner.Runtime.Tasks;
+﻿using BehaviorDesigner.Runtime.Tasks;
 using BT.Interfaces;
 using Components.Animation;
 using Components.Animation.Enums;
-using UnityEngine;
+using Components.Combat.Actions.Setups;
+using Components.Combat.Interfaces;
 
 namespace Components.Combat.Actions
 {
-    [Serializable]
     public abstract class CombatAction : IBehaviorAction
     {
-        public AnimationCaller AnimationCaller { get; private set; }
+        protected ICombatStatsCopyProvider CombatStatsCopyProvider;
         
-        [field: SerializeField] public AnimationClipData AnimationClipData { get; }
-
-        public void Initialize()
+        protected AnimationCaller AnimationCaller;
+        
+        public virtual void Initialize(CommonCombatActionSetup commonSetup)
         {
             AnimationCaller = new AnimationCaller();
             AnimationCaller.Callback += OnAnimationCallback;
+        }
+
+        public AnimationCaller GetAnimationCaller()
+        {
+            return AnimationCaller;
+        }
+
+        public void SetCombatStatsProvider(ICombatStatsCopyProvider combatStatsCopyProvider)
+        {
+            CombatStatsCopyProvider = combatStatsCopyProvider;
         }
         
         protected virtual void OnAnimationCallback(AnimationEventType eventType) { }
        
         public abstract TaskStatus GetCurrentStatus();
         public abstract void Execute();
+        
     }
 }

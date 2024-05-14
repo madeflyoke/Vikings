@@ -1,15 +1,19 @@
 using System.Linq;
 using Components;
 using Components.Animation;
-using Components.BT;
+using Components.BT.Units.Installers;
+using Components.BT.Units.Installers.Data;
 using Components.Combat;
 using Components.Movement;
 using Components.Settings;
+using Components.TagHolder;
 using Factories.Decorators;
 using Factories.Units.SubFactories.Attributes;
 using Factories.Units.SubFactories.Base;
+using Managers;
 using Units.Base;
 using Units.Enums;
+using Utility;
 
 namespace Factories.Units.SubFactories
 {
@@ -26,7 +30,7 @@ namespace Factories.Units.SubFactories
             DecorateBy(new HealthComponentDecorator(Config.ComponentsSettingsHolder
                 .GetComponentSettings<HealthComponentSettings>()));
             
-            var movementComponent = DecorateBy(new NavMeshMovementComponentDecorator(entityHolder, Config.ComponentsSettingsHolder
+            var navMeshMovementComponent = DecorateBy(new NavMeshMovementComponentDecorator(entityHolder, Config.ComponentsSettingsHolder
                 .GetComponentSettings<MovementComponentSettings>())) as NavMeshMovementComponent;
             
             var combatComponent = DecorateBy(new CombatComponentDecorator(Config.ComponentsSettingsHolder
@@ -35,14 +39,27 @@ namespace Factories.Units.SubFactories
             var animationComponent = DecorateBy(new AnimationComponentDecorator(entityHolder, Config.ComponentsSettingsHolder
                 .GetComponentSettings<AnimationComponentSettings>())) as AnimationComponent;
             
-            animationComponent.RegisterAnimationCallerMany(combatComponent.CombatActions.Select(x=>x.AnimationCaller));
+            animationComponent.RegisterAnimationCallerMany(combatComponent.CombatActions.Select(x=>x.GetAnimationCaller()));
             
-            animationComponent.RegisterAnimationCaller(movementComponent.AnimationCaller);
-            
-            var behaviorComponent = DecorateBy(new BehaviorTreeComponentDecorator(
-                    Config.ComponentsSettingsHolder.GetComponentSettings<BehaviorTreeComponentSettings>(), Entity)) as BehaviorTreeComponentHolder;
+            animationComponent.RegisterAnimationCaller(navMeshMovementComponent.AnimationCaller);
 
-            BattleController.Instance.StartBattleEvent += () => behaviorComponent.StartBehavior();
+            combatComponent.IncreaseAttackSpeedEvent += (x)=>animationComponent.SetAnimatorStateSpeedMultiplier(
+                AnimatorParametersNames.CombatActionSpeedMultiplier, x);
+
+            MeleeUnitBehaviorTreeInstallerData behaviorInstallerData = new MeleeUnitBehaviorTreeInstallerData
+            {
+                BehaviorTreeStarter = BattleController.Instance,
+                EntityHolder = entityHolder,
+                Agent = navMeshMovementComponent.Agent,
+                CombatActions = combatComponent.CombatActions,
+                CombatStatsCopyProvider = combatComponent,
+                CombatTargetsProvider = GeneralUnitsTeamSpawner.Instance.GetOpponentsTargetsProvider(Entity.GetEntityComponent<UnitTagHolder>().Team)
+            };
+            
+            var behaviorDecorator = new BehaviorTreeComponentDecorator<MeleeUnitBehaviorTreeInstaller>(
+                Config.ComponentsSettingsHolder.GetComponentSettings<BehaviorTreeComponentSettings>(), behaviorInstallerData);
+
+            DecorateBy(behaviorDecorator);
             
             return base.CreateProduct();
         }

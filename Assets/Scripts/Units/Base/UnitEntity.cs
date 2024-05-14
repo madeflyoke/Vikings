@@ -1,9 +1,12 @@
 using System;
 using System.Collections.Generic;
+using Components.Combat;
 using Components.Interfaces;
+using Components.TagHolder;
 using Factories.Interfaces;
 using Interfaces;
 using Sirenix.OdinInspector;
+using Sirenix.Utilities;
 using Units.Enums;
 using UnityEngine;
 
@@ -13,6 +16,12 @@ namespace Units.Base
     {
         [ShowInInspector, ReadOnly] private readonly Dictionary<Type, IEntityComponent> _components = new();
 
+        public UnitEntity InitializeEntity()
+        {
+            _components.Values.ForEach(x => x.InitializeComponent());
+            return this;
+        }
+        
         public IEntity AddEntityComponent (IEntityComponent unitEntityComponent)
         {
             var componentType = unitEntityComponent.GetType();
@@ -33,5 +42,35 @@ namespace Units.Base
             
             throw new Exception($"No component with type: {typeof(TComponent)}!");
         }
+
+        [Button]
+        public void SetIncreasedSpeed(float speed)
+        {
+            GetEntityComponent<CombatComponent>().SetAttackSpeed(speed);
+        }
+        
+#if UNITY_EDITOR
+
+        private Team EDITOR_team = Team.NONE;
+        
+        private void OnDrawGizmos()
+        {
+            if (EDITOR_team==Team.NONE)
+            {
+                EDITOR_team = GetEntityComponent<UnitTagHolder>().Team;
+            }
+
+            if (EDITOR_team==Team.ENEMIES)
+            {
+                Gizmos.color = Color.red;
+            }
+            else
+            {
+                Gizmos.color = Color.blue;
+            }
+            Gizmos.DrawSphere(transform.position +Vector3.up*3f, 1f);
+        }
+
+#endif
     }
 }
