@@ -1,5 +1,4 @@
 using BehaviorDesigner.Runtime.Tasks;
-using UnityEngine;
 using UnityEngine.AI;
 
 namespace BT.Nodes.Actions
@@ -15,9 +14,8 @@ namespace BT.Nodes.Actions
 
         public override TaskStatus OnUpdate()
         {
-            _agent.SetDestination(_agent.transform.position);
-            //_agent.ResetPath();
-            //_agent.isStopped = true;
+            _agent.ResetPath();
+            _agent.isStopped = true;
             return TaskStatus.Success;
         }
     }
