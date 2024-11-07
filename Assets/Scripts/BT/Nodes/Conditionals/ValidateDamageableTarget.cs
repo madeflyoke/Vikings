@@ -9,11 +9,18 @@ namespace BT.Nodes.Conditionals
     {
         private SharedDamageable _targetDamageable;
         private SharedTransform _targetTr;
-        
+        private NavMeshAgent _agent;
+
         public void SetSharedVariables(SharedDamageable targetDamageable, SharedTransform targetTr)
         {
             _targetDamageable = targetDamageable;
             _targetTr = targetTr;
+        }
+
+        public ValidateDamageableTarget Initialize(NavMeshAgent agent)
+        {
+            _agent = agent;
+            return this;
         }
 
         public override TaskStatus OnUpdate()
@@ -30,7 +37,11 @@ namespace BT.Nodes.Conditionals
 
         private bool ValidateNavMeshReachability()
         {
-            return NavMesh.SamplePosition(_targetTr.Value.position, out NavMeshHit _, 3f, 1);
+            var samplePositionExists = NavMesh.SamplePosition(_targetTr.Value.position, out NavMeshHit hit, 3f, 1);
+            var path = new NavMeshPath();
+            _agent.CalculatePath(hit.position, path);
+
+            return samplePositionExists && path.status==NavMeshPathStatus.PathComplete;
         }
     }
 }

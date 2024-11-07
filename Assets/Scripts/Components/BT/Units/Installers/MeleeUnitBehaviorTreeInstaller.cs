@@ -35,8 +35,8 @@ namespace Components.BT.Units.Installers
             SetupSharedContainers(installerData.EntityHolder);
             SetupNavMeshMovementTasks(installerData.Agent);
 
-            SetupCombatTasks(installerData.CombatActions, installerData.CombatTargetsProvider,
-                    installerData.CombatStatsCopyProvider);
+            SetupOpponentTargetTasks(installerData.CombatActions, installerData.CombatTargetsProvider,
+                    installerData.CombatStatsCopyProvider, installerData.Agent);
             
             installerData.BehaviorTreeStarter.BehaviorTreeStartEvent += ()=> _behaviorTree.FindTask<InPreparingProcess>().SetReady(); 
         }
@@ -75,14 +75,15 @@ namespace Components.BT.Units.Installers
                     movementSharedContainer.CurrentDestinationPoint));
         }
 
-        private void SetupCombatTasks(IEnumerable<CombatAction> combatActions, ICombatTargetsProvider combatTargetsProvider,
-            ICombatStatsCopyProvider combatStatsCopyProvider)
+        private void SetupOpponentTargetTasks(IEnumerable<CombatAction> combatActions, ICombatTargetsProvider combatTargetsProvider,
+            ICombatStatsCopyProvider combatStatsCopyProvider, NavMeshAgent agent)
         {
             var damageableTargetSharedContainer = GetSharedContainer<DamageableTargetSharedContainerVariable>().Value;
             var selfGeneralContainer = GetSharedContainer<SelfGeneralDataSharedContainerVariable>().Value;
 
             _behaviorTree
                 .FindTask<ValidateDamageableTarget>(MeleeUnitBehaviorTasksNames.ValidateDamageableTarget)
+                .Initialize(agent)
                 .SetSharedVariables
                     (damageableTargetSharedContainer.TargetDamageable, damageableTargetSharedContainer.TargetTr);
             
