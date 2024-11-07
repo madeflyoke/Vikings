@@ -70,9 +70,9 @@ namespace Components.BT.Units.Installers
             _behaviorTree.FindTasks<StopMoving>().ForEach(x=>x.Initialize(agent));
             
             _behaviorTree
-                .FindTask<SetClosestNavMeshPoint>(MeleeUnitBehaviorTasksNames.SetClosestNavMeshPoint)
-                .SetSharedVariables(damageableTargetSharedContainer.TargetTr, 
-                    movementSharedContainer.CurrentDestinationPoint);
+                .FindTasks<SetClosestNavMeshPoint>().ForEach(x=>
+                x.SetSharedVariables(damageableTargetSharedContainer.TargetTr, 
+                    movementSharedContainer.CurrentDestinationPoint));
         }
 
         private void SetupCombatTasks(IEnumerable<CombatAction> combatActions, ICombatTargetsProvider combatTargetsProvider,

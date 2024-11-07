@@ -1,6 +1,7 @@
 using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 using BT.Shared;
+using UnityEngine.AI;
 
 namespace BT.Nodes.Conditionals
 {
@@ -22,7 +23,14 @@ namespace BT.Nodes.Conditionals
 
         private bool Validate()
         {
-            return _targetTr.Value!=null&&_targetDamageable.Value.IsAlive;
+            return _targetTr.Value!=null
+                   && _targetDamageable.Value.IsAlive
+                   && ValidateNavMeshReachability();
+        }
+
+        private bool ValidateNavMeshReachability()
+        {
+            return NavMesh.SamplePosition(_targetTr.Value.position, out NavMeshHit _, 3f, 1);
         }
     }
 }
