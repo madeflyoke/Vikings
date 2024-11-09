@@ -82,10 +82,13 @@ namespace Components.BT.Units.Installers
             var selfGeneralContainer = GetSharedContainer<SelfGeneralDataSharedContainerVariable>().Value;
 
             _behaviorTree
-                .FindTask<ValidateDamageableTarget>(MeleeUnitBehaviorTasksNames.ValidateDamageableTarget)
-                .Initialize(agent)
-                .SetSharedVariables
-                    (damageableTargetSharedContainer.TargetDamageable, damageableTargetSharedContainer.TargetTr);
+                .FindTasks<ValidateDamageableTarget>()
+                .ForEach(x =>
+                {
+                    x.Initialize(agent)
+                        .SetSharedVariables
+                            (damageableTargetSharedContainer.TargetDamageable, damageableTargetSharedContainer.TargetTr);
+                });
             
             _behaviorTree
                 .FindTask<FindClosestDamageableTarget>(MeleeUnitBehaviorTasksNames.FindClosestDamageableTarget)

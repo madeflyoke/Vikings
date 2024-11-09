@@ -6,9 +6,9 @@ namespace Components.Health
 {
     public class HealthComponent: IDamageable, IEntityComponent
     {
+        public event Action<IDamageable> DeadEvent;
         public bool IsAlive { get; private set; }
 
-        public event Action HealthEmptyEvent; 
         private readonly Health _health;
         
         //health view
@@ -25,7 +25,7 @@ namespace Components.Health
             if (_health.CurrentHealth == 0)
             {
                 IsAlive = false;
-                HealthEmptyEvent?.Invoke();
+                DeadEvent?.Invoke(this);
             }
         }
 

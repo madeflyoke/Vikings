@@ -7,6 +7,7 @@ using CombatTargetsProviders.Interfaces;
 using Extensions;
 using Interfaces;
 using UnityEngine;
+using Utility;
 
 namespace BT.Nodes.Actions
 {
@@ -17,9 +18,10 @@ namespace BT.Nodes.Actions
         
         private SharedTransform _selfTransform;
         
-        private Dictionary<Transform, IDamageable> _targets;
+        private List<DamageableTarget> _targets;
         private ICombatTargetsProvider _combatTargetsProvider;
-
+        private DamageableTarget _lastCheckedTarget;
+        
         public FindClosestDamageableTarget Initialize(ICombatTargetsProvider combatTargetsProvider)
         {
             _combatTargetsProvider = combatTargetsProvider;
@@ -32,35 +34,43 @@ namespace BT.Nodes.Actions
             _closestDamageable = closestDamageable;
             _closestTr = closestTr;
         }
-
-        public override void OnStart()
-        {
-            base.OnStart();
-            _targets ??= _combatTargetsProvider.GetCombatTargets()
-                .ToDictionary(x=>x.TargetTr, z=>z.Damageable); //may be not spawned yet?
-        }
-
+        
         public override TaskStatus OnUpdate()
         {
-            if (UpdateTargets())
+            if (TryGetTargets(out DamageableTarget possibleTarget))
             {
-                _closestTr.Value =_selfTransform.Value.GetClosestTransform(_targets.Keys);
-                _closestDamageable.Value = _targets[_closestTr.Value];
+                _lastCheckedTarget = possibleTarget;
+                
+                _closestTr.Value =possibleTarget.TargetTr;
+                _closestDamageable.Value = possibleTarget.Damageable;
                 return TaskStatus.Success;
             }
 
             return TaskStatus.Failure;
         }
 
-        private bool UpdateTargets()
+        private bool TryGetTargets(out DamageableTarget possibleTarget)
         {
+            _targets = _combatTargetsProvider.GetAliveCombatTargets();
+            possibleTarget = null;
             if (_targets.Count!=0)
             {
-                _targets = _targets
-                    .Where(pair => pair.Key != null && pair.Value.IsAlive)
-                    .ToDictionary(pair => pair.Key, pair => pair.Value);
+                if (_lastCheckedTarget != null && _targets.Contains(_lastCheckedTarget)) //if not validated?
+                {
+                    _targets.Remove(_lastCheckedTarget);
+                    _lastCheckedTarget = null;
+                    if (_targets.Count==0)
+                    {
+                        return false;
+                    }
+                }
+                
+                var closestTr = _selfTransform.Value.GetClosestTransform(_targets.Select(x => x.TargetTr));
+                var target = _targets.FirstOrDefault(x => x.TargetTr == closestTr);
+                possibleTarget = target; 
+                return true;
             }
-            return _targets.Count != 0;
+            return false;
         }
     }
 }

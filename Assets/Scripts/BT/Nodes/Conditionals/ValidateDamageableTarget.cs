@@ -30,9 +30,14 @@ namespace BT.Nodes.Conditionals
 
         private bool Validate()
         {
-            return _targetTr.Value!=null
-                   && _targetDamageable.Value.IsAlive
+            return ValidateDamageable()
                    && ValidateNavMeshReachability();
+        }
+
+        private bool ValidateDamageable()
+        {
+            return _targetTr.Value != null
+                   && _targetDamageable.Value.IsAlive;
         }
 
         private bool ValidateNavMeshReachability()

@@ -5,6 +5,6 @@ namespace CombatTargetsProviders.Interfaces
 {
     public interface ICombatTargetsProvider
     {
-        public List<DamageableTarget> GetCombatTargets();
+        public List<DamageableTarget> GetAliveCombatTargets();
     }
 }
