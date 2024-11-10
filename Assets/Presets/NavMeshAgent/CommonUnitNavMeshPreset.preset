@@ -30,7 +30,7 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: m_Acceleration
-    value: 8
+    value: 20000
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: avoidancePriority
@@ -38,7 +38,7 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: m_AngularSpeed
-    value: 1000
+    value: 20000
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: m_StoppingDistance

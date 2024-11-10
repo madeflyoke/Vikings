@@ -343,6 +343,7 @@ MonoBehaviour:
     - {fileID: 758367274}
     - {fileID: 1481649739}
     _unitVariants: 01000000
+  EDITOR_drawGizmos: 1
 --- !u!4 &239746347
 Transform:
   m_ObjectHideFlags: 0

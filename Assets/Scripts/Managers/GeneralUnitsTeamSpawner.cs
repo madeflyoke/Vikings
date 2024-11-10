@@ -5,8 +5,11 @@ using CombatTargetsProviders;
 using CombatTargetsProviders.Interfaces;
 using Factories.Units;
 using Sirenix.OdinInspector;
+using Sirenix.Utilities;
 using Units.Enums;
+using UnityEditor;
 using UnityEngine;
+using Utility;
 
 namespace Managers
 {
@@ -16,7 +19,8 @@ namespace Managers
    
       [SerializeField] private UnitsAbstractFactory _unitsAbstractFactory;
       [SerializeField] private List<UnitsTeamSpawner> _unitsTeamSpawners = new();
-   
+      private bool _spawned;
+      
       private void Awake()
       {
          if (Instance!=null)
@@ -42,6 +46,7 @@ namespace Managers
          {
             x.Spawn();
          });
+         _spawned = true;
       }
 
       public ICombatTargetsProvider GetOpponentsTargetsProvider(Team team)
@@ -75,6 +80,45 @@ namespace Managers
             }
          }
       }
+      
+#if UNITY_EDITOR
+
+      [SerializeField] private bool EDITOR_drawGizmos;
+      
+      private void OnDrawGizmos()
+      {
+         if (_spawned && EDITOR_drawGizmos)
+         {
+            var enemies = GetOpponentsTargetsProvider(Team.ALLIES)?.GetAliveCombatTargets();
+            var allies =GetOpponentsTargetsProvider(Team.ENEMIES)?.GetAliveCombatTargets();
+
+            if (enemies.IsNullOrEmpty() || allies.IsNullOrEmpty())
+            {
+               return;
+            }
+         
+            Handles.color = Color.yellow;
+            GUIStyle style = new GUIStyle();
+            style.normal.textColor = Color.black;
+            style.alignment = TextAnchor.MiddleCenter;
+            style.fontStyle = FontStyle.Bold;
+            
+            foreach (var enemy in enemies)
+            {
+               foreach (var ally in allies)
+               {
+                  var enemyPos = enemy.TargetTr.position;
+                  var allyPos = ally.TargetTr.position;
+                  Handles.DrawLine(enemyPos, allyPos,3f);
+                  Handles.Label(Vector3.Lerp(enemyPos, allyPos, .5f)+Vector3.up, 
+                     Vector3.Distance(enemyPos, allyPos).ToString("F"),style);
+               }
+            }
+         }
+        
+      }
+
+#endif
 
 #endif
    }

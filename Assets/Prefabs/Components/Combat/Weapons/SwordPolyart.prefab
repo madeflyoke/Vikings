@@ -100,7 +100,7 @@ MonoBehaviour:
   _weaponStats:
     AttackDamage: 5
     AttackSpeed: 1
-    AttackRange: 5
+    AttackRange: 2
   _hitCollider: {fileID: 2306726106154380483}
 --- !u!65 &2306726106154380483
 BoxCollider:
