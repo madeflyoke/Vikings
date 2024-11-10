@@ -18,5 +18,15 @@ namespace Components.Animation
         {
             AnimationEventFired?.Invoke(AnimationEventType.END);
         }
+
+        public void HitStart()
+        {
+            AnimationEventFired?.Invoke(AnimationEventType.HITSTART);
+        }
+
+        public void HitEnd()
+        {
+            AnimationEventFired?.Invoke(AnimationEventType.HITEND);
+        }
     }
 }

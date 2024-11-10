@@ -2664,12 +2664,17 @@ PrefabInstance:
       addedObject: {fileID: 4636858932950879090}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 4651122370132508951, guid: 3285808d4c890c34195dc865ce857376, type: 3}
-      insertIndex: -1
+      insertIndex: 1
       addedObject: {fileID: 1072433958016108131}
   m_SourcePrefab: {fileID: 100100000, guid: 3285808d4c890c34195dc865ce857376, type: 3}
 --- !u!4 &1028880295469987553 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8225478536294427786, guid: 3285808d4c890c34195dc865ce857376, type: 3}
+  m_PrefabInstance: {fileID: 8962607498084145771}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &2228747314214243109 stripped
+BoxCollider:
+  m_CorrespondingSourceObject: {fileID: 7102051092704678222, guid: 3285808d4c890c34195dc865ce857376, type: 3}
   m_PrefabInstance: {fileID: 8962607498084145771}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &4390322646971177852 stripped
@@ -2689,6 +2694,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 669e88e4738249744a8582adb5f74bd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <HitCollider>k__BackingField: {fileID: 2228747314214243109}
   _renderer: {fileID: 6943545818814274649}
   _relatedMaterials:
   - {fileID: 2100000, guid: 421140039854e8c42938a8cb73d3480c, type: 2}

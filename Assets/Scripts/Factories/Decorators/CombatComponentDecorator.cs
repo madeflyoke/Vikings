@@ -21,6 +21,7 @@ namespace Factories.Decorators
     {
         private readonly CombatComponentSettings _combatComponentSettings;
         private readonly HumanoidModelHolder _humanoidModelHolder;
+        private Weapon _weapon;
 
         public CombatComponentDecorator(HumanoidModelHolder humanoidModelHolder, CombatComponentSettings combatComponentSettings)
         {
@@ -35,18 +36,18 @@ namespace Factories.Decorators
 
         private CombatComponent CreateCombatComponent()
         {
-            return new CombatComponent(CreateWeapon(), GetRelatedCombatActions());
+            CreateWeapon();
+            return new CombatComponent(_weapon, GetRelatedCombatActions());
         }
 
-        private Weapon CreateWeapon()
+        private void CreateWeapon()
         {
             GameObjectComponentBuilder<Weapon> goBuilder = new ();
             
-            return goBuilder
+            _weapon = goBuilder
                 .SetPrefab(_combatComponentSettings.WeaponPrefab)
                 .SetParent(_humanoidModelHolder.RightHandPoint)
                 .WithOriginalPositionAndRotation()
-               // .SetRotation(parent.rotation)
                 .Build();
         }
         
@@ -63,7 +64,7 @@ namespace Factories.Decorators
             foreach (var item in relatedCombatActionsTypes)
             {
                 var action = (CombatAction) Activator.CreateInstance(item.Value);
-                action.Initialize(item.Key);
+                action.Initialize(item.Key, _weapon);
                 relatedCombatActions.Add(action);
             }
 

@@ -22,6 +22,7 @@ namespace Components.Health
         public void SubtractHealth(int value)
         {
             CurrentHealth = Mathf.Clamp(CurrentHealth - value, 0, _maxHealth);
+            Debug.LogWarning($"Damage taken: {value}, health: {CurrentHealth}/{_maxHealth}");
         }
 
         public void RestoreHealth()

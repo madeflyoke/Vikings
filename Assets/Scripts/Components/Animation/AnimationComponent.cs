@@ -22,7 +22,6 @@ namespace Components.Animation
       public void SetAnimatorStateSpeedMultiplier(string parameterName, float speed)
       {
          _animator.SetFloat(parameterName,speed);
-         Debug.LogWarning("Speed "+speed);
       }
       
       private void PlayAnimation(string name, float transitionDuration = 0.25f)
@@ -48,7 +47,7 @@ namespace Components.Animation
          if (animationCaller != null)
          {
             animationCaller.CallOnAnimation += PlayCustomAnimation;
-            _animationEventsListener.AnimationEventFired += animationCaller.Callback;
+            animationCaller.AttachAnimationEventsListener(_animationEventsListener);
          }
       }
       

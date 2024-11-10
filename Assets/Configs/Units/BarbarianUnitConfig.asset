@@ -21,7 +21,6 @@ MonoBehaviour:
     - {fileID: 9000000, guid: a58d63122b09e9144938cd6a1ece4824, type: 3}
     - {fileID: 22100000, guid: b6ba0e2dc885e634c927a3d40c352e15, type: 2}
     - {fileID: 7815074289198016091, guid: 7e7bae7ff22d52a4aa26482bae02f2ce, type: 3}
-    - {fileID: 7400000, guid: 6019f1b4a095b0b4396f5561a51fee89, type: 2}
     - {fileID: 7400000, guid: eccbae3cfc77ad245ade46e143aa3200, type: 2}
     - {fileID: 11400000, guid: 07a373a7193ea3647b6fd3e2e150e67f, type: 2}
     SerializedBytesString: 
@@ -90,7 +89,7 @@ MonoBehaviour:
         Assembly-CSharp]], mscorlib
     - Name: 
       Entry: 12
-      Data: 2
+      Data: 1
     - Name: 
       Entry: 7
       Data: 8|Components.Combat.Actions.Setups.MeleeAttackSetup, Assembly-CSharp
@@ -111,37 +110,10 @@ MonoBehaviour:
       Data: 
     - Name: AttackDamageMultiplier
       Entry: 3
-      Data: 1
+      Data: 2
     - Name: EDITOR_finalDamage
       Entry: 4
-      Data: 5
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 10|Components.Combat.Actions.Setups.MeleeAttackSetup, Assembly-CSharp
-    - Name: AnimationClipData
-      Entry: 7
-      Data: 11|Components.Animation.AnimationClipData, Assembly-CSharp
-    - Name: <AnimationClip>k__BackingField
-      Entry: 10
-      Data: 6
-    - Name: <TargetStateName>k__BackingField
-      Entry: 1
-      Data: CombatAction
-    - Name: <TransitionDuration>k__BackingField
-      Entry: 4
-      Data: 0.25
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: AttackDamageMultiplier
-      Entry: 3
-      Data: 1
-    - Name: EDITOR_finalDamage
-      Entry: 4
-      Data: 5
+      Data: 10
     - Name: 
       Entry: 8
       Data: 
@@ -156,10 +128,10 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 12|Components.Settings.BehaviorTreeComponentSettings, Assembly-CSharp
+      Data: 10|Components.Settings.BehaviorTreeComponentSettings, Assembly-CSharp
     - Name: ExternalBehaviorTree
       Entry: 10
-      Data: 7
+      Data: 6
     - Name: 
       Entry: 8
       Data: 

@@ -5,6 +5,7 @@ using Components.Animation;
 using Components.Animation.Enums;
 using Components.Combat.Actions.Setups;
 using Components.Combat.Interfaces;
+using Components.Combat.Weapons;
 
 namespace Components.Combat.Actions
 {
@@ -13,12 +14,12 @@ namespace Components.Combat.Actions
         protected ICombatStatsCopyProvider CombatStatsCopyProvider;
         
         protected AnimationCaller AnimationCaller;
-        protected SharedDamageable CombatTarget;
-        
-        public virtual void Initialize(CommonCombatActionSetup commonSetup)
+        protected Weapon CurrentWeapon;
+
+        public virtual void Initialize(CommonCombatActionSetup commonSetup, Weapon weapon)
         {
             AnimationCaller = new AnimationCaller();
-            AnimationCaller.Callback += OnAnimationCallback;
+            CurrentWeapon = weapon;
         }
 
         public AnimationCaller GetAnimationCaller()
@@ -29,11 +30,6 @@ namespace Components.Combat.Actions
         public void SetCombatStatsProvider(ICombatStatsCopyProvider combatStatsCopyProvider)
         {
             CombatStatsCopyProvider = combatStatsCopyProvider;
-        }
-
-        public void SetCombatTarget(SharedDamageable combatTarget)
-        {
-            CombatTarget = combatTarget;
         }
         
         protected virtual void OnAnimationCallback(AnimationEventType eventType) { }

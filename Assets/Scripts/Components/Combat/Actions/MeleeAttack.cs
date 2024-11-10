@@ -3,24 +3,28 @@ using BT.Shared;
 using Components.Animation.Enums;
 using Components.Combat.Actions.Setups;
 using Components.Combat.Interfaces;
+using Components.Combat.Weapons;
 using Interfaces;
+using UnityEngine;
+using Utility;
 
 namespace Components.Combat.Actions
 {
     public class MeleeAttack : CombatAction
     {
-        private bool _finished;
+        private bool _completed;
+        private bool _wasHit;
         private MeleeAttackSetup _meleeSetup;
-        
-        public override void Initialize(CommonCombatActionSetup commonSetup) 
+
+        public override void Initialize(CommonCombatActionSetup commonSetup, Weapon weapon) 
         {
-            base.Initialize(commonSetup);
+            base.Initialize(commonSetup, weapon);
             _meleeSetup = commonSetup as MeleeAttackSetup;
         }
 
         public override TaskStatus GetCurrentStatus()
         {
-            if (_finished)
+            if (_completed)
             {
                 return TaskStatus.Success;
             }
@@ -29,13 +33,26 @@ namespace Components.Combat.Actions
 
         public override void Execute()
         {
-            _finished = false;
-            AnimationCaller.CallOnAnimation?.Invoke(AnimationCaller, _meleeSetup.AnimationClipData);
+            _completed = false;
+            
+            StartAttackAnimation();
         }
 
-        private void SetFinished()
+        private void StartAttackAnimation()
         {
-            _finished = true;
+            AnimationCaller.AnimationsEventsListener.AnimationEventFired += OnAnimationCallback;
+            CurrentWeapon.HitEvent += OnWeaponHit;
+            
+            AnimationCaller.CallOnAnimation?.Invoke(AnimationCaller, _meleeSetup.AnimationClipData);
+        }
+        
+        private void SetCompleted()
+        {
+            _completed = true;
+            
+            _wasHit = false;
+            AnimationCaller.AnimationsEventsListener.AnimationEventFired -= OnAnimationCallback;
+            CurrentWeapon.HitEvent -= OnWeaponHit;
         }
 
         protected override void OnAnimationCallback(AnimationEventType eventType)
@@ -43,7 +60,7 @@ namespace Components.Combat.Actions
             switch (eventType)
             {
                 case AnimationEventType.END:
-                    SetFinished();
+                    SetCompleted();
                     break;
                 case AnimationEventType.HITSTART:
                     OnHitStart();
@@ -56,17 +73,22 @@ namespace Components.Combat.Actions
 
         private void OnHitStart()
         {
-            
+            CurrentWeapon.SetColliderActive(true);
         }
 
         private void OnHitEnd()
         {
-            
+            CurrentWeapon.SetColliderActive(false);
         }
-
-        private void SetHitCollider(bool isActive)
+        
+        private void OnWeaponHit(DamageableTarget damageableTarget)
         {
-            
+            if (_wasHit==false)
+            {
+                _wasHit = true;
+                var damage = CombatStatsCopyProvider.GetCombatStatsCopy().AttackDamage * _meleeSetup.AttackDamageMultiplier;
+                damageableTarget.Damageable.TakeDamage(damage);
+            }
         }
     }
 }

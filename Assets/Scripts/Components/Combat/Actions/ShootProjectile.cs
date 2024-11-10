@@ -2,6 +2,7 @@ using BehaviorDesigner.Runtime.Tasks;
 using BT.Shared;
 using Components.Combat.Actions.Setups;
 using Components.Combat.Interfaces;
+using Components.Combat.Weapons;
 
 namespace Components.Combat.Actions
 {
@@ -9,9 +10,9 @@ namespace Components.Combat.Actions
     {
         private ShootProjectileSetup _shootProjectileSetup;
 
-        public override void Initialize(CommonCombatActionSetup commonSetup) 
+        public override void Initialize(CommonCombatActionSetup commonSetup, Weapon weapon) 
         {
-            base.Initialize(commonSetup);
+            base.Initialize(commonSetup, weapon);
             _shootProjectileSetup = commonSetup as ShootProjectileSetup;
         }
 

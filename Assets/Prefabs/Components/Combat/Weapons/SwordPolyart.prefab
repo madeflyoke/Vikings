@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1332992423029118212}
   - component: {fileID: 8061824661810684881}
   - component: {fileID: 7815074289198016091}
+  - component: {fileID: 2306726106154380483}
   m_Layer: 0
   m_Name: SwordPolyart
   m_TagString: Untagged
@@ -100,3 +101,25 @@ MonoBehaviour:
     AttackDamage: 5
     AttackSpeed: 1
     AttackRange: 5
+  _hitCollider: {fileID: 2306726106154380483}
+--- !u!65 &2306726106154380483
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5776774320959223694}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Size: {x: 0.2936207, y: 1.1790353, z: 0.18903702}
+  m_Center: {x: 0.0023518205, y: -0.79562014, z: 0.007853504}
