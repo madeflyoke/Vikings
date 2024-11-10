@@ -4,6 +4,7 @@ using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 using BT.Shared;
 using CombatTargetsProviders.Interfaces;
+using Components.Combat.Interfaces;
 using Extensions;
 using Interfaces;
 using UnityEngine;
@@ -20,11 +21,13 @@ namespace BT.Nodes.Actions
         
         private List<DamageableTarget> _targets;
         private ICombatTargetsProvider _combatTargetsProvider;
+        private ICombatTargetHolder _combatTargetHolder;
         private DamageableTarget _lastCheckedTarget;
         
-        public FindClosestDamageableTarget Initialize(ICombatTargetsProvider combatTargetsProvider)
+        public FindClosestDamageableTarget Initialize(ICombatTargetsProvider combatTargetsProvider, ICombatTargetHolder combatTargetHolder)
         {
             _combatTargetsProvider = combatTargetsProvider;
+            _combatTargetHolder = combatTargetHolder;
             return this;
         }
         
@@ -40,6 +43,7 @@ namespace BT.Nodes.Actions
             if (TryGetTargets(out DamageableTarget possibleTarget))
             {
                 _lastCheckedTarget = possibleTarget;
+                _combatTargetHolder.SetCombatTarget(_lastCheckedTarget); //combat component link
                 
                 _closestTr.Value =possibleTarget.TargetTr;
                 _closestDamageable.Value = possibleTarget.Damageable;

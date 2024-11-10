@@ -1,7 +1,9 @@
+using Components.Combat.Weapons;
+
 namespace Components.Combat.Interfaces
 {
     public interface ICombatStatsCopyProvider
     {
-        public CommonCombatStats GetCurrentCombatStatsCopy();
+        public WeaponStats GetCombatStatsCopy();
     }
 }

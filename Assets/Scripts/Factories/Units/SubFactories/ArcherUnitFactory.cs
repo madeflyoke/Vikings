@@ -4,6 +4,7 @@ using Components.Animation;
 using Components.Combat;
 using Components.Movement;
 using Components.Settings;
+using Components.View;
 using Factories.Decorators;
 using Factories.Units.SubFactories.Attributes;
 using Factories.Units.SubFactories.Base;
@@ -28,7 +29,8 @@ namespace Factories.Units.SubFactories
             var movementComponent = DecorateBy(new NavMeshMovementComponentDecorator(entityHolder, Config.ComponentsSettingsHolder
                 .GetComponentSettings<MovementComponentSettings>())) as NavMeshMovementComponent;
             
-            var combatComponent = DecorateBy(new CombatComponentDecorator(Config.ComponentsSettingsHolder
+            var combatComponent = DecorateBy(new CombatComponentDecorator(Entity.GetEntityComponent<HumanoidModelHolder>(),
+                Config.ComponentsSettingsHolder
                 .GetComponentSettings<CombatComponentSettings>())) as CombatComponent;
             
             var animationComponent = DecorateBy(new AnimationComponentDecorator(entityHolder, Config.ComponentsSettingsHolder

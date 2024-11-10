@@ -10,6 +10,7 @@ namespace Builders.Utility
         
         private string _name = typeof(TComponent).Name;
         private readonly CustomTransformData _spawnData = new();
+        private bool _resetToOriginals;
         
         public GameObjectComponentBuilder<TComponent> SetName(string name)
         {
@@ -20,6 +21,12 @@ namespace Builders.Utility
         public GameObjectComponentBuilder<TComponent>  SetPosition(Vector3 spawnPosition)
         {
             _spawnData.Position = spawnPosition;
+            return this;
+        }
+
+        public GameObjectComponentBuilder<TComponent> WithOriginalPositionAndRotation()
+        {
+            _resetToOriginals = true;
             return this;
         }
 
@@ -43,6 +50,12 @@ namespace Builders.Utility
 
         public TComponent Build()
         {
+            if (_prefab==null)
+            {
+                Debug.LogError("Prefab is not setup!");
+                return null;
+            }
+            
             var componentGo = Object.Instantiate(
                 _prefab,
                 _spawnData.Position,
@@ -50,6 +63,12 @@ namespace Builders.Utility
                 _spawnData.Parent);
             componentGo.name =  _name;
 
+            if (_resetToOriginals)
+            {
+                componentGo.transform.localPosition = _prefab.transform.localPosition;
+                componentGo.transform.localRotation = _prefab.transform.localRotation;
+            }
+            
             return componentGo;
         }
     }

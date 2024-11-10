@@ -10,7 +10,7 @@ namespace Components.Combat.Actions.Setups
     public abstract class CommonCombatActionSetup
     {
         public AnimationClipData AnimationClipData;
-        public int AttackDamageMultiplier;
+        public int AttackDamageMultiplier; //put into modifiers?
         
 #if UNITY_EDITOR
         [SerializeField, ReadOnly] public float EDITOR_finalDamage;
@@ -20,12 +20,12 @@ namespace Components.Combat.Actions.Setups
     [CombatActionVariant(CombatActionVariant = typeof(MeleeAttack))]
     public class MeleeAttackSetup : CommonCombatActionSetup
     {
-        public string Weapon;
+        
     }
     
     [CombatActionVariant(CombatActionVariant = typeof(ShootProjectile))]
     public class ShootProjectileSetup : CommonCombatActionSetup
     {
-        public GameObject Projectile;
+        
     }
 }

@@ -1,17 +1,17 @@
 using System;
 
-namespace Components.Combat
+namespace Components.Combat.Weapons
 {
     [Serializable]
-    public class CommonCombatStats
+    public class WeaponStats
     {
         public int AttackDamage;
         public float AttackSpeed;
         public float AttackRange;
 
-        public CommonCombatStats Clone()
+        public WeaponStats Clone()
         {
-            return new CommonCombatStats()
+            return new WeaponStats()
             {
                 AttackDamage = this.AttackDamage,
                 AttackSpeed = this.AttackSpeed,

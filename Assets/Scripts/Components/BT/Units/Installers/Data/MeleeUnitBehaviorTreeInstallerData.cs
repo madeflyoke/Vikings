@@ -17,5 +17,6 @@ namespace Components.BT.Units.Installers.Data
         public IEnumerable<CombatAction> CombatActions;
         public ICombatStatsCopyProvider CombatStatsCopyProvider;
         public ICombatTargetsProvider CombatTargetsProvider;
+        public ICombatTargetHolder CombatTargetHolder;
     }
 }

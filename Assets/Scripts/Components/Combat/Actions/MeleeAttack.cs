@@ -1,7 +1,9 @@
 using BehaviorDesigner.Runtime.Tasks;
+using BT.Shared;
 using Components.Animation.Enums;
 using Components.Combat.Actions.Setups;
 using Components.Combat.Interfaces;
+using Interfaces;
 
 namespace Components.Combat.Actions
 {
@@ -43,7 +45,28 @@ namespace Components.Combat.Actions
                 case AnimationEventType.END:
                     SetFinished();
                     break;
+                case AnimationEventType.HITSTART:
+                    OnHitStart();
+                    break;
+                case AnimationEventType.HITEND:
+                    OnHitEnd();
+                    break;
             }
+        }
+
+        private void OnHitStart()
+        {
+            
+        }
+
+        private void OnHitEnd()
+        {
+            
+        }
+
+        private void SetHitCollider(bool isActive)
+        {
+            
         }
     }
 }

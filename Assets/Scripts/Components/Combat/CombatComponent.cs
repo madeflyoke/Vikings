@@ -2,25 +2,32 @@ using System;
 using System.Collections.Generic;
 using Components.Combat.Actions;
 using Components.Combat.Interfaces;
+using Components.Combat.Weapons;
 using Components.Interfaces;
+using Utility;
 
 namespace Components.Combat
 {
-    public class CombatComponent : IEntityComponent, ICombatStatsCopyProvider
+    public class CombatComponent : IEntityComponent, ICombatStatsCopyProvider, ICombatTargetHolder
     {
         public event Action<float> IncreaseAttackSpeedEvent;
         
         public List<CombatAction> CombatActions { get; }
-        
-        private readonly CommonCombatStats _baseCombatStats;
-        private readonly CommonCombatStats _currentCombatStats;
 
-        public CombatComponent(List<CombatAction> actions, CommonCombatStats baseCombatStats)
+        private DamageableTarget _currentTarget;
+        private readonly Weapon _currentWeapon;
+        
+        private readonly WeaponStats _baseCombatStats;
+        private readonly WeaponStats _currentCombatStats;
+
+        public CombatComponent(Weapon weapon, List<CombatAction> actions)
         {
             CombatActions = actions;
            
-            _baseCombatStats = baseCombatStats.Clone();
-            _currentCombatStats = _baseCombatStats.Clone();
+            _currentWeapon = weapon;
+            
+            _baseCombatStats = weapon.WeaponStats;
+            _currentCombatStats = weapon.WeaponStats;
             
             CombatActions.ForEach(x=>x.SetCombatStatsProvider(this));
         }
@@ -36,9 +43,15 @@ namespace Components.Combat
             IncreaseAttackSpeedEvent?.Invoke(_currentCombatStats.AttackSpeed);
         }
 
-        public CommonCombatStats GetCurrentCombatStatsCopy()
+        public WeaponStats GetCombatStatsCopy()
         {
-            return _currentCombatStats.Clone();
+            return _baseCombatStats.Clone();
+        }
+
+        public void SetCombatTarget(DamageableTarget combatTarget)
+        {
+            _currentTarget = combatTarget;
+            _currentWeapon.SetCurrentTarget(_currentTarget);
         }
     }
 }

@@ -36,7 +36,7 @@ namespace Components.BT.Units.Installers
             SetupNavMeshMovementTasks(installerData.Agent);
 
             SetupOpponentTargetTasks(installerData.CombatActions, installerData.CombatTargetsProvider,
-                    installerData.CombatStatsCopyProvider, installerData.Agent);
+                    installerData.CombatStatsCopyProvider, installerData.Agent, installerData.CombatTargetHolder);
             
             installerData.BehaviorTreeStarter.BehaviorTreeStartEvent += ()=> _behaviorTree.FindTask<InPreparingProcess>().SetReady(); 
         }
@@ -76,7 +76,7 @@ namespace Components.BT.Units.Installers
         }
 
         private void SetupOpponentTargetTasks(IEnumerable<CombatAction> combatActions, ICombatTargetsProvider combatTargetsProvider,
-            ICombatStatsCopyProvider combatStatsCopyProvider, NavMeshAgent agent)
+            ICombatStatsCopyProvider combatStatsCopyProvider, NavMeshAgent agent, ICombatTargetHolder combatTargetHolder)
         {
             var damageableTargetSharedContainer = GetSharedContainer<DamageableTargetSharedContainerVariable>().Value;
             var selfGeneralContainer = GetSharedContainer<SelfGeneralDataSharedContainerVariable>().Value;
@@ -92,14 +92,14 @@ namespace Components.BT.Units.Installers
             
             _behaviorTree
                 .FindTask<FindClosestDamageableTarget>(MeleeUnitBehaviorTasksNames.FindClosestDamageableTarget)
-                .Initialize(combatTargetsProvider)
+                .Initialize(combatTargetsProvider, combatTargetHolder)
                 .SetSharedVariables(selfGeneralContainer.SelfTransform,
                     damageableTargetSharedContainer.TargetDamageable, damageableTargetSharedContainer.TargetTr);
             
             _behaviorTree
                 .FindTask<IsTargetWithinRange>(MeleeUnitBehaviorTasksNames.IsTargetWithinRange)
                 .SetSharedVariables(selfGeneralContainer.SelfTransform, damageableTargetSharedContainer.TargetTr,
-                    combatStatsCopyProvider.GetCurrentCombatStatsCopy().AttackRange);
+                    combatStatsCopyProvider.GetCombatStatsCopy().AttackRange);
             
             _behaviorTree
                 .FindTask<ProcessActions>(MeleeUnitBehaviorTasksNames.ProcessCombatActions)

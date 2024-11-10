@@ -1,4 +1,5 @@
 using BehaviorDesigner.Runtime.Tasks;
+using BT.Shared;
 using Components.Combat.Actions.Setups;
 using Components.Combat.Interfaces;
 

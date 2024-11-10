@@ -7,6 +7,7 @@ using Components.Combat;
 using Components.Movement;
 using Components.Settings;
 using Components.TagHolder;
+using Components.View;
 using Factories.Decorators;
 using Factories.Units.SubFactories.Attributes;
 using Factories.Units.SubFactories.Base;
@@ -33,7 +34,8 @@ namespace Factories.Units.SubFactories
             var navMeshMovementComponent = DecorateBy(new NavMeshMovementComponentDecorator(entityHolder, Config.ComponentsSettingsHolder
                 .GetComponentSettings<MovementComponentSettings>())) as NavMeshMovementComponent;
             
-            var combatComponent = DecorateBy(new CombatComponentDecorator(Config.ComponentsSettingsHolder
+            var combatComponent = DecorateBy(new CombatComponentDecorator(Entity.GetEntityComponent<HumanoidModelHolder>(),
+                Config.ComponentsSettingsHolder
                 .GetComponentSettings<CombatComponentSettings>())) as CombatComponent;
             
             var animationComponent = DecorateBy(new AnimationComponentDecorator(entityHolder, Config.ComponentsSettingsHolder
@@ -53,7 +55,8 @@ namespace Factories.Units.SubFactories
                 Agent = navMeshMovementComponent.Agent,
                 CombatActions = combatComponent.CombatActions,
                 CombatStatsCopyProvider = combatComponent,
-                CombatTargetsProvider = GeneralUnitsTeamSpawner.Instance.GetOpponentsTargetsProvider(Entity.GetEntityComponent<UnitTagHolder>().Team)
+                CombatTargetsProvider = GeneralUnitsTeamSpawner.Instance.GetOpponentsTargetsProvider(Entity.GetEntityComponent<UnitTagHolder>().Team),
+                CombatTargetHolder = combatComponent
             };
             
             var behaviorDecorator = new BehaviorTreeComponentDecorator<MeleeUnitBehaviorTreeInstaller>(

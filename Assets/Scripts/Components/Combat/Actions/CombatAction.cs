@@ -1,5 +1,6 @@
 ﻿using BehaviorDesigner.Runtime.Tasks;
 using BT.Interfaces;
+using BT.Shared;
 using Components.Animation;
 using Components.Animation.Enums;
 using Components.Combat.Actions.Setups;
@@ -12,6 +13,7 @@ namespace Components.Combat.Actions
         protected ICombatStatsCopyProvider CombatStatsCopyProvider;
         
         protected AnimationCaller AnimationCaller;
+        protected SharedDamageable CombatTarget;
         
         public virtual void Initialize(CommonCombatActionSetup commonSetup)
         {
@@ -27,6 +29,11 @@ namespace Components.Combat.Actions
         public void SetCombatStatsProvider(ICombatStatsCopyProvider combatStatsCopyProvider)
         {
             CombatStatsCopyProvider = combatStatsCopyProvider;
+        }
+
+        public void SetCombatTarget(SharedDamageable combatTarget)
+        {
+            CombatTarget = combatTarget;
         }
         
         protected virtual void OnAnimationCallback(AnimationEventType eventType) { }
