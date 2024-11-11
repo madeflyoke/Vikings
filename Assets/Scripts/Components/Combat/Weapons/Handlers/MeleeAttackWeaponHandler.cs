@@ -50,6 +50,7 @@ namespace Components.Combat.Weapons.Handlers
         private void OnValidate()
         {
             SetColliderActive(false);
+            _hitCollider.isTrigger = true;
         }
 
 #endif

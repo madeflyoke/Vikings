@@ -10,7 +10,7 @@ namespace Components.Combat
 {
     public class CombatComponent : IEntityComponent, ICombatStatsCopyProvider, ICombatTargetHolder
     {
-        public event Action<float> IncreaseAttackSpeedEvent;
+        public event Action<float> AttackSpeedSetEvent;
         
         public List<CombatAction> CombatActions { get; }
 
@@ -41,7 +41,7 @@ namespace Components.Combat
         public void SetAttackSpeed(float multiplier = 1f)
         {
             _currentCombatStats.AttackSpeed = _baseCombatStats.AttackSpeed * multiplier;
-            IncreaseAttackSpeedEvent?.Invoke(_currentCombatStats.AttackSpeed);
+            AttackSpeedSetEvent?.Invoke(_currentCombatStats.AttackSpeed);
         }
 
         public WeaponStats GetCombatStatsCopy()

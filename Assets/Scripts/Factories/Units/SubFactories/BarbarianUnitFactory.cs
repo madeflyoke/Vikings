@@ -45,7 +45,7 @@ namespace Factories.Units.SubFactories
             
             animationComponent.RegisterAnimationCaller(navMeshMovementComponent.AnimationCaller);
 
-            combatComponent.IncreaseAttackSpeedEvent += (x)=>animationComponent.SetAnimatorStateSpeedMultiplier(
+            combatComponent.AttackSpeedSetEvent += (x)=>animationComponent.SetAnimatorStateSpeedMultiplier(
                 AnimatorParametersNames.CombatActionSpeedMultiplier, x);
 
             MeleeUnitBehaviorTreeInstallerData behaviorInstallerData = new MeleeUnitBehaviorTreeInstallerData
