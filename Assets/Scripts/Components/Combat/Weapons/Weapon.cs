@@ -1,49 +1,33 @@
 using System;
-using BT.Shared;
-using Components.Combat.Interfaces;
-using Components.View;
-using Interfaces;
+using System.Collections.Generic;
+using System.Linq;
+using Components.Combat.Weapons.Interfaces;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using Utility;
 
 namespace Components.Combat.Weapons
 {
-    public class Weapon : MonoBehaviour
+    public class Weapon : SerializedMonoBehaviour
     {
-        public event Action<DamageableTarget> HitEvent;
-        
         public WeaponStats WeaponStats => _weaponStats.Clone();
         [SerializeField] private WeaponStats _weaponStats;
-        [SerializeField] private Collider _hitCollider;
-        private IHitReceiver _hitMarker;
-        private DamageableTarget _currentTarget;
+        
+        [SerializeField] private List<IWeaponAttackHandler> _weaponActionHandlers;
+
+        public void Initialize()
+        {
+            _weaponActionHandlers.ForEach(x=>x.Initialize());
+        }
 
         public void SetCurrentTarget(DamageableTarget target)
         {
-            _currentTarget = target;
-            _hitMarker = _currentTarget.TargetTr.GetComponentInChildren<IHitReceiver>();
+            _weaponActionHandlers.ForEach(x=>x.SetTarget(target));
         }
 
-        public void SetColliderActive(bool value)
+        public T GetWeaponActionHandler<T>() where T: IWeaponAttackHandler
         {
-            _hitCollider.enabled = value;
+            return (T)_weaponActionHandlers.FirstOrDefault(x => x.GetType() == typeof(T));
         }
-        
-        private void OnTriggerEnter(Collider other)
-        {
-            if (other == _hitMarker.HitCollider)
-            {
-                HitEvent?.Invoke(_currentTarget);
-            }
-        }
-        
-        #if UNITY_EDITOR
-
-        private void OnValidate()
-        {
-            SetColliderActive(false);
-        }
-
-#endif
     }
 }

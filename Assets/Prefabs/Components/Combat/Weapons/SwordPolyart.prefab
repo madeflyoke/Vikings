@@ -97,11 +97,42 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8747280e5446714caff4043835f4305, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects:
+    - {fileID: 2306726106154380483}
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: _weaponActionHandlers
+      Entry: 7
+      Data: 0|System.Collections.Generic.List`1[[Components.Combat.Weapons.Interfaces.IWeaponAttackHandler,
+        Assembly-CSharp]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: 1|Components.Combat.Weapons.Handlers.MeleeAttackWeaponHandler, Assembly-CSharp
+    - Name: _hitCollider
+      Entry: 10
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
   _weaponStats:
     AttackDamage: 5
     AttackSpeed: 1
     AttackRange: 2
-  _hitCollider: {fileID: 2306726106154380483}
 --- !u!65 &2306726106154380483
 BoxCollider:
   m_ObjectHideFlags: 0

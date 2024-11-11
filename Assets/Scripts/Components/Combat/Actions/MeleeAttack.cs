@@ -1,11 +1,8 @@
 using BehaviorDesigner.Runtime.Tasks;
-using BT.Shared;
 using Components.Animation.Enums;
 using Components.Combat.Actions.Setups;
-using Components.Combat.Interfaces;
 using Components.Combat.Weapons;
-using Interfaces;
-using UnityEngine;
+using Components.Combat.Weapons.Handlers;
 using Utility;
 
 namespace Components.Combat.Actions
@@ -15,11 +12,13 @@ namespace Components.Combat.Actions
         private bool _completed;
         private bool _wasHit;
         private MeleeAttackSetup _meleeSetup;
+        private MeleeAttackWeaponHandler _attackHandler;
 
         public override void Initialize(CommonCombatActionSetup commonSetup, Weapon weapon) 
         {
             base.Initialize(commonSetup, weapon);
             _meleeSetup = commonSetup as MeleeAttackSetup;
+            _attackHandler = weapon.GetWeaponActionHandler<MeleeAttackWeaponHandler>();
         }
 
         public override TaskStatus GetCurrentStatus()
@@ -41,7 +40,7 @@ namespace Components.Combat.Actions
         private void StartAttackAnimation()
         {
             AnimationCaller.AnimationsEventsListener.AnimationEventFired += OnAnimationCallback;
-            CurrentWeapon.HitEvent += OnWeaponHit;
+            _attackHandler.HitEvent += OnWeaponHit;
             
             AnimationCaller.CallOnAnimation?.Invoke(AnimationCaller, _meleeSetup.AnimationClipData);
         }
@@ -52,7 +51,7 @@ namespace Components.Combat.Actions
             
             _wasHit = false;
             AnimationCaller.AnimationsEventsListener.AnimationEventFired -= OnAnimationCallback;
-            CurrentWeapon.HitEvent -= OnWeaponHit;
+            _attackHandler.HitEvent -= OnWeaponHit;
         }
 
         protected override void OnAnimationCallback(AnimationEventType eventType)
@@ -73,12 +72,12 @@ namespace Components.Combat.Actions
 
         private void OnHitStart()
         {
-            CurrentWeapon.SetColliderActive(true);
+            _attackHandler.SetColliderActive(true);
         }
 
         private void OnHitEnd()
         {
-            CurrentWeapon.SetColliderActive(false);
+            _attackHandler.SetColliderActive(false);
         }
         
         private void OnWeaponHit(DamageableTarget damageableTarget)

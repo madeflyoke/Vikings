@@ -23,7 +23,7 @@ namespace Components.Combat
         public CombatComponent(Weapon weapon, List<CombatAction> actions)
         {
             CombatActions = actions;
-           
+            
             _currentWeapon = weapon;
             
             _baseCombatStats = weapon.WeaponStats;
@@ -34,6 +34,7 @@ namespace Components.Combat
 
         public void InitializeComponent()
         {
+            _currentWeapon.Initialize();
             SetAttackSpeed();
         }
 
