@@ -34,5 +34,9 @@ namespace Components.Health
         {
             
         }
+
+        public void Dispose()
+        {
+        }
     }
 }

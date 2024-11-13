@@ -29,9 +29,9 @@ namespace Factories.Units.SubFactories
             var movementComponent = DecorateBy(new NavMeshMovementComponentDecorator(entityHolder, Config.ComponentsSettingsHolder
                 .GetComponentSettings<MovementComponentSettings>())) as NavMeshMovementComponent;
             
-            var combatComponent = DecorateBy(new CombatComponentDecorator(Entity.GetEntityComponent<HumanoidModelHolder>(),
+            var combatComponent = DecorateBy(new CombatComponentDecorator(WeaponsConfig,Entity.GetEntityComponent<HumanoidModelHolder>(),
                 Config.ComponentsSettingsHolder
-                .GetComponentSettings<CombatComponentSettings>())) as CombatComponent;
+                    .GetComponentSettings<CombatComponentSettings>())) as CombatComponent;
             
             var animationComponent = DecorateBy(new AnimationComponentDecorator(entityHolder, Config.ComponentsSettingsHolder
                 .GetComponentSettings<AnimationComponentSettings>())) as AnimationComponent;

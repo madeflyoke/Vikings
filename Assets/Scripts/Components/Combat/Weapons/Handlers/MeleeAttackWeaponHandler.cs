@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using Components.Combat.Interfaces;
 using Components.Combat.Weapons.Interfaces;
@@ -14,15 +15,23 @@ namespace Components.Combat.Weapons.Handlers
     {
         public event Action<DamageableTarget> HitEvent;
         
-        [SerializeField] private Collider _hitCollider;
+        [SerializeField] private List<Collider> _hitColliders;
         
         public DamageableTarget CurrentTarget { get; private set; }
+        
         private IHitReceiver _hitMarker;
-        private IDisposable _colliderDis;
+        private CompositeDisposable _collidersDisposable;
+        private Weapon _relatedWeapon;
 
-        public void Initialize()
+        public void Initialize(Weapon relatedWeapon)
         {
-            _colliderDis = _hitCollider.OnTriggerEnterAsObservable().Subscribe(ManualOnTriggerEnter);
+            _relatedWeapon = relatedWeapon;
+            
+            _collidersDisposable = new CompositeDisposable();
+            foreach (var col in _hitColliders)
+            {
+                col.OnTriggerEnterAsObservable().Where(_=>_relatedWeapon.Activated).Subscribe(ManualOnTriggerEnter).AddTo(_collidersDisposable);
+            }
         }
         
         public void SetTarget(DamageableTarget damageableTarget)
@@ -33,12 +42,12 @@ namespace Components.Combat.Weapons.Handlers
         
         public void SetColliderActive(bool value)
         {
-            _hitCollider.enabled = value;
+            _hitColliders.ForEach(x=>x.enabled=value);
         }
         
         private void ManualOnTriggerEnter(Collider other)
         {
-            if (other == _hitMarker.HitCollider)
+            if (other == _hitMarker.OverallCollider)
             {
                 HitEvent?.Invoke(CurrentTarget);
             }
@@ -50,14 +59,14 @@ namespace Components.Combat.Weapons.Handlers
         private void OnValidate()
         {
             SetColliderActive(false);
-            _hitCollider.isTrigger = true;
+            _hitColliders.ForEach(x=>x.isTrigger = true);
         }
 
 #endif
 
         public void Dispose()
         {
-            _colliderDis?.Dispose();
+            _collidersDisposable?.Dispose();
         }
     }
 }

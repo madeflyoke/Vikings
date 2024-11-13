@@ -15,7 +15,7 @@ namespace Components.BT.Units.Installers.Data
         
         public NavMeshAgent Agent;
         public IEnumerable<CombatAction> CombatActions;
-        public ICombatStatsCopyProvider CombatStatsCopyProvider;
+        public ICombatStatsProvider CombatStatsProvider;
         public ICombatTargetsProvider CombatTargetsProvider;
         public ICombatTargetHolder CombatTargetHolder;
     }

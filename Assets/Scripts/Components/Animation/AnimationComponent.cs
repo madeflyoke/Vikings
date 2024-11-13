@@ -55,5 +55,9 @@ namespace Components.Animation
       {
          animationCallers.ForEach(RegisterAnimationCaller);
       }
+
+      public void Dispose()
+      {
+      }
    }
 }

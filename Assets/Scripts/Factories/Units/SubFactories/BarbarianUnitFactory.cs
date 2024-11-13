@@ -34,7 +34,7 @@ namespace Factories.Units.SubFactories
             var navMeshMovementComponent = DecorateBy(new NavMeshMovementComponentDecorator(entityHolder, Config.ComponentsSettingsHolder
                 .GetComponentSettings<MovementComponentSettings>())) as NavMeshMovementComponent;
             
-            var combatComponent = DecorateBy(new CombatComponentDecorator(Entity.GetEntityComponent<HumanoidModelHolder>(),
+            var combatComponent = DecorateBy(new CombatComponentDecorator(WeaponsConfig,Entity.GetEntityComponent<HumanoidModelHolder>(),
                 Config.ComponentsSettingsHolder
                 .GetComponentSettings<CombatComponentSettings>())) as CombatComponent;
             
@@ -54,7 +54,7 @@ namespace Factories.Units.SubFactories
                 EntityHolder = entityHolder,
                 Agent = navMeshMovementComponent.Agent,
                 CombatActions = combatComponent.CombatActions,
-                CombatStatsCopyProvider = combatComponent,
+                CombatStatsProvider = combatComponent,
                 CombatTargetsProvider = GeneralUnitsTeamSpawner.Instance.GetOpponentsTargetsProvider(Entity.GetEntityComponent<UnitTagHolder>().Team),
                 CombatTargetHolder = combatComponent
             };

@@ -1,4 +1,5 @@
-﻿using BehaviorDesigner.Runtime.Tasks;
+﻿using System.Collections.Generic;
+using BehaviorDesigner.Runtime.Tasks;
 using BT.Interfaces;
 using BT.Shared;
 using Components.Animation;
@@ -11,15 +12,17 @@ namespace Components.Combat.Actions
 {
     public abstract class CombatAction : IBehaviorAction
     {
-        protected ICombatStatsCopyProvider CombatStatsCopyProvider;
+        public CommonCombatActionSetup CommonSetup { get; private set; }
+        protected ICombatStatsProvider CombatStatsProvider;
         
         protected AnimationCaller AnimationCaller;
-        protected Weapon CurrentWeapon;
+        protected WeaponSet WeaponsSet;
 
-        public virtual void Initialize(CommonCombatActionSetup commonSetup, Weapon weapon)
+        public virtual void Initialize(CommonCombatActionSetup commonSetup, WeaponSet weaponsSet)
         {
+            CommonSetup = commonSetup;
             AnimationCaller = new AnimationCaller();
-            CurrentWeapon = weapon;
+            WeaponsSet = weaponsSet;
         }
 
         public AnimationCaller GetAnimationCaller()
@@ -27,10 +30,11 @@ namespace Components.Combat.Actions
             return AnimationCaller;
         }
 
-        public void SetCombatStatsProvider(ICombatStatsCopyProvider combatStatsCopyProvider)
+        public void SetCombatStatsProvider(ICombatStatsProvider combatStatsProvider)
         {
-            CombatStatsCopyProvider = combatStatsCopyProvider;
+            CombatStatsProvider = combatStatsProvider;
         }
+        
         
         protected virtual void OnAnimationCallback(AnimationEventType eventType) { }
        

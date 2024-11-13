@@ -8,6 +8,6 @@ namespace Components.Combat.Weapons.Interfaces
         public DamageableTarget CurrentTarget { get; }
 
         public void SetTarget(DamageableTarget damageableTarget);
-        public void Initialize();
+        public void Initialize(Weapon relatedWeapon);
     }
 }

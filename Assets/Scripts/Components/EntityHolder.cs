@@ -21,5 +21,9 @@ namespace Components
         {
             
         }
+
+        public void Dispose()
+        {
+        }
     }
 }

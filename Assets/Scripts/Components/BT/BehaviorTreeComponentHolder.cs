@@ -16,5 +16,9 @@ namespace Components.BT
         {
             _behaviorTree.EnableBehavior();
         }
+
+        public void Dispose()
+        {
+        }
     }
 }

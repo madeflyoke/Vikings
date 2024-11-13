@@ -36,7 +36,7 @@ namespace Components.BT.Units.Installers
             SetupNavMeshMovementTasks(installerData.Agent);
 
             SetupOpponentTargetTasks(installerData.CombatActions, installerData.CombatTargetsProvider,
-                    installerData.CombatStatsCopyProvider, installerData.Agent, installerData.CombatTargetHolder);
+                    installerData.CombatStatsProvider, installerData.Agent, installerData.CombatTargetHolder);
             
             installerData.BehaviorTreeStarter.BehaviorTreeStartEvent += ()=> _behaviorTree.FindTask<InPreparingProcess>().SetReady(); 
         }
@@ -76,7 +76,7 @@ namespace Components.BT.Units.Installers
         }
 
         private void SetupOpponentTargetTasks(IEnumerable<CombatAction> combatActions, ICombatTargetsProvider combatTargetsProvider,
-            ICombatStatsCopyProvider combatStatsCopyProvider, NavMeshAgent agent, ICombatTargetHolder combatTargetHolder)
+            ICombatStatsProvider combatStatsProvider, NavMeshAgent agent, ICombatTargetHolder combatTargetHolder)
         {
             var damageableTargetSharedContainer = GetSharedContainer<DamageableTargetSharedContainerVariable>().Value;
             var selfGeneralContainer = GetSharedContainer<SelfGeneralDataSharedContainerVariable>().Value;
@@ -99,7 +99,7 @@ namespace Components.BT.Units.Installers
             _behaviorTree
                 .FindTask<IsTargetWithinRange>(MeleeUnitBehaviorTasksNames.IsTargetWithinRange)
                 .SetSharedVariables(selfGeneralContainer.SelfTransform, damageableTargetSharedContainer.TargetTr,
-                    combatStatsCopyProvider.GetCombatStatsCopy().AttackRange);
+                    combatStatsProvider);
             
             _behaviorTree
                 .FindTask<ProcessActions>(MeleeUnitBehaviorTasksNames.ProcessCombatActions)

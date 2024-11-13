@@ -8,5 +8,9 @@ namespace Components.TagHolder.Base
         {
             
         }
+
+        public void Dispose()
+        {
+        }
     }
 }

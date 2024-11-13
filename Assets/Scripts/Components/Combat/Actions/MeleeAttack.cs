@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using BehaviorDesigner.Runtime.Tasks;
 using Components.Animation.Enums;
 using Components.Combat.Actions.Setups;
@@ -12,13 +13,14 @@ namespace Components.Combat.Actions
         private bool _completed;
         private bool _wasHit;
         private MeleeAttackSetup _meleeSetup;
-        private MeleeAttackWeaponHandler _attackHandler;
+        private List<MeleeAttackWeaponHandler> _meleeAttackHandlers;
 
-        public override void Initialize(CommonCombatActionSetup commonSetup, Weapon weapon) 
+        public override void Initialize(CommonCombatActionSetup commonSetup, WeaponSet weaponsSet) 
         {
-            base.Initialize(commonSetup, weapon);
+            base.Initialize(commonSetup, weaponsSet);
             _meleeSetup = commonSetup as MeleeAttackSetup;
-            _attackHandler = weapon.GetWeaponActionHandler<MeleeAttackWeaponHandler>();
+            
+            _meleeAttackHandlers = weaponsSet.GetWeaponAttackHandlers<MeleeAttackWeaponHandler>();
         }
 
         public override TaskStatus GetCurrentStatus()
@@ -33,14 +35,14 @@ namespace Components.Combat.Actions
         public override void Execute()
         {
             _completed = false;
-            
+            WeaponsSet.SetActive(true);
             StartAttackAnimation();
         }
 
         private void StartAttackAnimation()
         {
             AnimationCaller.AnimationsEventsListener.AnimationEventFired += OnAnimationCallback;
-            _attackHandler.HitEvent += OnWeaponHit;
+            _meleeAttackHandlers.ForEach(x=>x.HitEvent += OnWeaponHit);
             
             AnimationCaller.CallOnAnimation?.Invoke(AnimationCaller, _meleeSetup.AnimationClipData);
         }
@@ -50,8 +52,10 @@ namespace Components.Combat.Actions
             _completed = true;
             
             _wasHit = false;
+            
             AnimationCaller.AnimationsEventsListener.AnimationEventFired -= OnAnimationCallback;
-            _attackHandler.HitEvent -= OnWeaponHit;
+            _meleeAttackHandlers.ForEach(x=>x.HitEvent -= OnWeaponHit);
+            WeaponsSet.SetActive(false);
         }
 
         protected override void OnAnimationCallback(AnimationEventType eventType)
@@ -72,12 +76,12 @@ namespace Components.Combat.Actions
 
         private void OnHitStart()
         {
-            _attackHandler.SetColliderActive(true);
+            _meleeAttackHandlers.ForEach(x=>x.SetColliderActive(true));
         }
 
         private void OnHitEnd()
         {
-            _attackHandler.SetColliderActive(false);
+            _meleeAttackHandlers.ForEach(x=>x.SetColliderActive(false));
         }
         
         private void OnWeaponHit(DamageableTarget damageableTarget)
@@ -85,7 +89,7 @@ namespace Components.Combat.Actions
             if (_wasHit==false)
             {
                 _wasHit = true;
-                var damage = CombatStatsCopyProvider.GetCombatStatsCopy().AttackDamage * _meleeSetup.AttackDamageMultiplier;
+                var damage = CombatStatsProvider.GetCurrentCombatStats().AttackDamage * _meleeSetup.AttackDamageMultiplier;
                 damageableTarget.Damageable.TakeDamage(damage);
             }
         }

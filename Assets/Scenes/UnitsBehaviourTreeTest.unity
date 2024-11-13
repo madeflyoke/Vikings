@@ -1504,7 +1504,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc0e9a51e61f41a09c5937e0653a01b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <Config>k__BackingField: {fileID: 11400000, guid: b84dee49ace3fca43b4335f9af4bd834, type: 2}
+  Config: {fileID: 11400000, guid: b84dee49ace3fca43b4335f9af4bd834, type: 2}
+  WeaponsConfig: {fileID: 11400000, guid: ec417f66bdd34f5479bfc823099a50d6, type: 2}
   _entityHolder: {fileID: -6091326919306696630, guid: c0b09884bc1937f4b9d8a92e9cc674f3, type: 3}
 --- !u!4 &2078943781
 Transform:
@@ -1533,7 +1534,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1ae23de467455b46a1c909e853a4743, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <Config>k__BackingField: {fileID: 11400000, guid: b3e94c7a3db53ec4386c115bb77d75ba, type: 2}
+  Config: {fileID: 11400000, guid: b3e94c7a3db53ec4386c115bb77d75ba, type: 2}
+  WeaponsConfig: {fileID: 11400000, guid: ec417f66bdd34f5479bfc823099a50d6, type: 2}
   _entityHolder: {fileID: -6091326919306696630, guid: c0b09884bc1937f4b9d8a92e9cc674f3, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

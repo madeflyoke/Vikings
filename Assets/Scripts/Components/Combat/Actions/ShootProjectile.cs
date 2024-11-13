@@ -10,9 +10,9 @@ namespace Components.Combat.Actions
     {
         private ShootProjectileSetup _shootProjectileSetup;
 
-        public override void Initialize(CommonCombatActionSetup commonSetup, Weapon weapon) 
+        public override void Initialize(CommonCombatActionSetup commonSetup, WeaponSet weaponsSet) 
         {
-            base.Initialize(commonSetup, weapon);
+            base.Initialize(commonSetup, weaponsSet);
             _shootProjectileSetup = commonSetup as ShootProjectileSetup;
         }
 

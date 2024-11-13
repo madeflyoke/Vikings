@@ -1,6 +1,7 @@
 using System;
 using System.Text;
 using Components;
+using Components.Combat.Weapons;
 using Components.Interfaces;
 using Components.TagHolder;
 using Factories.Components;
@@ -19,8 +20,9 @@ namespace Factories.Units.SubFactories.Base
     public abstract class UnitSubFactory : MonoBehaviour, IFactory<UnitEntity>
     {
         protected IReadOnlyEntity Entity;
-        
-        [field: SerializeField, ReadOnly] protected UnitConfig Config { get; private set; }
+
+        [field: SerializeField, ReadOnly] protected UnitConfig Config;
+        [SerializeField] protected WeaponsConfig WeaponsConfig;
         [SerializeField] private EntityHolder _entityHolder;
         private UnitEntity _unitEntity;
 

@@ -1,5 +1,6 @@
 using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
+using Components.Combat.Interfaces;
 using UnityEngine;
 
 namespace BT.Nodes.Conditionals
@@ -8,13 +9,13 @@ namespace BT.Nodes.Conditionals
     {
         private SharedTransform _selfTransform;
         private SharedTransform _target;
-        private float _range;
+        private ICombatStatsProvider _combatStatsProvider;
         
-        public void SetSharedVariables(SharedTransform selfTransform, SharedTransform targetTransform, float range)
+        public void SetSharedVariables(SharedTransform selfTransform, SharedTransform targetTransform, ICombatStatsProvider combatStatsProvider)
         {
             _selfTransform = selfTransform;
             _target = targetTransform;
-            _range = range;
+            _combatStatsProvider = combatStatsProvider;
         }
 
         public override TaskStatus OnUpdate()
@@ -24,7 +25,7 @@ namespace BT.Nodes.Conditionals
 
         private bool IsWithinRange()
         {
-            return Vector3.Distance(_target.Value.position, _selfTransform.Value.position) <= _range;
+            return Vector3.Distance(_target.Value.position, _selfTransform.Value.position) <= _combatStatsProvider.GetCurrentCombatStats().AttackRange;
         }
     }
 }

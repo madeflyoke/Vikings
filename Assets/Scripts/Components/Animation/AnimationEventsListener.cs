@@ -19,12 +19,12 @@ namespace Components.Animation
             AnimationEventFired?.Invoke(AnimationEventType.END);
         }
 
-        public void HitStart()
+        public void OnHitStart()
         {
             AnimationEventFired?.Invoke(AnimationEventType.HITSTART);
         }
 
-        public void HitEnd()
+        public void OnHitEnd()
         {
             AnimationEventFired?.Invoke(AnimationEventType.HITEND);
         }
