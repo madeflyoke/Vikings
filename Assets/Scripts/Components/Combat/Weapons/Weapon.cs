@@ -64,10 +64,10 @@ namespace Components.Combat.Weapons
             
             foreach (var conditionHandler in conditions.AttackHandlers)
             {
-                var resultHandler = _weaponActionHandlers.FirstOrDefault(x => x.GetType() == conditionHandler.GetType());
+                var resultHandler = _weaponActionHandlers.FirstOrDefault(x => x.GetType() == conditionHandler);
                 if (resultHandler==null)
                 {
-                    Debug.LogError($"Missing attack handler by condition: {conditionHandler.GetType()}");
+                    Debug.LogError($"Missing attack handler by condition: {conditionHandler}");
                     return false;
                 }
             }

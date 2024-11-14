@@ -101,17 +101,16 @@ MonoBehaviour:
       Data: 2
     - Name: AttackHandlers
       Entry: 7
-      Data: 10|System.Collections.Generic.List`1[[Components.Combat.Weapons.Interfaces.IWeaponAttackHandler,
-        Assembly-CSharp]], mscorlib
+      Data: 10|System.Collections.Generic.List`1[[System.Type, mscorlib]], mscorlib
     - Name: 
       Entry: 12
       Data: 1
     - Name: 
       Entry: 7
-      Data: 11|Components.Combat.Weapons.Handlers.MeleeAttackWeaponHandler, Assembly-CSharp
-    - Name: _hitColliders
-      Entry: 6
-      Data: 
+      Data: 11|System.RuntimeType, mscorlib
+    - Name: 
+      Entry: 1
+      Data: Components.Combat.Weapons.Handlers.MeleeAttackWeaponHandler, Assembly-CSharp
     - Name: 
       Entry: 8
       Data: 
