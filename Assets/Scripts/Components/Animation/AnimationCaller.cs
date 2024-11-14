@@ -1,5 +1,4 @@
 using System;
-using Components.Animation.Enums;
 
 namespace Components.Animation
 {
@@ -13,11 +12,6 @@ namespace Components.Animation
         public void AttachAnimationEventsListener(AnimationEventsListener eventsListener)
         {
             AnimationsEventsListener = eventsListener;
-        }
-
-        public void SetParameterValue(string name, float value)
-        {
-            CallOnParameterValueChange?.Invoke(name,value);
         }
     }
 }

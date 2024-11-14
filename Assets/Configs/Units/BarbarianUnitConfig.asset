@@ -21,6 +21,7 @@ MonoBehaviour:
     - {fileID: 9000000, guid: cabd8e6caf7ded941b2256f9d328f711, type: 3}
     - {fileID: 22100000, guid: b6ba0e2dc885e634c927a3d40c352e15, type: 2}
     - {fileID: -5698863656139880434, guid: cabd8e6caf7ded941b2256f9d328f711, type: 3}
+    - {fileID: 7624655660056751624, guid: cabd8e6caf7ded941b2256f9d328f711, type: 3}
     - {fileID: 11400000, guid: ec417f66bdd34f5479bfc823099a50d6, type: 2}
     - {fileID: 11400000, guid: 07a373a7193ea3647b6fd3e2e150e67f, type: 2}
     SerializedBytesString: 
@@ -161,7 +162,7 @@ MonoBehaviour:
       Data: 1
     - Name: WeaponMode
       Entry: 3
-      Data: 2
+      Data: 1
     - Name: AttackHandlers
       Entry: 7
       Data: 15|System.Collections.Generic.List`1[[System.Type, mscorlib]], mscorlib
@@ -185,7 +186,7 @@ MonoBehaviour:
       Data: 16|Components.Animation.AnimationClipData, Assembly-CSharp
     - Name: <AnimationClip>k__BackingField
       Entry: 10
-      Data: 4
+      Data: 5
     - Name: <TargetStateName>k__BackingField
       Entry: 1
       Data: CombatAction
@@ -203,7 +204,7 @@ MonoBehaviour:
       Data: 1
     - Name: EDITOR_finalDamage
       Entry: 4
-      Data: 10
+      Data: 5
     - Name: 
       Entry: 8
       Data: 
@@ -215,7 +216,7 @@ MonoBehaviour:
       Data: 
     - Name: EDITOR_WeaponsConfig
       Entry: 10
-      Data: 5
+      Data: 6
     - Name: 
       Entry: 8
       Data: 
@@ -224,7 +225,7 @@ MonoBehaviour:
       Data: 17|Components.Settings.BehaviorTreeComponentSettings, Assembly-CSharp
     - Name: ExternalBehaviorTree
       Entry: 10
-      Data: 6
+      Data: 7
     - Name: 
       Entry: 8
       Data: 

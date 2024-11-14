@@ -26,11 +26,6 @@ namespace Components.Combat.Actions
             WeaponsSet = weaponsSet;
         }
 
-        public AnimationCaller GetAnimationCaller()
-        {
-            return AnimationCaller;
-        }
-
         public void SetCombatStatsProvider(ICombatStatsProvider combatStatsProvider)
         {
             CombatStatsProvider = combatStatsProvider;

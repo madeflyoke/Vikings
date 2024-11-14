@@ -39,7 +39,7 @@ namespace Components.Combat
         public void InitializeComponent()
         {
             _weaponsHolder.Initialize();
-            SetAttackSpeed();
+            SetAttackSpeed(.3f);
         }
 
         public void SetAttackSpeed(float multiplier = 1f)
