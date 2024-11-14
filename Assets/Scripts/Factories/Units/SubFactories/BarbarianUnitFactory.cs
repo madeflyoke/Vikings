@@ -41,12 +41,9 @@ namespace Factories.Units.SubFactories
             var animationComponent = DecorateBy(new AnimationComponentDecorator(entityHolder, Config.ComponentsSettingsHolder
                 .GetComponentSettings<AnimationComponentSettings>())) as AnimationComponent;
             
-            animationComponent.RegisterAnimationCallerMany(combatComponent.CombatActions.Select(x=>x.GetAnimationCaller()));
-            
-            animationComponent.RegisterAnimationCaller(navMeshMovementComponent.AnimationCaller);
-
-            combatComponent.AttackSpeedSetEvent += (x)=>animationComponent.SetAnimatorStateSpeedMultiplier(
-                AnimatorParametersNames.CombatActionSpeedMultiplier, x);
+            animationComponent.RegisterAnimationCallerMany(combatComponent.CombatActions);
+            animationComponent.RegisterAnimationCaller(navMeshMovementComponent);
+            animationComponent.RegisterAnimationCaller(combatComponent);
 
             MeleeUnitBehaviorTreeInstallerData behaviorInstallerData = new MeleeUnitBehaviorTreeInstallerData
             {

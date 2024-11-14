@@ -132,6 +132,9 @@ MonoBehaviour:
     - Name: <TargetStateName>k__BackingField
       Entry: 1
       Data: CombatAction
+    - Name: <FullBodyLayer>k__BackingField
+      Entry: 5
+      Data: true
     - Name: <TransitionDuration>k__BackingField
       Entry: 4
       Data: 0.25

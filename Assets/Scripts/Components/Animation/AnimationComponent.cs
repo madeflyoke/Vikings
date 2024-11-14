@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Components.Animation.Interfaces;
 using Components.Interfaces;
 using Sirenix.Utilities;
 using UnityEngine;
@@ -19,14 +20,21 @@ namespace Components.Animation
       
       public void InitializeComponent() { }
 
-      public void SetAnimatorStateSpeedMultiplier(string parameterName, float speed)
+      public void SetParameterValue(string parameterName, float value)
       {
-         _animator.SetFloat(parameterName,speed);
+         _animator.SetFloat(parameterName,value);
       }
-      
-      private void PlayAnimation(string name, float transitionDuration = 0.25f)
+
+      private void PlayAnimation(string name, int layerIndex =0, float transitionDuration = 0.25f)
       {
-         _animator.CrossFadeInFixedTime(name, transitionDuration);
+         if (layerIndex!=0)
+         {
+            _animator.CrossFadeInFixedTime(name, transitionDuration, layer: layerIndex);
+         }
+         else
+         {
+            _animator.CrossFadeInFixedTime(name, transitionDuration);
+         }
       }
 
       private void PlayCustomAnimation(AnimationCaller caller, AnimationClipData clipData)
@@ -39,21 +47,24 @@ namespace Components.Animation
             }
          }
 
-         PlayAnimation(clipData.TargetStateName, clipData.TransitionDuration);
+         PlayAnimation(clipData.TargetStateName, 
+            clipData.FullBodyLayer? AnimatorLayersIndexes.FullBodyLayer: 0,
+            clipData.TransitionDuration);
       }
 
-      public void RegisterAnimationCaller(AnimationCaller animationCaller)
+      public void RegisterAnimationCaller(IAnimationCallerHolder animationCallerHolder)
       {
-         if (animationCaller != null)
+         if (animationCallerHolder != null)
          {
-            animationCaller.CallOnAnimation += PlayCustomAnimation;
-            animationCaller.AttachAnimationEventsListener(_animationEventsListener);
+            animationCallerHolder.AnimationCaller.CallOnAnimation += PlayCustomAnimation; //handle unsubscribing?
+            animationCallerHolder.AnimationCaller.CallOnParameterValueChange += SetParameterValue;
+            animationCallerHolder.AnimationCaller.AttachAnimationEventsListener(_animationEventsListener);
          }
       }
       
-      public void RegisterAnimationCallerMany(IEnumerable<AnimationCaller> animationCallers)
+      public void RegisterAnimationCallerMany(IEnumerable<IAnimationCallerHolder> animationCallersHolders)
       {
-         animationCallers.ForEach(RegisterAnimationCaller);
+         animationCallersHolders.ForEach(RegisterAnimationCaller);
       }
 
       public void Dispose()

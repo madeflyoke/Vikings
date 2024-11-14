@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Components.Animation;
+using Components.Animation.Interfaces;
 using Components.Combat.Actions;
 using Components.Combat.Interfaces;
 using Components.Combat.Weapons;
@@ -9,12 +11,11 @@ using Utility;
 
 namespace Components.Combat
 {
-    public class CombatComponent : IEntityComponent, ICombatStatsProvider, ICombatTargetHolder
+    public class CombatComponent : IEntityComponent, ICombatStatsProvider, ICombatTargetHolder, IAnimationCallerHolder
     {
-        public event Action<float> AttackSpeedSetEvent;
-        
         public List<CombatAction> CombatActions { get; }
         
+        public AnimationCaller AnimationCaller { get; }
         private WeaponStats BaseCombatStats=>_weaponsHolder.CurrentWeaponStats;
         private WeaponStats _currentCombatStats;
 
@@ -25,6 +26,7 @@ namespace Components.Combat
             CombatActions = actions;
             _weaponsHolder = weaponsHolder;
             _weaponsHolder.CurrentWeaponSetChanged += OnWeaponSetChanged;
+            AnimationCaller = new AnimationCaller();
             
             CombatActions.ForEach(x=>x.SetCombatStatsProvider(this));
         }
@@ -43,7 +45,7 @@ namespace Components.Combat
         public void SetAttackSpeed(float multiplier = 1f)
         {
             _currentCombatStats.AttackSpeed = BaseCombatStats.AttackSpeed * multiplier;
-            AttackSpeedSetEvent?.Invoke(_currentCombatStats.AttackSpeed);
+            AnimationCaller.CallOnParameterValueChange?.Invoke(AnimatorParametersNames.CombatActionSpeedMultiplier, _currentCombatStats.AttackSpeed);
         }
 
         public WeaponStats GetCurrentCombatStats()

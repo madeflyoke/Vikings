@@ -4,18 +4,19 @@ using BT.Interfaces;
 using BT.Shared;
 using Components.Animation;
 using Components.Animation.Enums;
+using Components.Animation.Interfaces;
 using Components.Combat.Actions.Setups;
 using Components.Combat.Interfaces;
 using Components.Combat.Weapons;
 
 namespace Components.Combat.Actions
 {
-    public abstract class CombatAction : IBehaviorAction
+    public abstract class CombatAction : IBehaviorAction, IAnimationCallerHolder
     {
-        public CommonCombatActionSetup CommonSetup { get; private set; }
+        private CommonCombatActionSetup CommonSetup { get; set; }
         protected ICombatStatsProvider CombatStatsProvider;
         
-        protected AnimationCaller AnimationCaller;
+        public AnimationCaller AnimationCaller { get; private set; }
         protected WeaponSet WeaponsSet;
 
         public virtual void Initialize(CommonCombatActionSetup commonSetup, WeaponSet weaponsSet)

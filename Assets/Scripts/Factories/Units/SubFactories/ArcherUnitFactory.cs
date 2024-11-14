@@ -26,7 +26,7 @@ namespace Factories.Units.SubFactories
             DecorateBy(new HealthComponentDecorator(Config.ComponentsSettingsHolder
                 .GetComponentSettings<HealthComponentSettings>()));
             
-            var movementComponent = DecorateBy(new NavMeshMovementComponentDecorator(entityHolder, Config.ComponentsSettingsHolder
+            var navMeshMovementComponent = DecorateBy(new NavMeshMovementComponentDecorator(entityHolder, Config.ComponentsSettingsHolder
                 .GetComponentSettings<MovementComponentSettings>())) as NavMeshMovementComponent;
             
             var combatComponent = DecorateBy(new CombatComponentDecorator(WeaponsConfig,Entity.GetEntityComponent<HumanoidModelHolder>(),
@@ -36,9 +36,9 @@ namespace Factories.Units.SubFactories
             var animationComponent = DecorateBy(new AnimationComponentDecorator(entityHolder, Config.ComponentsSettingsHolder
                 .GetComponentSettings<AnimationComponentSettings>())) as AnimationComponent;
             
-            animationComponent.RegisterAnimationCallerMany(combatComponent.CombatActions.Select(x=>x.GetAnimationCaller()));
+            animationComponent.RegisterAnimationCallerMany(combatComponent.CombatActions);
             
-            animationComponent.RegisterAnimationCaller(movementComponent.AnimationCaller);
+            animationComponent.RegisterAnimationCaller(navMeshMovementComponent);
 
             return base.CreateProduct();
         }

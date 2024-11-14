@@ -1,5 +1,6 @@
 using System;
 using Components.Animation;
+using Components.Animation.Interfaces;
 using Components.Interfaces;
 using UniRx;
 using UnityEngine.AI;
@@ -7,12 +8,10 @@ using Utility;
 
 namespace Components.Movement
 {
-    public class NavMeshMovementComponent : IEntityComponent, IDisposable
+    public class NavMeshMovementComponent : IEntityComponent, IAnimationCallerHolder
     {
         public AnimationCaller AnimationCaller { get; }
         public NavMeshAgent Agent { get; }
-        
-        private bool IsAgentMoving => Agent.velocity.magnitude > 0f;
         
         private IDisposable _agentSpeedObserver;
 
@@ -24,28 +23,17 @@ namespace Components.Movement
 
         public void InitializeComponent()
         {
-            _agentSpeedObserver = this.ObserveEveryValueChanged(x => x.IsAgentMoving).Skip(1)
+            _agentSpeedObserver = Observable.EveryUpdate()
                 .Subscribe(x =>
                 {
-                    if (x)
-                    {
-                        OnAgentMoving();
-                    }
-                    else
-                    {
-                        OnAgentStopped();
-                    }
+                    UpdateAnimationValue();
                 });
         }
         
-        private void OnAgentMoving()
+        private void UpdateAnimationValue()
         {
-            AnimationCaller.CallOnAnimation?.Invoke(AnimationCaller, new AnimationClipData(targetStateName: AnimatorStatesNames.Moving));
-        }
-        
-        private void OnAgentStopped()
-        {
-            AnimationCaller.CallOnAnimation?.Invoke(AnimationCaller, new AnimationClipData(targetStateName: AnimatorStatesNames.Idle));
+            AnimationCaller.CallOnParameterValueChange(AnimatorParametersNames.CurrentVelocity,
+                Agent.velocity.magnitude);
         }
 
         public void Dispose()

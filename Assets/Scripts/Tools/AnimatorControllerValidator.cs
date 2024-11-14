@@ -15,7 +15,7 @@ namespace Tools
         
         [SerializeField] private AnimatorController _animatorController;
         [SerializeField] private string _emptyAnimationsPath;
-        [SerializeField] private string _animationsParametersPath;
+      //  [SerializeField] private string _animationsParametersPath;
         
         [Button, Tooltip("Caution! Removes all files except empty animations in folder")]
         public void RecreateAndFillEmptyAnimations()
@@ -120,38 +120,38 @@ namespace Tools
             return isOk;
         }
         
-        [Button]
-        private void SetAnimatorParameters()
-        {
-            ClassGenerator classGenerator = new ClassGenerator();
-            
-            var allStates = _animatorController.layers
-                .SelectMany(x => x.stateMachine.states.Select(x => x.state));
-            
-            
-            IEnumerable<string> SetSpeedMultiplierParameters()
-            {
-                _animatorController.parameters =
-                    _animatorController.parameters.Where(x => x.name.Contains("SpeedMultiplier") == false).ToArray();
-                
-                return allStates.Where(x=>x.name!=AnimatorStatesNames.None).Select(x =>
-                {
-                    var parameterName = x.name + "SpeedMultiplier";
-                    x.speedParameterActive = true;
-                    AnimatorControllerParameter newParameter = new AnimatorControllerParameter();
-                    newParameter.name = parameterName;
-                    newParameter.type = AnimatorControllerParameterType.Float;
-                    newParameter.defaultFloat = 1f;
-                    
-                    _animatorController.AddParameter(newParameter);
-                    x.speedParameter = parameterName;
-                    return parameterName;
-                });
-            }
-
-            classGenerator.GenerateStatic("AnimatorParametersNames",
-                    SetSpeedMultiplierParameters(), _animationsParametersPath);
-        }
+        // [Button]
+        // private void SetAnimatorParameters()
+        // {
+        //     ClassGenerator classGenerator = new ClassGenerator();
+        //     
+        //     var allStates = _animatorController.layers
+        //         .SelectMany(x => x.stateMachine.states.Select(x => x.state));
+        //     
+        //     
+        //     IEnumerable<string> SetSpeedMultiplierParameters()
+        //     {
+        //         _animatorController.parameters =
+        //             _animatorController.parameters.Where(x => x.name.Contains("SpeedMultiplier") == false).ToArray();
+        //         
+        //         return allStates.Where(x=>x.name!=AnimatorStatesNames.None).Select(x =>
+        //         {
+        //             var parameterName = x.name + "SpeedMultiplier";
+        //             x.speedParameterActive = true;
+        //             AnimatorControllerParameter newParameter = new AnimatorControllerParameter();
+        //             newParameter.name = parameterName;
+        //             newParameter.type = AnimatorControllerParameterType.Float;
+        //             newParameter.defaultFloat = 1f;
+        //             
+        //             _animatorController.AddParameter(newParameter);
+        //             x.speedParameter = parameterName;
+        //             return parameterName;
+        //         });
+        //     }
+        //
+        //     classGenerator.GenerateStatic("AnimatorParametersNames",
+        //             SetSpeedMultiplierParameters(), _animationsParametersPath);
+        // }
         
         private void OnValidate()
         {

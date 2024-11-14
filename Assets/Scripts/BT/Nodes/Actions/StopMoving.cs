@@ -16,9 +16,7 @@ namespace BT.Nodes.Actions
         {
             if (_agent.hasPath)
             {
-                _agent.speed = 0;
-              //  _agent.ResetPath();
-               // _agent.isStopped = true;
+                _agent.isStopped = true;
             }
             return TaskStatus.Success;
         }
