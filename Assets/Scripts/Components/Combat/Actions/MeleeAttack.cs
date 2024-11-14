@@ -1,9 +1,11 @@
+using System;
 using System.Collections.Generic;
 using BehaviorDesigner.Runtime.Tasks;
 using Components.Animation.Enums;
 using Components.Combat.Actions.Setups;
 using Components.Combat.Weapons;
 using Components.Combat.Weapons.Handlers;
+using UniRx;
 using Utility;
 
 namespace Components.Combat.Actions
@@ -14,6 +16,8 @@ namespace Components.Combat.Actions
         private bool _wasHit;
         private MeleeAttackSetup _meleeSetup;
         private List<MeleeAttackWeaponHandler> _meleeAttackHandlers;
+
+        private IDisposable _disposable;
 
         public override void Initialize(CommonCombatActionSetup commonSetup, WeaponSet weaponsSet) 
         {
@@ -44,7 +48,7 @@ namespace Components.Combat.Actions
             AnimationCaller.AnimationsEventsListener.AnimationEventFired += OnAnimationCallback;
             _meleeAttackHandlers.ForEach(x=>x.HitEvent += OnWeaponHit);
             
-            AnimationCaller.CallOnAnimation?.Invoke(AnimationCaller, _meleeSetup.AnimationClipData);
+            AnimationCaller.CallOnAnimationWithCallback?.Invoke(AnimationCaller, _meleeSetup.AnimationClipData, SetCompleted);
         }
         
         private void SetCompleted()
@@ -59,9 +63,6 @@ namespace Components.Combat.Actions
         {
             switch (eventType)
             {
-                case AnimationEventType.END:
-                    SetCompleted();
-                    break;
                 case AnimationEventType.HITSTART:
                     OnHitStart();
                     break;
@@ -89,6 +90,12 @@ namespace Components.Combat.Actions
                 var damage = CombatStatsProvider.GetCurrentCombatStats().AttackDamage * _meleeSetup.AttackDamageMultiplier;
                 damageableTarget.Damageable.TakeDamage(damage);
             }
+        }
+
+        public override void Dispose()
+        {
+            base.Dispose();
+            _disposable?.Dispose();
         }
     }
 }

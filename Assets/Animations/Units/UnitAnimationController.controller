@@ -382,7 +382,7 @@ AnimatorState:
   m_SpeedParameter: CombatActionSpeedMultiplier
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
-  m_TimeParameter: 
+  m_TimeParameter: IdleSpeedMultiplier
 --- !u!114 &7915843160325241914
 MonoBehaviour:
   m_ObjectHideFlags: 1

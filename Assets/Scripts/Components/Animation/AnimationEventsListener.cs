@@ -9,16 +9,6 @@ namespace Components.Animation
     {
         public event Action<AnimationEventType> AnimationEventFired;
         
-        public void OnAnimationStart()
-        {
-            AnimationEventFired?.Invoke(AnimationEventType.START);
-        }
-
-        public void OnAnimationEnd()
-        {
-            AnimationEventFired?.Invoke(AnimationEventType.END);
-        }
-
         public void OnHitStart()
         {
             AnimationEventFired?.Invoke(AnimationEventType.HITSTART);

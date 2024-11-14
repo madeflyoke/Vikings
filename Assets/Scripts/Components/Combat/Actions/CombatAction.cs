@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using BehaviorDesigner.Runtime.Tasks;
 using BT.Interfaces;
 using BT.Shared;
@@ -11,7 +12,7 @@ using Components.Combat.Weapons;
 
 namespace Components.Combat.Actions
 {
-    public abstract class CombatAction : IBehaviorAction, IAnimationCallerHolder
+    public abstract class CombatAction : IBehaviorAction, IAnimationCallerHolder, IDisposable
     {
         private CommonCombatActionSetup CommonSetup { get; set; }
         protected ICombatStatsProvider CombatStatsProvider;
@@ -36,6 +37,9 @@ namespace Components.Combat.Actions
        
         public abstract TaskStatus GetCurrentStatus();
         public abstract void Execute();
-        
+
+        public virtual void Dispose()
+        {
+        }
     }
 }
