@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.ExceptionServices;
 using Builders.Utility;
+using Components.Combat.Weapons;
 using Factories.Interfaces;
 using Factories.Units.SubFactories;
 using Factories.Units.SubFactories.Attributes;
@@ -19,6 +20,7 @@ namespace Factories.Units
     public class UnitsAbstractFactory : SerializedMonoBehaviour, IFactory<UnitEntity>
     {
         [SerializeField] private UnitsConfigsContainer _unitsConfigsContainer;
+        [SerializeField] private WeaponsConfig _weaponsConfig;
         [SerializeField, ReadOnly] private Dictionary<UnitVariant, UnitSubFactory> _subFactoriesMap;
 
         private readonly UnitProductRequestData _unitProductRequestData = new ();
@@ -102,12 +104,12 @@ namespace Factories.Units
                 }
 
                 _subFactoriesMap.Add(attribute.UnitVariant, subFactoriesParent.AddComponent<TFactory>()
-                    .SetRelatedConfig(_unitsConfigsContainer.GetConfig(attribute.UnitVariant)));
+                    .SetupFactoryData(_unitsConfigsContainer.GetConfig(attribute.UnitVariant), _weaponsConfig));
             }
             
             AddSubFactory<BarbarianUnitFactory>();
             AddSubFactory<ArcherUnitFactory>();
-          
+            AddSubFactory<DummyUnitFactory>();
         }
 
    

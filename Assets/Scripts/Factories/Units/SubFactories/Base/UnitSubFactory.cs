@@ -8,10 +8,11 @@ using Factories.Components;
 using Factories.Decorators;
 using Factories.Interfaces;
 using Interfaces;
+using Sirenix.OdinInspector;
+using Sirenix.Serialization;
 using Units.Base;
 using Units.Configs;
 using Units.Enums;
-using Unity.Collections;
 using UnityEngine;
 using Utility;
 
@@ -21,9 +22,9 @@ namespace Factories.Units.SubFactories.Base
     {
         protected IReadOnlyEntity Entity;
 
-        [field: SerializeField, ReadOnly] protected UnitConfig Config;
-        [SerializeField] protected WeaponsConfig WeaponsConfig;
-        [SerializeField] private EntityHolder _entityHolder;
+        [SerializeField, ReadOnly] protected UnitConfig Config;
+        [SerializeField, ReadOnly] private EntityHolder _entityHolder;
+        [SerializeField, ReadOnly] protected WeaponsConfig WeaponsConfig;
         private UnitEntity _unitEntity;
 
         public UnitSubFactory Initialize(CustomTransformData spawnData, Team team)
@@ -61,9 +62,10 @@ namespace Factories.Units.SubFactories.Base
 
 #if UNITY_EDITOR
         
-        public UnitSubFactory SetRelatedConfig(UnitConfig config)
+        public UnitSubFactory SetupFactoryData(UnitConfig config, WeaponsConfig weaponsConfig)
         {
             Config = config;
+            WeaponsConfig = weaponsConfig;
             _entityHolder = Resources.Load<EntityHolder>("EmptyUnitHolder");
 
             return this;

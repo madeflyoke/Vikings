@@ -65,7 +65,8 @@ namespace Managers
    
 #if UNITY_EDITOR
 
-      private void OnValidate()
+      [Button]
+      private void SetupSpawners()
       {
          foreach (var value in Enum.GetValues(typeof(Team)))
          {
