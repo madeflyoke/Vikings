@@ -35,7 +35,7 @@ namespace Components.Combat.Actions
         public override void Execute()
         {
             _completed = false;
-            WeaponsSet.SetActive(true);
+            WeaponsSet.CallOnActivate();
             StartAttackAnimation();
         }
 
@@ -55,7 +55,6 @@ namespace Components.Combat.Actions
             
             AnimationCaller.AnimationsEventsListener.AnimationEventFired -= OnAnimationCallback;
             _meleeAttackHandlers.ForEach(x=>x.HitEvent -= OnWeaponHit);
-            WeaponsSet.SetActive(false);
         }
 
         protected override void OnAnimationCallback(AnimationEventType eventType)

@@ -7,62 +7,90 @@ using Utility;
 
 namespace Components.Combat.Weapons
 {
-    public class WeaponSet
+    public class WeaponSet : IDisposable
     {
-        public event Action<WeaponSet> WeaponSetActivated; 
-        
+        public event Action<WeaponSet> CallOnWeaponSetActivated;
+
+        public bool Active { get; private set; }
         public WeaponStats WeaponStats { get; private set; }
-        public WeaponMode WeaponMode { get; private set; }
-        public WeaponType WeaponsType { get; private set; }
-        
+        private WeaponMode WeaponMode { get; set; }
+        private WeaponType WeaponsType { get; set; }
+
         private readonly WeaponPair _weaponPair;
-        
-        public WeaponSet(WeaponPair weaponPair)
+        private readonly WeaponsHolder _weaponsHolder;
+
+        public WeaponSet(WeaponPair weaponPair, WeaponsHolder weaponsHolder)
         {
+            _weaponsHolder = weaponsHolder;
             _weaponPair = weaponPair;
             WeaponMode = WeaponMode.DUAL;
-            _weaponPair.Item2.SwitchHandParent();
-            SetWeaponSetData();
+            _weaponPair.Item2.SetHandParent(false);
+            Initialize();
         }
 
-        public WeaponSet(Weapon weapon)
+        public WeaponSet(Weapon weapon, WeaponsHolder weaponsHolder)
         {
-            _weaponPair = new WeaponPair(){Item1 = weapon};
+            _weaponsHolder = weaponsHolder;
+            _weaponPair = new WeaponPair() {Item1 = weapon};
             WeaponMode = WeaponMode.SINGLE;
-            SetWeaponSetData();
+            Initialize();
+        }
+        
+        public void CallOnActivate()
+        {
+            CallOnWeaponSetActivated?.Invoke(this);
         }
 
-        private void SetWeaponSetData()
+        private void Initialize()
         {
+            _weaponsHolder.CurrentWeaponSetChanged += OnWeaponSetChanged;
+            _weaponsHolder.WeaponSetsDisabled += OnWeaponSetDisabled;
+            _weaponsHolder.CurrenTargetChanged += SetTarget;
+
             var data = _weaponPair.Item1.WeaponData;
             WeaponsType = data.Type;
             WeaponStats = _weaponPair.GetWeaponStats();
         }
 
-        public void SetTarget(DamageableTarget target)
+        private void SetTarget(DamageableTarget target)
         {
-            _weaponPair.ForEach(x=>x.SetTarget(target));
+            _weaponPair.ForEach(x => x.SetTarget(target));
+        }
+
+        private void OnWeaponSetDisabled()
+        {
+            Active = false;
+            _weaponPair.SetWeaponsActive(false);
         }
         
-        public void SetActive(bool value)
+        private void OnWeaponSetChanged(WeaponSet weaponSet)
         {
-            if (value)
+            if (weaponSet==this)
             {
-                WeaponSetActivated?.Invoke(this);
+                Active = true;
+                _weaponPair.SetWeaponsActive(true);
             }
-            _weaponPair.ForEach(x=>x.ActivateWeapon(value));
         }
-        
-        public List<T> GetWeaponAttackHandlers<T>() where T: IWeaponAttackHandler
+
+        public List<T> GetWeaponAttackHandlers<T>() where T : IWeaponAttackHandler
         {
-            return new List<T>()
+            var result = new List<T> {_weaponPair.Item1.GetAttackHandler<T>()};
+            if (_weaponPair.Item2!=null)
             {
-                _weaponPair.Item1.GetAttackHandler<T>(),
-                _weaponPair.Item2.GetAttackHandler<T>()
-            };
+                result.Add(_weaponPair.Item2.GetAttackHandler<T>());
+            }
+
+            return result;
+        }
+
+        public void Dispose()
+        {
+            _weaponsHolder.CurrentWeaponSetChanged -= OnWeaponSetChanged;
+            _weaponsHolder.CurrenTargetChanged -= SetTarget;
+            _weaponsHolder.WeaponSetsDisabled -= OnWeaponSetDisabled;
         }
     }
-    
+
     public class WeaponPair
     {
         public Weapon Item1;
@@ -96,10 +124,22 @@ namespace Components.Combat.Weapons
             }
         }
 
+        public void SetWeaponsActive(bool value)
+        {
+            Item1.SetWeaponActive(value);
+            if (Item2)
+            {
+                Item2.SetWeaponActive(value);
+            }
+        }
+
         public void ForEach(Action<Weapon> action)
         {
             action?.Invoke(Item1);
-            action?.Invoke(Item2);
+            if (Item2 != null)
+            {
+                action?.Invoke(Item2);
+            }
         }
     }
 }

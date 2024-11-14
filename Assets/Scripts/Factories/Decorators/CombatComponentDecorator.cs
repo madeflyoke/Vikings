@@ -69,7 +69,7 @@ namespace Factories.Decorators
                 {
                     case WeaponMode.SINGLE:
                         var weapon = weapons.FirstOrDefault(x => x.ValidateWeaponByConditions(setup.Conditions));
-                        weaponSet = new WeaponSet(weapon);
+                        weaponSet = new WeaponSet(weapon, weaponsHolder);
                         break;
                     case WeaponMode.DUAL:
                         List<Weapon> dualWeapons = weapons.Where(x => x.ValidateWeaponByConditions(setup.Conditions)).Take(2).ToList();
@@ -79,7 +79,7 @@ namespace Factories.Decorators
                             weapons.Add(additionalWeapon);
                             dualWeapons.Add(additionalWeapon);
                         }
-                        weaponSet = new WeaponSet(new WeaponPair(dualWeapons));
+                        weaponSet = new WeaponSet(new WeaponPair(dualWeapons),weaponsHolder);
                         break;
                 }
                 

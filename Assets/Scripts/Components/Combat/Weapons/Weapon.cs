@@ -25,7 +25,7 @@ namespace Components.Combat.Weapons
             _weaponActionHandlers.ForEach(x=>x.Initialize(this));
         }
         
-        public void ActivateWeapon(bool value)
+        public void SetWeaponActive(bool value)
         {
             Activated = value;
             gameObject.SetActive(value);
@@ -37,14 +37,12 @@ namespace Components.Combat.Weapons
             _humanoidModelHolder = humanoidModelHolder;
         }
 
-        public void SwitchHandParent()
+        public void SetHandParent(bool mainHand)
         {
-            transform.parent = transform.parent == _humanoidModelHolder.LeftHandPoint
-                ? _humanoidModelHolder.RightHandPoint
-                : _humanoidModelHolder.LeftHandPoint;
+            transform.parent = mainHand ? _humanoidModelHolder.RightHandPoint : _humanoidModelHolder.LeftHandPoint;
             transform.localPosition = Vector3.zero;
         }
-        
+
         public void SetTarget(DamageableTarget target)
         {
             _weaponActionHandlers.ForEach(x=>x.SetTarget(target));

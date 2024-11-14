@@ -31,7 +31,7 @@ namespace Components.Combat
             CombatActions.ForEach(x=>x.SetCombatStatsProvider(this));
         }
 
-        private void OnWeaponSetChanged()
+        private void OnWeaponSetChanged(WeaponSet weaponSet)
         {
             _currentCombatStats = BaseCombatStats;
         }
