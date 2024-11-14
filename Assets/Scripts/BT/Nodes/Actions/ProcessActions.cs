@@ -23,7 +23,7 @@ namespace BT.Nodes.Actions
 
         public override TaskStatus OnUpdate()
         {
-            if (_actions[_currentActionIndex].GetCurrentStatus()!=TaskStatus.Running)
+            if (_actions[_currentActionIndex].GetCurrentStatus()==TaskStatus.Success)
             {
                 _currentActionIndex++;
                 if (_currentActionIndex >= _actions.Count)

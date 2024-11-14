@@ -25,26 +25,35 @@ namespace Components.Animation
         
 #if UNITY_EDITOR
         
-        [Button]
-        public void AddDefaultAnimationEvents()
-        {
-            AnimationUtility.SetAnimationEvents(AnimationClip, Array.Empty<AnimationEvent>());
-            AddEvent(nameof(AnimationEventsListener.OnAnimationStart), 0f);
-            AddEvent(nameof(AnimationEventsListener.OnAnimationEnd), AnimationClip.length);
-
-            void AddEvent(string name, float time)
-            {
-                var animEvent = new AnimationEvent
-                {
-                    functionName = name,
-                    time = time
-                };
-                AnimationUtility.SetAnimationEvents(AnimationClip, AnimationClip.events.Concat(new []{animEvent}).ToArray());
-                EditorUtility.SetDirty(AnimationClip);
-                AssetDatabase.SaveAssets();
-                AssetDatabase.Refresh();
-            }
-        }
+        // [Button]
+        // public void AddDefaultAnimationEvents()
+        // {
+        //     AnimationUtility.SetAnimationEvents(AnimationClip, Array.Empty<AnimationEvent>());
+        //     AddEvent(nameof(AnimationEventsListener.OnAnimationStart), 0f);
+        //     AddEvent(nameof(AnimationEventsListener.OnAnimationEnd), AnimationClip.length);
+        //
+        //     void AddEvent(string name, float time)
+        //     {
+        //         var animEvent = new AnimationEvent
+        //         {
+        //             functionName = name,
+        //             time = time
+        //         };
+        //         AnimationUtility.SetAnimationEvents(AnimationClip, AnimationClip.events.Concat(new []{animEvent}).ToArray());
+        //         EditorUtility.SetDirty(AnimationClip);
+        //         AssetDatabase.SaveAssets();
+        //         AssetDatabase.Refresh();
+        //     }
+        // }
+        
+        // [Button]
+        // public void ClearAllEvents()
+        // {
+        //     AnimationUtility.SetAnimationEvents(AnimationClip, Array.Empty<AnimationEvent>());
+        //     EditorUtility.SetDirty(AnimationClip);
+        //     AssetDatabase.SaveAssets();
+        //     AssetDatabase.Refresh();
+        // }
 
         private List<string> GetStatesNames()
         {

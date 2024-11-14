@@ -49,12 +49,10 @@ namespace Components.Combat.Actions
         
         private void SetCompleted()
         {
-            _completed = true;
-            
             _wasHit = false;
-            
             AnimationCaller.AnimationsEventsListener.AnimationEventFired -= OnAnimationCallback;
             _meleeAttackHandlers.ForEach(x=>x.HitEvent -= OnWeaponHit);
+            _completed = true;
         }
 
         protected override void OnAnimationCallback(AnimationEventType eventType)
