@@ -31,14 +31,17 @@ namespace Components.Animation
          _animator.SetFloat(parameterName,value);
       }
 
+      private float GetParameterValue(string parameterName)
+      {
+         return _animator.GetFloat(parameterName);
+      }
+
       private void CheckAnimationEnd(AnimationClipData clipData, Action onComplete)
       {
-         AnimatorStateInfo stateInfo =
-            _animator.GetCurrentAnimatorStateInfo(clipData.FullBodyLayer ? AnimatorLayersIndexes.FullBodyLayer : 0);
-
-         var finalSpeed = stateInfo.speed * stateInfo.speedMultiplier;
+         var speedMultiplier =GetParameterValue(AnimatorParametersNames.GetCorrespondingParameter(clipData.TargetStateName));
+         
          Observable
-            .Timer(TimeSpan.FromSeconds(clipData.AnimationClip.length * finalSpeed + 1f))
+            .Timer(TimeSpan.FromSeconds(clipData.AnimationClip.length / speedMultiplier))
             .Subscribe(_ => onComplete?.Invoke()).AddTo(_compositeDisposable);
       }
       
