@@ -12,7 +12,6 @@ namespace Components.Combat.Actions
 {
     public class MeleeAttack : CombatAction
     {
-        private bool _completed;
         private bool _wasHit;
         private MeleeAttackSetup _meleeSetup;
         private List<MeleeAttackWeaponHandler> _meleeAttackHandlers;
@@ -29,7 +28,7 @@ namespace Components.Combat.Actions
 
         public override TaskStatus GetCurrentStatus()
         {
-            if (_completed)
+            if (Completed)
             {
                 return TaskStatus.Success;
             }
@@ -38,7 +37,7 @@ namespace Components.Combat.Actions
 
         public override void Execute()
         {
-            _completed = false;
+            Completed = false;
             WeaponsSet.CallOnActivate();
             StartAttackAnimation();
         }
@@ -56,7 +55,7 @@ namespace Components.Combat.Actions
             _wasHit = false;
             AnimationCaller.AnimationsEventsListener.AnimationEventFired -= OnAnimationCallback;
             _meleeAttackHandlers.ForEach(x=>x.HitEvent -= OnWeaponHit);
-            _completed = true;
+            Completed = true;
         }
 
         protected override void OnAnimationCallback(AnimationEventType eventType)

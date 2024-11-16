@@ -1,4 +1,5 @@
 using BehaviorDesigner.Runtime;
+using Components.Combat.Interfaces;
 using Components.Health;
 using Interfaces;
 

@@ -15,11 +15,13 @@ namespace Components.Combat.Actions
     public abstract class CombatAction : IBehaviorAction, IAnimationCallerHolder, IDisposable
     {
         private CommonCombatActionSetup CommonSetup { get; set; }
-        protected ICombatStatsProvider CombatStatsProvider;
+        public bool Completed { get; protected set; }
         
+        protected ICombatStatsProvider CombatStatsProvider;
+
         public AnimationCaller AnimationCaller { get; private set; }
         protected WeaponSet WeaponsSet;
-
+        
         public virtual void Initialize(CommonCombatActionSetup commonSetup, WeaponSet weaponsSet)
         {
             CommonSetup = commonSetup;

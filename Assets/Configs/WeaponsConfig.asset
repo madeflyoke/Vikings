@@ -18,4 +18,4 @@ MonoBehaviour:
     _stats:
       AttackDamage: 5
       AttackSpeed: 1
-      AttackRange: 2
+      AttackRange: 2.1

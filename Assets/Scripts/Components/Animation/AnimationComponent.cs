@@ -9,7 +9,7 @@ using Utility;
 
 namespace Components.Animation
 {
-   public class AnimationComponent : IEntityComponent
+   public class AnimationComponent : IEntityComponent, IAnimationCallerRegister
    {
       private readonly AnimationEventsListener _animationEventsListener;
       private readonly Animator _animator;
@@ -45,16 +45,9 @@ namespace Components.Animation
             .Subscribe(_ => onComplete?.Invoke()).AddTo(_compositeDisposable);
       }
       
-      private void PlayAnimation(string name, int layerIndex =0, float transitionDuration = 0.25f)
+      private void PlayAnimation(string name, float transitionDuration = 0.25f)
       {
-         if (layerIndex!=0)
-         {
-            _animator.CrossFadeInFixedTime(name, transitionDuration, layer: layerIndex);
-         }
-         else
-         {
-            _animator.CrossFadeInFixedTime(name, transitionDuration);
-         }
+         _animator.CrossFadeInFixedTime(name, transitionDuration);
       }
 
       private void PlayCustomAnimation(AnimationCaller caller, AnimationClipData clipData, Action callBack)
@@ -67,8 +60,7 @@ namespace Components.Animation
             }
          }
 
-         PlayAnimation(clipData.TargetStateName, 
-            clipData.FullBodyLayer? AnimatorLayersIndexes.FullBodyLayer: 0,
+         PlayAnimation(clipData.TargetStateName,
             clipData.TransitionDuration);
          
          if (callBack!=null)

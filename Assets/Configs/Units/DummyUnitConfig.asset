@@ -17,6 +17,7 @@ MonoBehaviour:
     SerializedBytes: 
     ReferencedUnityObjects:
     - {fileID: 2795563923027106890, guid: f68da880b6f1abc4a94e7c542479883c, type: 3}
+    - {fileID: 2655988077585873504, guid: b694cfbed49cce44e8cc48ae6a27e5b4, type: 2}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
@@ -31,7 +32,7 @@ MonoBehaviour:
         Assembly-CSharp]], mscorlib
     - Name: 
       Entry: 12
-      Data: 2
+      Data: 3
     - Name: 
       Entry: 7
       Data: 2|Components.Settings.ModelHolderSettings, Assembly-CSharp
@@ -47,6 +48,15 @@ MonoBehaviour:
     - Name: BaseHealth
       Entry: 3
       Data: 10000
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 4|Components.Settings.MovementComponentSettings, Assembly-CSharp
+    - Name: _navMeshAgentTemplate
+      Entry: 10
+      Data: 1
     - Name: 
       Entry: 8
       Data: 

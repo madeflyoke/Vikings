@@ -6,28 +6,25 @@ namespace BT.Nodes.Actions
 {
     public class SetClosestNavMeshPoint : Action
     {
-        private SharedTransform _originalTransform;
-        private SharedVector3 _closestPoint;
+        private SharedVector3 _sourcePoint;
 
-        public void SetSharedVariables(SharedTransform originalTransform ,SharedVector3 resultPoint)
+        public void SetSharedVariables(SharedVector3 sourcePoint)
         {
-            _originalTransform = originalTransform;
-            _closestPoint = resultPoint;
+            _sourcePoint = sourcePoint;
         }
-        
+
         public override TaskStatus OnUpdate()
         {
-            return SetClosestDestinationPoint()? TaskStatus.Success : TaskStatus.Failure;
+            return SetClosestDestinationPoint() ? TaskStatus.Success : TaskStatus.Failure;
         }
-        
+
         private bool SetClosestDestinationPoint()
         {
-            if (NavMesh.SamplePosition(_originalTransform.Value.position, out NavMeshHit hit, 3f, 1))
+            if (NavMesh.SamplePosition(_sourcePoint.Value, out NavMeshHit hit, 3f, 1))
             {
-                _closestPoint.Value = hit.position;
+                _sourcePoint.Value = hit.position;
                 return true;
             }
-
             return false;
         }
     }

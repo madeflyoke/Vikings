@@ -32,8 +32,8 @@ namespace Components.Movement
         
         private void UpdateAnimationValue()
         {
-            AnimationCaller.CallOnParameterValueChange(AnimatorParametersNames.CurrentVelocity,
-                Agent.velocity.magnitude);
+            AnimationCaller.CallOnParameterValueChange?.Invoke(AnimatorParametersNames.CurrentVelocity,
+                    Agent.velocity.magnitude);
         }
 
         public void Dispose()

@@ -1,3 +1,4 @@
+using Components.Combat.Interfaces;
 using Components.Health;
 using Components.Interfaces;
 using Components.Settings;
@@ -8,10 +9,12 @@ namespace Factories.Decorators
     public class HealthComponentDecorator : IEntityDecorator
     {
         private readonly HealthComponentSettings _healthComponentSettings;
+        private readonly IHitReceiver _hitReceiver;
         
-        public HealthComponentDecorator(HealthComponentSettings healthComponentSettings)
+        public HealthComponentDecorator(HealthComponentSettings healthComponentSettings, IHitReceiver hitReceiver)
         {
             _healthComponentSettings = healthComponentSettings;
+            _hitReceiver = hitReceiver;
         }
         
         public IEntityComponent Decorate()
@@ -22,7 +25,7 @@ namespace Factories.Decorators
 
         private HealthComponent CreateHealthController()
         {
-            return new HealthComponent (_healthComponentSettings.BaseHealth);
+            return new HealthComponent(_healthComponentSettings.BaseHealth, _hitReceiver);
         }
     }
 }

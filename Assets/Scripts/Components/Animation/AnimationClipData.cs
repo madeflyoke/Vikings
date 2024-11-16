@@ -13,7 +13,6 @@ namespace Components.Animation
     {
         [field: SerializeField] public AnimationClip AnimationClip { get; private set; }
         [field: SerializeField, ValueDropdown(nameof(GetStatesNames))] public string TargetStateName { get; private set; }
-        [field: SerializeField] public bool FullBodyLayer { get; private set; }
         [field: SerializeField] public float TransitionDuration { get; private set; }= 0.25f ;
 
         public AnimationClipData(AnimationClip animationClip = default, string targetStateName = default, float transitionDuration = 0.25f)

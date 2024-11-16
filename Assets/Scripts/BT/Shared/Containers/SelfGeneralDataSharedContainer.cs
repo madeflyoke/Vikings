@@ -7,7 +7,8 @@ namespace BT.Shared.Containers
     [Serializable]
     public class SelfGeneralDataSharedContainer
     {
-        public Transform SelfTransform;
+        public SharedDamageable SelfDamageable;
+        public SharedTransform SelfTransform;
     }
     
     public class SelfGeneralDataSharedContainerVariable : SharedVariable<SelfGeneralDataSharedContainer>

@@ -19,7 +19,7 @@ namespace Components.Combat.Weapons.Handlers
         
         public DamageableTarget CurrentTarget { get; private set; }
         
-        private IHitReceiver _hitMarker;
+        private IHitReceiver _hitReceiver;
         private CompositeDisposable _collidersDisposable;
         private Weapon _relatedWeapon;
 
@@ -37,7 +37,7 @@ namespace Components.Combat.Weapons.Handlers
         public void SetTarget(DamageableTarget damageableTarget)
         {
             CurrentTarget = damageableTarget;
-            _hitMarker = damageableTarget.TargetTr.GetComponentInChildren<IHitReceiver>();
+            _hitReceiver = damageableTarget.Damageable.HitReceiver;
         }
         
         public void SetColliderActive(bool value)
@@ -47,7 +47,7 @@ namespace Components.Combat.Weapons.Handlers
         
         private void ManualOnTriggerEnter(Collider other)
         {
-            if (other == _hitMarker.OverallCollider)
+            if (other == _hitReceiver.OverallCollider)
             {
                 HitEvent?.Invoke(CurrentTarget);
             }

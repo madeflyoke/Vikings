@@ -20,11 +20,11 @@ namespace Factories.Units.SubFactories
         {
             var entityHolder = Entity.GetEntityComponent<EntityHolder>();
             
-            DecorateBy(new ModelHolderDecorator(entityHolder, Config.ComponentsSettingsHolder
-                .GetComponentSettings<ModelHolderSettings>()));
+            var modelHolder =DecorateBy(new ModelHolderDecorator(entityHolder, Config.ComponentsSettingsHolder
+                .GetComponentSettings<ModelHolderSettings>())) as ModelHolder;
             
             DecorateBy(new HealthComponentDecorator(Config.ComponentsSettingsHolder
-                .GetComponentSettings<HealthComponentSettings>()));
+                .GetComponentSettings<HealthComponentSettings>(),modelHolder));
             
             var navMeshMovementComponent = DecorateBy(new NavMeshMovementComponentDecorator(entityHolder, Config.ComponentsSettingsHolder
                 .GetComponentSettings<MovementComponentSettings>())) as NavMeshMovementComponent;

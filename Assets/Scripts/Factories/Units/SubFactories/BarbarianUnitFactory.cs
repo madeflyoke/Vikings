@@ -4,6 +4,7 @@ using Components.Animation;
 using Components.BT.Units.Installers;
 using Components.BT.Units.Installers.Data;
 using Components.Combat;
+using Components.Health;
 using Components.Movement;
 using Components.Settings;
 using Components.TagHolder;
@@ -25,11 +26,11 @@ namespace Factories.Units.SubFactories
         {
             var entityHolder = Entity.GetEntityComponent<EntityHolder>();
             
-            DecorateBy(new ModelHolderDecorator(entityHolder, Config.ComponentsSettingsHolder
-                .GetComponentSettings<ModelHolderSettings>()));
+            var modelHolder =DecorateBy(new ModelHolderDecorator(entityHolder, Config.ComponentsSettingsHolder
+                .GetComponentSettings<ModelHolderSettings>())) as ModelHolder;
             
-            DecorateBy(new HealthComponentDecorator(Config.ComponentsSettingsHolder
-                .GetComponentSettings<HealthComponentSettings>()));
+            var healthComponent =DecorateBy(new HealthComponentDecorator(Config.ComponentsSettingsHolder
+                .GetComponentSettings<HealthComponentSettings>(), modelHolder)) as HealthComponent;
             
             var navMeshMovementComponent = DecorateBy(new NavMeshMovementComponentDecorator(entityHolder, Config.ComponentsSettingsHolder
                 .GetComponentSettings<MovementComponentSettings>())) as NavMeshMovementComponent;
@@ -53,7 +54,9 @@ namespace Factories.Units.SubFactories
                 CombatActions = combatComponent.CombatActions,
                 CombatStatsProvider = combatComponent,
                 CombatTargetsProvider = GeneralUnitsTeamSpawner.Instance.GetOpponentsTargetsProvider(Entity.GetEntityComponent<UnitTagHolder>().Team),
-                CombatTargetHolder = combatComponent
+                CombatTargetHolder = combatComponent,
+                DamageableComponent = healthComponent,
+                AnimationsRegister = animationComponent
             };
             
             var behaviorDecorator = new BehaviorTreeComponentDecorator<MeleeUnitBehaviorTreeInstaller>(

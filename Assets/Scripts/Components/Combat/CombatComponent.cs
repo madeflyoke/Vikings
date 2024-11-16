@@ -7,6 +7,7 @@ using Components.Combat.Actions;
 using Components.Combat.Interfaces;
 using Components.Combat.Weapons;
 using Components.Interfaces;
+using UniRx;
 using Utility;
 
 namespace Components.Combat

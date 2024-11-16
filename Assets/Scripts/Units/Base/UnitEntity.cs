@@ -68,7 +68,7 @@ namespace Units.Base
             {
                 Gizmos.color = Color.blue;
             }
-            Gizmos.DrawSphere(transform.position +Vector3.up*3f, 1f);
+            Gizmos.DrawSphere(transform.position +Vector3.up*3f, 0.2f);
         }
 
 #endif

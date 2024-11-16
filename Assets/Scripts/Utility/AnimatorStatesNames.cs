@@ -10,6 +10,7 @@ namespace Utility
         public static string Idle = "Idle";
         public static string Moving = "Moving";
         public static string Combat = "CombatAction";
+        public static string Death = "Death";
         
 #if UNITY_EDITOR
         
