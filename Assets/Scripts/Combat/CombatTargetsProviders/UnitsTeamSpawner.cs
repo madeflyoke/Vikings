@@ -1,18 +1,17 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using CombatTargetsProviders.Interfaces;
+using Combat.CombatTargetsProviders.Interfaces;
 using Components;
 using Components.Combat.Interfaces;
 using Components.Health;
 using Factories.Units;
-using Interfaces;
 using Units.Base;
 using Units.Enums;
 using UnityEngine;
 using Utility;
 
-namespace CombatTargetsProviders
+namespace Combat.CombatTargetsProviders
 {
     [Serializable]
     public class UnitsTeamSpawner : ICombatTargetsProvider

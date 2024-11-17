@@ -7,6 +7,6 @@ namespace Components.Combat.Interfaces
         public event Action<IDamageable> DeadEvent;
         public IHitReceiver HitReceiver { get; }
         public abstract bool IsAlive { get; }
-        public abstract void TakeDamage(int value);
+        public abstract void TakeDamage(float value);
     }
 }

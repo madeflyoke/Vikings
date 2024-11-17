@@ -1,12 +1,12 @@
 using System.Collections.Generic;
-using CombatTargetsProviders.Interfaces;
+using BT.Interfaces;
+using Combat.CombatTargetsProviders.Interfaces;
 using Components.Animation;
 using Components.Animation.Interfaces;
 using Components.BT.Interfaces;
 using Components.Combat.Actions;
 using Components.Combat.Interfaces;
 using Interfaces;
-using Managers.Interfaces;
 using UnityEngine.AI;
 
 namespace Components.BT.Units.Installers.Data

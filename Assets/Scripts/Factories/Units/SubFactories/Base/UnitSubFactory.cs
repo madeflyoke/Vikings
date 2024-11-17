@@ -23,8 +23,9 @@ namespace Factories.Units.SubFactories.Base
         protected IReadOnlyEntity Entity;
 
         [SerializeField, ReadOnly] protected UnitConfig Config;
-        [SerializeField, ReadOnly] private EntityHolder _entityHolder;
         [SerializeField, ReadOnly] protected WeaponsConfig WeaponsConfig;
+        [SerializeField, ReadOnly] protected TeamsConfig TeamsConfig;
+        [SerializeField, ReadOnly] private EntityHolder _entityHolder;
         private UnitEntity _unitEntity;
 
         public UnitSubFactory Initialize(CustomTransformData spawnData, Team team)
@@ -62,11 +63,12 @@ namespace Factories.Units.SubFactories.Base
 
 #if UNITY_EDITOR
         
-        public UnitSubFactory SetupFactoryData(UnitConfig config, WeaponsConfig weaponsConfig)
+        public UnitSubFactory SetupFactoryData(UnitConfig config, WeaponsConfig weaponsConfig, TeamsConfig teamsConfig)
         {
             Config = config;
             WeaponsConfig = weaponsConfig;
-            _entityHolder = Resources.Load<EntityHolder>("EmptyUnitHolder");
+            TeamsConfig = teamsConfig;
+            _entityHolder = Resources.Load<EntityHolder>(ResourcesPaths.BaseEntities.EntityHolderPath);
 
             return this;
         }

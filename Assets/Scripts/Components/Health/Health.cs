@@ -5,29 +5,38 @@ namespace Components.Health
 {
     public class Health
     {
-        public int CurrentHealth { get; private set; }
-        private readonly int _maxHealth;
+        public event Action HealthEmptyEvent;
+        public event Action<float> HealthChanged;
+        public float CurrentHealth { get; private set; }
+        public float MaxHealth { get; private set; }
 
-        public Health(int maxHealth)
+        public Health(float maxHealth)
         {
-            _maxHealth = maxHealth;
+            MaxHealth = maxHealth;
             RestoreHealth();
         }
 
-        public void AddHealth(int value)
+        public void AddHealth(float value)
         {
             CurrentHealth += value;
+            HealthChanged?.Invoke(CurrentHealth);
         }
 
-        public void SubtractHealth(int value)
+        public void SubtractHealth(float value)
         {
-            CurrentHealth = Mathf.Clamp(CurrentHealth - value, 0, _maxHealth);
-            Debug.LogWarning($"Damage taken: {value}, health: {CurrentHealth}/{_maxHealth}");
+            CurrentHealth = Mathf.Clamp(CurrentHealth - value, 0, MaxHealth);
+            HealthChanged?.Invoke(CurrentHealth);
+            if (CurrentHealth == 0)
+            {
+                HealthEmptyEvent?.Invoke();
+            }
+            Debug.LogWarning($"Damage taken: {value}, health: {CurrentHealth}/{MaxHealth}");
         }
 
         public void RestoreHealth()
         {
-            CurrentHealth = _maxHealth;
+            CurrentHealth = MaxHealth;
+            HealthChanged?.Invoke(CurrentHealth);
         }
     }
 }

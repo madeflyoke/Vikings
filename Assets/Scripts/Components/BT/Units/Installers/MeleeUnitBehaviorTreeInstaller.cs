@@ -8,7 +8,7 @@ using BT.Nodes.Conditionals;
 using BT.Shared.Containers;
 using BT.Tools;
 using BT.Utility;
-using CombatTargetsProviders.Interfaces;
+using Combat.CombatTargetsProviders.Interfaces;
 using Components.Animation;
 using Components.Animation.Interfaces;
 using Components.BT.Interfaces;
@@ -38,7 +38,7 @@ namespace Components.BT.Units.Installers
 
             SetupSharedContainers(installerData.EntityHolder, installerData.DamageableComponent);
             
-            SetupSelfTasks(installerData.AnimationsRegister);
+            SetupSelfTasks(installerData.AnimationsRegister, installerData.Agent);
             SetupNavMeshMovementTasks(installerData.Agent);
             SetupOpponentTargetTasks(installerData.CombatActions, installerData.CombatTargetsProvider,
                     installerData.CombatStatsProvider, installerData.Agent, installerData.CombatTargetHolder);
@@ -66,7 +66,7 @@ namespace Components.BT.Units.Installers
             }
         }
 
-        private void SetupSelfTasks(IAnimationCallerRegister animationRegister)
+        private void SetupSelfTasks(IAnimationCallerRegister animationRegister, NavMeshAgent agent)
         {
             var selfDataContainer = GetSharedContainer<SelfGeneralDataSharedContainerVariable>().Value;
             
@@ -82,7 +82,7 @@ namespace Components.BT.Units.Installers
             
             _behaviorTree.FindTasks<SetDeath>().ForEach(x =>
             {
-                x.Initialize();
+                x.Initialize(agent);
                 animationRegister.RegisterAnimationCaller(x);
             });
         }

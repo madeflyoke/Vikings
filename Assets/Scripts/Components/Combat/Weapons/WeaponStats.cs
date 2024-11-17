@@ -5,7 +5,7 @@ namespace Components.Combat.Weapons
     [Serializable]
     public class WeaponStats
     {
-        public int AttackDamage;
+        public float AttackDamage;
         public float AttackSpeed;
         public float AttackRange;
 

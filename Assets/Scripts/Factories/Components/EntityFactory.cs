@@ -1,3 +1,4 @@
+using System;
 using Builders.Utility;
 using Components;
 using Factories.Interfaces;
@@ -48,6 +49,5 @@ namespace Factories.Components
         {
             return holder.gameObject.AddComponent<TEntity>();
         }
-
     }
 }

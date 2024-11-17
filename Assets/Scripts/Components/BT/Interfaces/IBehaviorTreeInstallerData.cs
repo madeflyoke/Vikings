@@ -1,4 +1,4 @@
-using Managers.Interfaces;
+using BT.Interfaces;
 
 namespace Components.BT.Interfaces
 {

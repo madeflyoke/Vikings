@@ -2,8 +2,11 @@
 using Components;
 using Components.Animation;
 using Components.Combat;
+using Components.Health;
 using Components.Movement;
 using Components.Settings;
+using Components.TagHolder;
+using Components.UI;
 using Components.View;
 using Factories.Decorators;
 using Factories.Units.SubFactories.Attributes;
@@ -22,9 +25,12 @@ namespace Factories.Units.SubFactories
             
             var modelHolder =DecorateBy(new ModelHolderDecorator(entityHolder, Config.ComponentsSettingsHolder
                 .GetComponentSettings<ModelHolderSettings>())) as ModelHolder;
+
+            var entityInfoView = DecorateBy(new EntityInfoViewUIComponentDecorator(modelHolder.TopPoint)) as EntityInfoViewUI;
+            var team = Entity.GetEntityComponent<UnitTagHolder>().Team;
             
-            DecorateBy(new HealthComponentDecorator(Config.ComponentsSettingsHolder
-                .GetComponentSettings<HealthComponentSettings>(),modelHolder));
+            var healthComponent =DecorateBy(new HealthComponentDecorator(Config.ComponentsSettingsHolder.GetComponentSettings<HealthComponentSettings>(), 
+                modelHolder, entityInfoView.transform, TeamsConfig.GetTeamConfigData(team).RelatedColor)) as HealthComponent;
             
             var navMeshMovementComponent = DecorateBy(new NavMeshMovementComponentDecorator(entityHolder, Config.ComponentsSettingsHolder
                 .GetComponentSettings<MovementComponentSettings>())) as NavMeshMovementComponent;

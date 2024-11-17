@@ -1,6 +1,6 @@
 using System;
 
-namespace Managers.Interfaces
+namespace BT.Interfaces
 {
     public interface IBehaviorTreeStarter
     {

@@ -3,7 +3,7 @@ using System.Linq;
 using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 using BT.Shared;
-using CombatTargetsProviders.Interfaces;
+using Combat.CombatTargetsProviders.Interfaces;
 using Components.Combat.Interfaces;
 using Extensions;
 using Interfaces;

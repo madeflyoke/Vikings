@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Utility;
 
-namespace CombatTargetsProviders.Interfaces
+namespace Combat.CombatTargetsProviders.Interfaces
 {
     public interface ICombatTargetsProvider
     {

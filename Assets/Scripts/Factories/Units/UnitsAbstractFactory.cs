@@ -21,6 +21,7 @@ namespace Factories.Units
     {
         [SerializeField] private UnitsConfigsContainer _unitsConfigsContainer;
         [SerializeField] private WeaponsConfig _weaponsConfig;
+        [SerializeField] private TeamsConfig _teamsConfig;
         [SerializeField, ReadOnly] private Dictionary<UnitVariant, UnitSubFactory> _subFactoriesMap;
 
         private readonly UnitProductRequestData _unitProductRequestData = new ();
@@ -104,7 +105,7 @@ namespace Factories.Units
                 }
 
                 _subFactoriesMap.Add(attribute.UnitVariant, subFactoriesParent.AddComponent<TFactory>()
-                    .SetupFactoryData(_unitsConfigsContainer.GetConfig(attribute.UnitVariant), _weaponsConfig));
+                    .SetupFactoryData(_unitsConfigsContainer.GetConfig(attribute.UnitVariant), _weaponsConfig, _teamsConfig));
             }
             
             AddSubFactory<BarbarianUnitFactory>();

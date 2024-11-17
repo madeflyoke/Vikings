@@ -33,7 +33,7 @@ namespace BT.Nodes.Actions
         {
             if (CheckForFreeSpaceAroundEnemy(out Vector3 pos))
             {
-                _closestPoint.Value = _targetTr.Value.position; //pos
+                _closestPoint.Value = pos; //_targetTr.Value.position
                 return TaskStatus.Success;
             }
             return TaskStatus.Failure;

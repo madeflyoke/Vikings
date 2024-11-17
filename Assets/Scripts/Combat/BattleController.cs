@@ -1,9 +1,9 @@
 using System;
-using Managers.Interfaces;
+using BT.Interfaces;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace Managers
+namespace Combat
 {
     public class BattleController : MonoBehaviour, IBehaviorTreeStarter
     {

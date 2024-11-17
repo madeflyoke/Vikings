@@ -1,8 +1,7 @@
 using System;
 using Components.Combat.Interfaces;
+using Components.Health.UI;
 using Components.Interfaces;
-using Interfaces;
-using UnityEngine;
 
 namespace Components.Health
 {
@@ -14,17 +13,19 @@ namespace Components.Health
         public bool IsAlive { get; private set; }
 
         private readonly Health _health;
+        private readonly HealthView _healthView;
         
-        //health view
-
-        public HealthComponent(int maxHealth, IHitReceiver hitReceiver)
+        public HealthComponent( Health health, HealthView healthView, IHitReceiver hitReceiver)
         {
-            _health = new Health(maxHealth);
+            _health = health;
+            _healthView = healthView;
+            
+            _health.HealthEmptyEvent += OnHealthEmpty;
             HitReceiver = hitReceiver;
             IsAlive = true;
         }
         
-        public void TakeDamage(int value)
+        public void TakeDamage(float value)
         {
             _health.SubtractHealth(value);
             if (_health.CurrentHealth == 0)
@@ -34,6 +35,12 @@ namespace Components.Health
             }
         }
 
+        private void OnHealthEmpty()
+        {
+            IsAlive = false;
+            DeadEvent?.Invoke(this);
+        }
+
         public void InitializeComponent()
         {
             
@@ -41,6 +48,7 @@ namespace Components.Health
 
         public void Dispose()
         {
+            _health.HealthEmptyEvent -= OnHealthEmpty;
         }
     }
 }

@@ -2445,6 +2445,10 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 9c1c9c9bffd7efd49bd10b19507c789e, type: 2}
+    - target: {fileID: 8592305479043263699, guid: 3285808d4c890c34195dc865ce857376, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 2.69
+      objectReference: {fileID: 0}
     - target: {fileID: 8956347639924031724, guid: 3285808d4c890c34195dc865ce857376, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -2461,6 +2465,11 @@ PrefabInstance:
       insertIndex: 1
       addedObject: {fileID: 1072433958016108131}
   m_SourcePrefab: {fileID: 100100000, guid: 3285808d4c890c34195dc865ce857376, type: 3}
+--- !u!4 &819536692830205624 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8592305479043263699, guid: 3285808d4c890c34195dc865ce857376, type: 3}
+  m_PrefabInstance: {fileID: 8962607498084145771}
+  m_PrefabAsset: {fileID: 0}
 --- !u!65 &2228747314214243109 stripped
 BoxCollider:
   m_CorrespondingSourceObject: {fileID: 7102051092704678222, guid: 3285808d4c890c34195dc865ce857376, type: 3}
@@ -2489,5 +2498,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <OverallCollider>k__BackingField: {fileID: 2228747314214243109}
+  <TopPoint>k__BackingField: {fileID: 819536692830205624}
   <RightHandPoint>k__BackingField: {fileID: 8299246112671177900}
   <LeftHandPoint>k__BackingField: {fileID: 264433212148769270}

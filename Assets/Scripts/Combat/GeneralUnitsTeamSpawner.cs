@@ -1,17 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using CombatTargetsProviders;
-using CombatTargetsProviders.Interfaces;
+using Combat.CombatTargetsProviders;
+using Combat.CombatTargetsProviders.Interfaces;
 using Factories.Units;
 using Sirenix.OdinInspector;
 using Sirenix.Utilities;
 using Units.Enums;
 using UnityEditor;
 using UnityEngine;
-using Utility;
 
-namespace Managers
+namespace Combat
 {
    public class GeneralUnitsTeamSpawner : SerializedMonoBehaviour
    {
