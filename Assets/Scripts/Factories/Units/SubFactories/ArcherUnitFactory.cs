@@ -1,6 +1,8 @@
-﻿using System.Linq;
+﻿using Combat;
 using Components;
 using Components.Animation;
+using Components.BT.Units.Installers;
+using Components.BT.Units.Installers.Data;
 using Components.Combat;
 using Components.Health;
 using Components.Movement;
@@ -21,13 +23,16 @@ namespace Factories.Units.SubFactories
     {
         public override UnitEntity CreateProduct()
         {
-            var entityHolder = Entity.GetEntityComponent<EntityHolder>();
+           var entityHolder = Entity.GetEntityComponent<EntityHolder>();
             
             var modelHolder =DecorateBy(new ModelHolderDecorator(entityHolder, Config.ComponentsSettingsHolder
                 .GetComponentSettings<ModelHolderSettings>())) as ModelHolder;
 
             var entityInfoView = DecorateBy(new EntityInfoViewUIComponentDecorator(modelHolder.TopPoint)) as EntityInfoViewUI;
             var team = Entity.GetEntityComponent<UnitTagHolder>().Team;
+            
+            var animationComponent = DecorateBy(new AnimationComponentDecorator(entityHolder, Config.ComponentsSettingsHolder
+                .GetComponentSettings<AnimationComponentSettings>())) as AnimationComponent;
             
             var healthComponent =DecorateBy(new HealthComponentDecorator(Config.ComponentsSettingsHolder.GetComponentSettings<HealthComponentSettings>(), 
                 modelHolder, entityInfoView.transform, TeamsConfig.GetTeamConfigData(team).RelatedColor)) as HealthComponent;
@@ -36,16 +41,27 @@ namespace Factories.Units.SubFactories
                 .GetComponentSettings<MovementComponentSettings>())) as NavMeshMovementComponent;
             
             var combatComponent = DecorateBy(new CombatComponentDecorator(WeaponsConfig,Entity.GetEntityComponent<HumanoidModelHolder>(),
-                Config.ComponentsSettingsHolder
-                    .GetComponentSettings<CombatComponentSettings>())) as CombatComponent;
+                Config.ComponentsSettingsHolder.GetComponentSettings<CombatComponentSettings>(),
+                animationComponent,animationComponent)) as CombatComponent;
             
-            var animationComponent = DecorateBy(new AnimationComponentDecorator(entityHolder, Config.ComponentsSettingsHolder
-                .GetComponentSettings<AnimationComponentSettings>())) as AnimationComponent;
+            RangeUnitBehaviorTreeInstallerData behaviorInstallerData = new RangeUnitBehaviorTreeInstallerData
+            {
+                BehaviorTreeStarter = BattleController.Instance,
+                EntityHolder = entityHolder,
+                MovementProvider = navMeshMovementComponent,
+                CombatActions = combatComponent.CombatActions,
+                WeaponStatsProvider = combatComponent,
+                CombatTargetsProvider = GeneralUnitsTeamSpawner.Instance.GetOpponentsTargetsProvider(Entity.GetEntityComponent<UnitTagHolder>().Team),
+                CombatTargetHolder = combatComponent,
+                DamageableComponent = healthComponent,
+                AnimationPlayer = animationComponent
+            };
             
-            animationComponent.RegisterAnimationCallerMany(combatComponent.CombatActions);
-            
-            animationComponent.RegisterAnimationCaller(navMeshMovementComponent);
+            var behaviorDecorator = new BehaviorTreeComponentDecorator<RangeUnitBehaviorTreeInstaller>(
+                Config.ComponentsSettingsHolder.GetComponentSettings<BehaviorTreeComponentSettings>(), behaviorInstallerData);
 
+            DecorateBy(behaviorDecorator);
+            
             return base.CreateProduct();
         }
     }

@@ -30,7 +30,7 @@ namespace Components.Health
             {
                 HealthEmptyEvent?.Invoke();
             }
-            Debug.LogWarning($"Damage taken: {value}, health: {CurrentHealth}/{MaxHealth}");
+          //  Debug.LogWarning($"Damage taken: {value}, health: {CurrentHealth}/{MaxHealth}");
         }
 
         public void RestoreHealth()

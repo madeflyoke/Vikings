@@ -43,12 +43,6 @@ namespace Units.Base
             throw new Exception($"No component with type: {typeof(TComponent)}!");
         }
 
-        [Button]
-        public void SetIncreasedSpeed(float speed)
-        {
-            GetEntityComponent<CombatComponent>().SetAttackSpeed(speed);
-        }
-        
 #if UNITY_EDITOR
 
         private Team EDITOR_team = Team.NONE;

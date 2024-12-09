@@ -14,8 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   WeaponDatas:
   - Type: 1
-    Prefab: {fileID: 7815074289198016091, guid: 7e7bae7ff22d52a4aa26482bae02f2ce, type: 3}
+    Prefab: {fileID: 3028852031688218528, guid: 5eb6d013fec842642afa7cea52eebab5, type: 3}
     _stats:
       AttackDamage: 5
       AttackSpeed: 1
       AttackRange: 2.1
+  - Type: 50
+    Prefab: {fileID: 5287778155125979602, guid: bd2dafeac083edb4c9d0e8c9e2b5e48e, type: 3}
+    _stats:
+      AttackDamage: 8
+      AttackSpeed: 3
+      AttackRange: 40

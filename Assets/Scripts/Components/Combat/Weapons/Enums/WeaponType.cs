@@ -7,5 +7,6 @@ namespace Components.Combat.Weapons.Enums
         NONE =0,
         SMALLAXE = 1,
         TWOHANDEDAXE =2,
+        TWOHANDEDCROSSBOW = 50,
     }
 }

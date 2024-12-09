@@ -9,7 +9,7 @@ namespace Components.Combat.Weapons
         public float AttackSpeed;
         public float AttackRange;
 
-        public WeaponStats Clone()
+        public WeaponStats Copy()
         {
             return new WeaponStats()
             {

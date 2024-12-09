@@ -1,39 +1,44 @@
 using System.Collections.Generic;
 using BehaviorDesigner.Runtime.Tasks;
-using BT.Interfaces;
-using UnityEngine;
+using Components.BT.Actions.Interfaces;
 
 namespace BT.Nodes.Actions
 {
     public class ProcessActions : Action
     {
-        private List<IBehaviorAction> _actions;
-        private int _currentActionIndex;
-        
+        protected List<IBehaviorAction> Actions;
+        protected int CurrentActionIndex;
+
         public void Initialize(List<IBehaviorAction> actions)
         {
-            _actions = actions;
+            Actions = actions;
         }
 
         public override void OnStart()
         {
-            _currentActionIndex = 0;
-            _actions[_currentActionIndex].Execute();
+            CurrentActionIndex = 0;
+            Actions[CurrentActionIndex].Execute();
         }
 
         public override TaskStatus OnUpdate()
         {
-            if (_actions[_currentActionIndex].GetCurrentStatus()==TaskStatus.Success)
+            if (Actions[CurrentActionIndex].CurrentStatus == TaskStatus.Success)
             {
-                _currentActionIndex++;
-                if (_currentActionIndex >= _actions.Count)
+                CurrentActionIndex++;
+                if (CurrentActionIndex >= Actions.Count)
                 {
-                    return TaskStatus.Success;
+                    CurrentActionIndex = 0;
                 }
-                _actions[_currentActionIndex].Execute();
+
+                Actions[CurrentActionIndex].Execute();
             }
+
             return TaskStatus.Running;
         }
 
+        public override void OnEnd()
+        {
+            Actions.ForEach(x => x.Stop());
+        }
     }
 }

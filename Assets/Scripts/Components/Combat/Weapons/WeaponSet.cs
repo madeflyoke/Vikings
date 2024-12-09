@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using Components.BT.Actions.Conditions;
 using Components.Combat.Weapons.Enums;
 using Components.Combat.Weapons.Interfaces;
 using Utility;
@@ -11,10 +11,11 @@ namespace Components.Combat.Weapons
     {
         public event Action<WeaponSet> CallOnWeaponSetActivated;
 
-        public bool Active { get; private set; }
+        private bool Active { get; set; }
         public WeaponStats WeaponStats { get; private set; }
-        private WeaponMode WeaponMode { get; set; }
-        private WeaponType WeaponsType { get; set; }
+        
+        private WeaponMode _weaponMode;
+        private WeaponType _weaponsType;
 
         private readonly WeaponPair _weaponPair;
         private readonly WeaponsHolder _weaponsHolder;
@@ -23,7 +24,7 @@ namespace Components.Combat.Weapons
         {
             _weaponsHolder = weaponsHolder;
             _weaponPair = weaponPair;
-            WeaponMode = WeaponMode.DUAL;
+            _weaponMode = WeaponMode.DUAL;
             _weaponPair.Item2.SetHandParent(false);
             Initialize();
         }
@@ -32,7 +33,7 @@ namespace Components.Combat.Weapons
         {
             _weaponsHolder = weaponsHolder;
             _weaponPair = new WeaponPair() {Item1 = weapon};
-            WeaponMode = WeaponMode.SINGLE;
+            _weaponMode = WeaponMode.SINGLE;
             Initialize();
         }
         
@@ -47,8 +48,7 @@ namespace Components.Combat.Weapons
             _weaponsHolder.WeaponSetsDisabled += OnWeaponSetDisabled;
             _weaponsHolder.CurrenTargetChanged += SetTarget;
 
-            var data = _weaponPair.Item1.WeaponData;
-            WeaponsType = data.Type;
+            _weaponsType = _weaponPair.Item1.WeaponType;
             WeaponStats = _weaponPair.GetWeaponStats();
         }
 
@@ -83,6 +83,28 @@ namespace Components.Combat.Weapons
             return result;
         }
 
+        public bool ValidateWeaponSetByConditions(CombatActionConditions conditions)
+        {
+            if (conditions.WeaponType!=_weaponsType || conditions.WeaponMode!=_weaponMode)
+            {
+                return false;
+            }
+
+            if (_weaponPair.Item1.ValidateWeaponByConditions(conditions))
+            {
+                if (conditions.WeaponMode==WeaponMode.SINGLE)
+                {
+                    return true;
+                }
+                else if (_weaponPair.Item2!=null && _weaponPair.Item2.ValidateWeaponByConditions(conditions))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+        
         public void Dispose()
         {
             _weaponsHolder.CurrentWeaponSetChanged -= OnWeaponSetChanged;
@@ -111,15 +133,15 @@ namespace Components.Combat.Weapons
         {
             if (Item2==null)
             {
-                return Item1.WeaponData.Stats;
+                return Item1.GetCombatStats();
             }
             else
             {
                 return new WeaponStats()
                 {
-                    AttackDamage = Item1.WeaponData.Stats.AttackDamage+Item2.WeaponData.Stats.AttackDamage,
-                    AttackRange = Math.Min(Item1.WeaponData.Stats.AttackRange, Item2.WeaponData.Stats.AttackRange),
-                    AttackSpeed = Math.Min(Item1.WeaponData.Stats.AttackSpeed, Item2.WeaponData.Stats.AttackSpeed)
+                    AttackDamage = Item1.GetCombatStats().AttackDamage+Item2.GetCombatStats().AttackDamage,
+                    AttackRange = Math.Min(Item1.GetCombatStats().AttackRange, Item2.GetCombatStats().AttackRange),
+                    AttackSpeed = Math.Min(Item1.GetCombatStats().AttackSpeed, Item2.GetCombatStats().AttackSpeed)
                 };
             }
         }

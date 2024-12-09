@@ -9,13 +9,14 @@ namespace BT.Nodes.Conditionals
     {
         private SharedTransform _selfTransform;
         private SharedTransform _target;
-        private ICombatStatsProvider _combatStatsProvider;
+        private IWeaponStatsProvider _weaponStatsProvider;
         
-        public void SetSharedVariables(SharedTransform selfTransform, SharedTransform targetTransform, ICombatStatsProvider combatStatsProvider)
+        public void SetSharedVariables(SharedTransform selfTransform, SharedTransform targetTransform, 
+            IWeaponStatsProvider weaponStatsProvider)
         {
             _selfTransform = selfTransform;
             _target = targetTransform;
-            _combatStatsProvider = combatStatsProvider;
+            this._weaponStatsProvider = weaponStatsProvider;
         }
 
         public override TaskStatus OnUpdate()
@@ -25,7 +26,7 @@ namespace BT.Nodes.Conditionals
 
         private bool IsWithinRange()
         {
-            return Vector3.Distance(_target.Value.position, _selfTransform.Value.position) <= _combatStatsProvider.GetCurrentCombatStats().AttackRange;
+            return Vector3.Distance(_target.Value.position, _selfTransform.Value.position) <= _weaponStatsProvider.GetCombatStats().AttackRange;
         }
     }
 }

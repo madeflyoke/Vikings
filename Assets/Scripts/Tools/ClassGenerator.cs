@@ -7,7 +7,7 @@ namespace Tools
 {
     public class ClassGenerator
     {
-        public void GenerateStatic(string className, IEnumerable<string> content, string path)
+        public void GenerateStatic(string className, IEnumerable<string> content, string path, bool isConstants)
         {
             string fileName = Path.Combine(path, className + ".cs");
             string classContent = String.Empty;
@@ -23,7 +23,8 @@ namespace Tools
             foreach (string property in content)
             {
                 string propertyName = new string(property.Where(char.IsLetter).ToArray());
-                classContent += $"\n\t\tpublic static string {propertyName} = \"{property}\";";
+                string keywordType = isConstants ? "const" : "static";
+                classContent += $"\n\t\tpublic {keywordType} string {propertyName} = \"{property}\";";
             }
 
             classContent += $"\n\t}}\n}}";

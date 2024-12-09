@@ -1,6 +1,7 @@
 using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 using BT.Shared;
+using Components.Movement.Interfaces;
 using UnityEngine.AI;
 
 namespace BT.Nodes.Conditionals
@@ -9,7 +10,7 @@ namespace BT.Nodes.Conditionals
     {
         private SharedDamageable _targetDamageable;
         private SharedTransform _targetTr;
-        private NavMeshAgent _agent;
+        private IMovementProvider _movementProvider;
 
         public void SetSharedVariables(SharedDamageable targetDamageable, SharedTransform targetTr)
         {
@@ -17,9 +18,9 @@ namespace BT.Nodes.Conditionals
             _targetTr = targetTr;
         }
 
-        public ValidateDamageableTarget Initialize(NavMeshAgent agent)
+        public ValidateDamageableTarget Initialize(IMovementProvider movementProvider)
         {
-            _agent = agent;
+            _movementProvider = movementProvider;
             return this;
         }
 
@@ -43,9 +44,8 @@ namespace BT.Nodes.Conditionals
         private bool ValidateNavMeshReachability()
         {
             var samplePositionExists = NavMesh.SamplePosition(_targetTr.Value.position, out NavMeshHit hit, 3f, 1);
-            var path = new NavMeshPath();
-            _agent.CalculatePath(hit.position, path);
-
+            var path = _movementProvider.CalculatePath(hit.position);
+            
             return samplePositionExists && path.status==NavMeshPathStatus.PathComplete;
         }
     }

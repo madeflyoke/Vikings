@@ -1,5 +1,6 @@
 using BehaviorDesigner.Runtime.Tasks;
 using BehaviorDesigner.Runtime;
+using Components.Movement.Interfaces;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -8,28 +9,27 @@ namespace BT.Nodes.Actions
     public class MoveToPoint : Action
     {
         private SharedVector3 _targetPoint;
-        private NavMeshAgent _agent;
+        private IMovementProvider _movementProvider;
 
         public void SetSharedVariables(SharedVector3 targetPoint)
         {
             _targetPoint = targetPoint;
         }
         
-        public MoveToPoint Initialize(NavMeshAgent agent)
+        public MoveToPoint Initialize(IMovementProvider movementProvider)
         {
-            _agent = agent;
+            _movementProvider = movementProvider;
             return this;
         }
 
         public override void OnStart()
         {
-            _agent.isStopped = false;
+            _movementProvider.StartMovement();
         }
 
         public override TaskStatus OnUpdate()
         {
-            _agent.destination = _targetPoint.Value;
-            
+            _movementProvider.SetMovementPoint(_targetPoint.Value);
             return TaskStatus.Success;
         }
     }

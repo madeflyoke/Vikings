@@ -1,4 +1,5 @@
 using Components;
+using Components.Animation.Interfaces;
 using Components.Interfaces;
 using Components.Movement;
 using Components.Settings;

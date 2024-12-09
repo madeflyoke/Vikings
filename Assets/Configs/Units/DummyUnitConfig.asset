@@ -47,7 +47,7 @@ MonoBehaviour:
       Data: 3|Components.Settings.HealthComponentSettings, Assembly-CSharp
     - Name: BaseHealth
       Entry: 3
-      Data: 10000
+      Data: 555
     - Name: 
       Entry: 8
       Data: 

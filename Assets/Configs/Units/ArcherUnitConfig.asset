@@ -16,10 +16,14 @@ MonoBehaviour:
     SerializedFormat: 2
     SerializedBytes: 
     ReferencedUnityObjects:
-    - {fileID: 9025364475223084031, guid: 9f1d99bd9bab41c449f3a508a144c505, type: 3}
+    - {fileID: 5098599661120741587, guid: 9f1d99bd9bab41c449f3a508a144c505, type: 3}
     - {fileID: 2655988077585873504, guid: b694cfbed49cce44e8cc48ae6a27e5b4, type: 2}
-    - {fileID: 9000000, guid: 84b42445372ad5347aebd5d216a95d4f, type: 3}
-    - {fileID: 22100000, guid: 73af6ccbb6dd99447b37c88d8e84b737, type: 2}
+    - {fileID: 9000000, guid: 3ea4e38fe026a8444889d20d9dd31657, type: 3}
+    - {fileID: 22100000, guid: e21dca704684ecc439407acf84170ade, type: 2}
+    - {fileID: 7083891485487361019, guid: 3ea4e38fe026a8444889d20d9dd31657, type: 3}
+    - {fileID: -1954687964646988558, guid: 3ea4e38fe026a8444889d20d9dd31657, type: 3}
+    - {fileID: 11400000, guid: ec417f66bdd34f5479bfc823099a50d6, type: 2}
+    - {fileID: 11400000, guid: b13914236992b3547a2174f6e3b8ea14, type: 2}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
@@ -34,7 +38,7 @@ MonoBehaviour:
         Assembly-CSharp]], mscorlib
     - Name: 
       Entry: 12
-      Data: 4
+      Data: 6
     - Name: 
       Entry: 7
       Data: 2|Components.Settings.ModelHolderSettings, Assembly-CSharp
@@ -49,7 +53,7 @@ MonoBehaviour:
       Data: 3|Components.Settings.HealthComponentSettings, Assembly-CSharp
     - Name: BaseHealth
       Entry: 3
-      Data: 100
+      Data: 75
     - Name: 
       Entry: 8
       Data: 
@@ -71,6 +75,142 @@ MonoBehaviour:
     - Name: OverrideAnimatorController
       Entry: 10
       Data: 3
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 6|Components.Settings.CombatComponentSettings, Assembly-CSharp
+    - Name: CombatActionsSequence
+      Entry: 7
+      Data: 7|System.Collections.Generic.List`1[[Components.BT.Actions.Interfaces.IBehaviorActionSetup,
+        Assembly-CSharp]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 3
+    - Name: 
+      Entry: 7
+      Data: 8|Components.BT.Actions.Setups.IdleTimedActionSetup, Assembly-CSharp
+    - Name: Duration
+      Entry: 4
+      Data: 0.5
+    - Name: CanBeInterrupted
+      Entry: 5
+      Data: false
+    - Name: OneTimed
+      Entry: 5
+      Data: true
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 9|Components.BT.Actions.Setups.ShootProjectileSetup, Assembly-CSharp
+    - Name: Conditions
+      Entry: 7
+      Data: 10|Components.BT.Actions.Conditions.CombatActionConditions, Assembly-CSharp
+    - Name: WeaponType
+      Entry: 3
+      Data: 50
+    - Name: WeaponMode
+      Entry: 3
+      Data: 1
+    - Name: AttackHandlers
+      Entry: 7
+      Data: 11|System.Collections.Generic.List`1[[System.Type, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: 12|System.RuntimeType, mscorlib
+    - Name: 
+      Entry: 1
+      Data: Components.Combat.Weapons.Handlers.ShotProjectileWeaponHandler, Assembly-CSharp
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: AnimationClipData
+      Entry: 7
+      Data: 13|Components.Animation.AnimationClipData, Assembly-CSharp
+    - Name: <AnimationClip>k__BackingField
+      Entry: 10
+      Data: 4
+    - Name: <TargetStateName>k__BackingField
+      Entry: 1
+      Data: CombatAction
+    - Name: <TransitionDuration>k__BackingField
+      Entry: 4
+      Data: 0.25
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: AttackDamageMultiplier
+      Entry: 3
+      Data: 1
+    - Name: EDITOR_finalDamage
+      Entry: 4
+      Data: 4
+    - Name: ReloadAnimation
+      Entry: 7
+      Data: 14|Components.Animation.AnimationClipData, Assembly-CSharp
+    - Name: <AnimationClip>k__BackingField
+      Entry: 10
+      Data: 5
+    - Name: <TargetStateName>k__BackingField
+      Entry: 1
+      Data: CombatAction
+    - Name: <TransitionDuration>k__BackingField
+      Entry: 4
+      Data: 0.25
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 15|Components.BT.Actions.Setups.IdleTimedActionSetup, Assembly-CSharp
+    - Name: Duration
+      Entry: 4
+      Data: 1
+    - Name: CanBeInterrupted
+      Entry: 5
+      Data: true
+    - Name: OneTimed
+      Entry: 5
+      Data: false
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: EDITOR_WeaponsConfig
+      Entry: 10
+      Data: 6
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 16|Components.Settings.BehaviorTreeComponentSettings, Assembly-CSharp
+    - Name: ExternalBehaviorTree
+      Entry: 10
+      Data: 7
     - Name: 
       Entry: 8
       Data: 

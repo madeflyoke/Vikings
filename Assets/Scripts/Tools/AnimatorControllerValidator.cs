@@ -99,7 +99,7 @@ namespace Tools
 
         private bool ValidateStatesNames()
         {
-            var values = AnimatorStatesNames.GetAnimatorNamesValues();
+            var values = AnimationStatesNames.GetAnimatorNamesValues();
             bool isOk = true;
 
             for (int z = 0; z < _animatorController.layers.Length; z++)

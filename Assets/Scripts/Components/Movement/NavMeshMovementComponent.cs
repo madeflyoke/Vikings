@@ -1,44 +1,59 @@
-using System;
-using Components.Animation;
-using Components.Animation.Interfaces;
 using Components.Interfaces;
-using UniRx;
+using Components.Movement.Interfaces;
+using UnityEngine;
 using UnityEngine.AI;
-using Utility;
 
 namespace Components.Movement
 {
-    public class NavMeshMovementComponent : IEntityComponent, IAnimationCallerHolder
+    public class NavMeshMovementComponent : IEntityComponent, IMovementProvider
     {
-        public AnimationCaller AnimationCaller { get; }
-        public NavMeshAgent Agent { get; }
-        
-        private IDisposable _agentSpeedObserver;
+        private readonly NavMeshAgent _agent;
 
         public NavMeshMovementComponent(NavMeshAgent agent)
         {
-            Agent = agent;
-            AnimationCaller = new AnimationCaller();
-        }
-
-        public void InitializeComponent()
-        {
-            _agentSpeedObserver = Observable.EveryUpdate()
-                .Subscribe(x =>
-                {
-                    UpdateAnimationValue();
-                });
+            _agent = agent;
         }
         
-        private void UpdateAnimationValue()
+        public void InitializeComponent()
         {
-            AnimationCaller.CallOnParameterValueChange?.Invoke(AnimatorParametersNames.CurrentVelocity,
-                    Agent.velocity.magnitude);
+            StopMovement();
+        }
+        
+        public void SetMovementPoint(Vector3 destinationPoint)
+        {
+            _agent.destination = destinationPoint;
         }
 
+        public void StartMovement()
+        {
+            if (_agent.isStopped)
+            {
+                _agent.isStopped = false;
+            }
+        }
+        
+        public void StopMovement()
+        {
+            if (_agent.isStopped==false)
+            {
+                _agent.isStopped = true;
+            }
+        }
+
+        public NavMeshPath CalculatePath(Vector3 destinationPos)
+        {
+            var path = new NavMeshPath();
+            _agent.CalculatePath(destinationPos, path);
+            return path;
+        }
+
+        public void SetRelatedComponentActive(bool value)
+        {
+            _agent.enabled = value;
+        }
+        
         public void Dispose()
         {
-            _agentSpeedObserver?.Dispose();
         }
     }
 }

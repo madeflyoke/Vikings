@@ -1,16 +1,20 @@
 using System;
 using System.Collections.Generic;
+using Components.BT.Actions.Conditions;
+using Components.Combat.Interfaces;
+using Factories.Interfaces;
 using Utility;
 
 namespace Components.Combat.Weapons
 {
-    public class WeaponsHolder : IDisposable
+    public class WeaponsHolder : IDisposable, IFactoryProduct, IWeaponStatsProvider
     {
         public event Action WeaponSetsDisabled;
         public event Action<WeaponSet> CurrentWeaponSetChanged;
         public event Action<DamageableTarget> CurrenTargetChanged;
 
-        public WeaponStats CurrentWeaponStats => _currentWeaponSet.WeaponStats.Clone();
+        private WeaponStats currentWeaponStats => _currentWeaponSet.WeaponStats;
+        
         private WeaponSet _currentWeaponSet;
         
         private readonly List<Weapon> _allWeapons;
@@ -40,10 +44,20 @@ namespace Components.Combat.Weapons
             _currentWeaponSet = weaponSet;
             CurrentWeaponSetChanged?.Invoke(_currentWeaponSet);
         }
+
+        public WeaponSet GetWeaponSetByConditions(CombatActionConditions combatActionConditions)
+        {
+            return _weaponsSets.Find(set => set.ValidateWeaponSetByConditions(combatActionConditions));
+        }
         
         public void Dispose()
         {
             _weaponsSets.ForEach(x => x.CallOnWeaponSetActivated -= OnWeaponSetActivated);
+        }
+
+        public WeaponStats GetCombatStats()
+        {
+            return currentWeaponStats;
         }
     }
 }

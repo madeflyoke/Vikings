@@ -2,22 +2,25 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using BehaviorDesigner.Runtime;
-using BT.Interfaces;
 using BT.Nodes.Actions;
+using BT.Nodes.Actions.Animation;
 using BT.Nodes.Conditionals;
+using BT.Nodes.Events;
 using BT.Shared.Containers;
 using BT.Tools;
 using BT.Utility;
 using Combat.CombatTargetsProviders.Interfaces;
 using Components.Animation;
 using Components.Animation.Interfaces;
+using Components.BT.Actions;
+using Components.BT.Actions.Interfaces;
 using Components.BT.Interfaces;
 using Components.BT.Units.Installers.Data;
-using Components.Combat.Actions;
 using Components.Combat.Interfaces;
 using Components.Health;
-using Interfaces;
-using UnityEngine.AI;
+using Components.Movement.Interfaces;
+using Sirenix.Utilities;
+using Utility;
 
 namespace Components.BT.Units.Installers
 {
@@ -38,10 +41,10 @@ namespace Components.BT.Units.Installers
 
             SetupSharedContainers(installerData.EntityHolder, installerData.DamageableComponent);
             
-            SetupSelfTasks(installerData.AnimationsRegister, installerData.Agent);
-            SetupNavMeshMovementTasks(installerData.Agent);
-            SetupOpponentTargetTasks(installerData.CombatActions, installerData.CombatTargetsProvider,
-                    installerData.CombatStatsProvider, installerData.Agent, installerData.CombatTargetHolder);
+            SetupSelfTasks(installerData.AnimationPlayer, installerData.MovementProvider);
+            SetupNavMeshMovementTasks(installerData.MovementProvider);
+            SetupCombatTasks(installerData.CombatActions, installerData.CombatTargetsProvider,
+                    installerData.WeaponStatsProvider, installerData.MovementProvider, installerData.CombatTargetHolder);
             
             installerData.BehaviorTreeStarter.BehaviorTreeStartEvent += ()=> _behaviorTree.FindTask<InPreparingProcess>().SetReady(); 
         }
@@ -66,7 +69,7 @@ namespace Components.BT.Units.Installers
             }
         }
 
-        private void SetupSelfTasks(IAnimationCallerRegister animationRegister, NavMeshAgent agent)
+        private void SetupSelfTasks(IAnimationPlayer animationPlayer, IMovementProvider movementProvider)
         {
             var selfDataContainer = GetSharedContainer<SelfGeneralDataSharedContainerVariable>().Value;
             
@@ -74,30 +77,33 @@ namespace Components.BT.Units.Installers
                 .FindTask<SelfValidate>()
                 .SetSharedVariables(selfDataContainer.SelfDamageable);
 
-            _behaviorTree.FindTasks<SetIdle>().ForEach(x =>
+            _behaviorTree.FindTasks<SetAnimation>(CommonBehaviorTasksNames.SetIdleAnimation).ForEach((x) =>
             {
-                x.Initialize();
-                animationRegister.RegisterAnimationCaller(x);
+                x.Initialize(animationPlayer, new AnimationClipData(targetStateName: AnimationStatesNames.Idle));
+            });
+            
+            _behaviorTree.FindTasks<SetAnimation>(CommonBehaviorTasksNames.SetMovementAnimation).ForEach((x) =>
+            {
+                x.Initialize(animationPlayer, new AnimationClipData(targetStateName: AnimationStatesNames.Moving));
             });
             
             _behaviorTree.FindTasks<SetDeath>().ForEach(x =>
             {
-                x.Initialize(agent);
-                animationRegister.RegisterAnimationCaller(x);
+                x.Initialize(movementProvider,animationPlayer);
             });
         }
 
-        private void SetupNavMeshMovementTasks(NavMeshAgent agent)
+        private void SetupNavMeshMovementTasks(IMovementProvider movementProvider)
         {
             var movementSharedContainer = GetSharedContainer<MovementSharedContainerVariable>().Value;
             var damageableTargetSharedContainer = GetSharedContainer<DamageableTargetSharedContainerVariable>().Value;
             var selfContainer = GetSharedContainer<SelfGeneralDataSharedContainerVariable>().Value;
 
             _behaviorTree
-                .FindTask<MoveToPoint>(MeleeUnitBehaviorTasksNames.MoveToPoint)
-                .Initialize(agent).SetSharedVariables(movementSharedContainer.CurrentDestinationPoint);
+                .FindTask<MoveToPoint>(CommonBehaviorTasksNames.MoveToPoint)
+                .Initialize(movementProvider).SetSharedVariables(movementSharedContainer.CurrentDestinationPoint);
             
-            _behaviorTree.FindTasks<StopMoving>().ForEach(x=>x.Initialize(agent));
+            _behaviorTree.FindTasks<StopMoving>().ForEach(x=>x.Initialize(movementProvider));
             
             _behaviorTree.FindTask<FindTargetClosestPoint>()
                 .SetSharedVariables(damageableTargetSharedContainer.TargetTr,
@@ -111,8 +117,8 @@ namespace Components.BT.Units.Installers
                 .SetSharedVariables(movementSharedContainer.CurrentDestinationPoint);
         }
 
-        private void SetupOpponentTargetTasks(IEnumerable<CombatAction> combatActions, ICombatTargetsProvider combatTargetsProvider,
-            ICombatStatsProvider combatStatsProvider, NavMeshAgent agent, ICombatTargetHolder combatTargetHolder)
+        private void SetupCombatTasks(IEnumerable<IBehaviorAction> combatActions, ICombatTargetsProvider combatTargetsProvider,
+            IWeaponStatsProvider weaponStatsProvider, IMovementProvider movementProvider, ICombatTargetHolder combatTargetHolder)
         {
             var damageableTargetSharedContainer = GetSharedContainer<DamageableTargetSharedContainerVariable>().Value;
             var selfGeneralContainer = GetSharedContainer<SelfGeneralDataSharedContainerVariable>().Value;
@@ -121,28 +127,36 @@ namespace Components.BT.Units.Installers
                 .FindTasks<ValidateDamageableTarget>()
                 .ForEach(x =>
                 {
-                    x.Initialize(agent)
+                    x.Initialize(movementProvider)
                         .SetSharedVariables
                             (damageableTargetSharedContainer.TargetDamageable, damageableTargetSharedContainer.TargetTr);
                 });
             
             _behaviorTree
-                .FindTask<FindClosestDamageableTarget>(MeleeUnitBehaviorTasksNames.FindClosestDamageableTarget)
+                .FindTask<FindClosestDamageableTarget>(CommonBehaviorTasksNames.FindClosestDamageableTarget)
                 .Initialize(combatTargetsProvider, combatTargetHolder)
                 .SetSharedVariables(selfGeneralContainer.SelfTransform,
                     damageableTargetSharedContainer.TargetDamageable, damageableTargetSharedContainer.TargetTr);
             
             _behaviorTree
-                .FindTask<IsTargetWithinRange>(MeleeUnitBehaviorTasksNames.IsTargetWithinRange)
+                .FindTask<IsTargetWithinRange>(CommonBehaviorTasksNames.IsTargetWithinRange)
                 .SetSharedVariables(selfGeneralContainer.SelfTransform, damageableTargetSharedContainer.TargetTr,
-                    combatStatsProvider);
+                    weaponStatsProvider);
             
             _behaviorTree
-                .FindTask<ProcessActions>(MeleeUnitBehaviorTasksNames.ProcessCombatActions)
+                .FindTask<IsTargetOutOfRangeNotified>(CommonBehaviorTasksNames.IsTargetOutOfRangeNotified)
+                .SetNotifier(new BehaviorEventSender(_behaviorTree, CommonBehaviorEventsNames.InterruptCombatActions))
+                .SetSharedVariables(selfGeneralContainer.SelfTransform, damageableTargetSharedContainer.TargetTr,
+                    weaponStatsProvider);
+            
+            _behaviorTree
+                .FindTask<ProcessActionsInterrupted>(CommonBehaviorTasksNames.ProcessCombatActions)
+                .SetupInterruption(false, 
+                    new BehaviorEventReceiver(_behaviorTree, CommonBehaviorEventsNames.InterruptCombatActions))
                 .Initialize(combatActions.Cast<IBehaviorAction>().ToList());
             
             _behaviorTree
-                .FindTask<RotateTo>(MeleeUnitBehaviorTasksNames.RotateToDamageable)
+                .FindTask<RotateTo>(CommonBehaviorTasksNames.RotateToDamageable)
                 .SetSharedVariables(selfGeneralContainer.SelfTransform, damageableTargetSharedContainer.TargetTr);
         }
 

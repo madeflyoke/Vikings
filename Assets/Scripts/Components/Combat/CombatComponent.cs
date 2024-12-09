@@ -1,55 +1,49 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using Components.Animation;
 using Components.Animation.Interfaces;
-using Components.Combat.Actions;
+using Components.BT.Actions.Interfaces;
 using Components.Combat.Interfaces;
 using Components.Combat.Weapons;
 using Components.Interfaces;
-using UniRx;
 using Utility;
 
 namespace Components.Combat
 {
-    public class CombatComponent : IEntityComponent, ICombatStatsProvider, ICombatTargetHolder, IAnimationCallerHolder
+    public class CombatComponent : IEntityComponent, IWeaponStatsProvider, ICombatTargetHolder
     {
-        public List<CombatAction> CombatActions { get; }
+        public List<IBehaviorAction> CombatActions { get; }
         
-        public AnimationCaller AnimationCaller { get; }
-        private WeaponStats BaseCombatStats=>_weaponsHolder.CurrentWeaponStats;
+        private WeaponStats BaseCombatStats=>_weaponsHolder.GetCombatStats().Copy();
         private WeaponStats _currentCombatStats;
 
+        private readonly IAnimatorValueChanger _animatorValueChanger;
         private readonly WeaponsHolder _weaponsHolder;
 
-        public CombatComponent(WeaponsHolder weaponsHolder, List<CombatAction> actions)
+        public CombatComponent(WeaponsHolder weaponsHolder, List<IBehaviorAction> actions, IAnimatorValueChanger animatorValueChanger)
         {
             CombatActions = actions;
             _weaponsHolder = weaponsHolder;
             _weaponsHolder.CurrentWeaponSetChanged += OnWeaponSetChanged;
-            AnimationCaller = new AnimationCaller();
-            
-            CombatActions.ForEach(x=>x.SetCombatStatsProvider(this));
+            _animatorValueChanger = animatorValueChanger;
         }
 
         private void OnWeaponSetChanged(WeaponSet weaponSet)
         {
             _currentCombatStats = BaseCombatStats;
+            SetAttackSpeed();
         }
 
         public void InitializeComponent()
         {
             _weaponsHolder.Initialize();
-            SetAttackSpeed();
         }
 
         public void SetAttackSpeed(float multiplier = 1f)
         {
             _currentCombatStats.AttackSpeed = BaseCombatStats.AttackSpeed * multiplier;
-            AnimationCaller.CallOnParameterValueChange?.Invoke(AnimatorParametersNames.CombatActionSpeedMultiplier, _currentCombatStats.AttackSpeed);
+            _animatorValueChanger.SetParameterValue(AnimatorParametersNames.CombatActionSpeedMultiplier, _currentCombatStats.AttackSpeed);
         }
 
-        public WeaponStats GetCurrentCombatStats()
+        public WeaponStats GetCombatStats()
         {
             return _currentCombatStats;
         }

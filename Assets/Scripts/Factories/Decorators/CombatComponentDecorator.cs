@@ -1,20 +1,15 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using Builders.Utility;
-using Components;
+using Components.Animation.Interfaces;
+using Components.BT.Actions.Factories;
+using Components.BT.Actions.Setups;
 using Components.Combat;
-using Components.Combat.Actions;
-using Components.Combat.Actions.Attributes;
-using Components.Combat.Actions.Setups;
 using Components.Combat.Weapons;
-using Components.Combat.Weapons.Enums;
+using Components.Combat.Weapons.Factories;
 using Components.Interfaces;
 using Components.Settings;
 using Components.View;
 using Interfaces;
-using UnityEngine;
+using Sirenix.Utilities;
 
 namespace Factories.Decorators
 {
@@ -23,13 +18,18 @@ namespace Factories.Decorators
         private readonly CombatComponentSettings _combatComponentSettings;
         private readonly HumanoidModelHolder _humanoidModelHolder;
         private readonly WeaponsConfig _weaponsConfig;
-
+        private readonly IAnimatorValueChanger _animatorValueChanger;
+        private readonly IAnimationPlayer _animationPlayer;
+        
         public CombatComponentDecorator(WeaponsConfig weaponsConfig,
-            HumanoidModelHolder humanoidModelHolder, CombatComponentSettings combatComponentSettings)
+            HumanoidModelHolder humanoidModelHolder, CombatComponentSettings combatComponentSettings, 
+            IAnimationPlayer animationPlayer, IAnimatorValueChanger animatorValueChanger)
         {
             _combatComponentSettings = combatComponentSettings;
             _humanoidModelHolder = humanoidModelHolder;
             _weaponsConfig = weaponsConfig;
+            _animationPlayer = animationPlayer;
+            _animatorValueChanger = animatorValueChanger;
         }
         
         public IEntityComponent Decorate()
@@ -39,77 +39,17 @@ namespace Factories.Decorators
 
         private CombatComponent CreateCombatComponent()
         {
-            var actions = CreateRelatedCombatActions(out WeaponsHolder weaponsHolder);
+            var combatActionsSetupList = _combatComponentSettings.CombatActionsSequence;
             
-            return new CombatComponent(weaponsHolder, actions);
+            var weaponActionsSetups = combatActionsSetupList.FilterCast<CommonWeaponActionSetup>().ToList();
+            var weaponsHolder = new WeaponsHolderFactory(_weaponsConfig, _humanoidModelHolder, weaponActionsSetups).CreateProduct();
+
+            var actionsFactory = new CombatBehaviorActionsFactory(weaponsHolder, _animationPlayer);
+            var actions = combatActionsSetupList.Select(setup => actionsFactory.SetSpecifications(setup).CreateProduct()).ToList();
+
+            var component =new CombatComponent(weaponsHolder, actions,_animatorValueChanger);
+            return component;
         }
 
-        private List<CombatAction> CreateRelatedCombatActions(out WeaponsHolder weaponsHolder)
-        {
-            var combatActionsSetup = _combatComponentSettings.CombatActionsSequence;
-
-            Dictionary<CommonCombatActionSetup, Type> relatedCombatActionsTypes = combatActionsSetup.ToDictionary(x => x,
-                z => z.GetType()
-                    .GetCustomAttribute<CombatActionVariantAttribute>().CombatActionVariant); //reflect attributes to get related actions by setups
-            
-            List<CombatAction> relatedCombatActions = new List<CombatAction>();
-
-            List<Weapon> weapons = CreateWeapons(relatedCombatActionsTypes.Keys.Select(x=>x.Conditions.WeaponType).ToList());
-            
-            List<WeaponSet> weaponsSets = new List<WeaponSet>();
-            weaponsHolder = new WeaponsHolder(weapons, weaponsSets);
-            
-            foreach (var item in relatedCombatActionsTypes)
-            {
-                CombatAction action = (CombatAction) Activator.CreateInstance(item.Value);
-                CommonCombatActionSetup setup = item.Key;
-                WeaponSet weaponSet =null;
-                
-                switch (setup.Conditions.WeaponMode)
-                {
-                    case WeaponMode.SINGLE:
-                        var weapon = weapons.FirstOrDefault(x => x.ValidateWeaponByConditions(setup.Conditions));
-                        weaponSet = new WeaponSet(weapon, weaponsHolder);
-                        break;
-                    case WeaponMode.DUAL:
-                        List<Weapon> dualWeapons = weapons.Where(x => x.ValidateWeaponByConditions(setup.Conditions)).Take(2).ToList();
-                        if (dualWeapons.Count!=2)
-                        {
-                            var additionalWeapon = CreateWeapon(setup.Conditions.WeaponType);
-                            weapons.Add(additionalWeapon);
-                            dualWeapons.Add(additionalWeapon);
-                        }
-                        weaponSet = new WeaponSet(new WeaponPair(dualWeapons),weaponsHolder);
-                        break;
-                }
-                
-                weaponsSets.Add(weaponSet);
-                action.Initialize(item.Key, weaponSet);
-                relatedCombatActions.Add(action);
-            }
-            
-            return relatedCombatActions;
-        }
-        
-        private List<Weapon> CreateWeapons(List<WeaponType> weaponTypes)
-        {
-            return weaponTypes.Distinct().Select(CreateWeapon).ToList();
-        }
-        
-        private Weapon CreateWeapon(WeaponType weaponType)
-        {
-            GameObjectComponentBuilder<Weapon> goBuilder = new ();
-            
-            var weaponData = _weaponsConfig.GetWeaponData(weaponType);
-
-            var weapon = goBuilder
-                .SetPrefab(weaponData.Prefab)
-                .SetParent(_humanoidModelHolder.RightHandPoint)
-                .WithOriginalPositionAndRotation()
-                .Build();
-            weapon.SetData(weaponData, _humanoidModelHolder);
-
-            return weapon;
-        }
     }
 }

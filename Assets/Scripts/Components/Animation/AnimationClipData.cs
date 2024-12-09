@@ -18,7 +18,7 @@ namespace Components.Animation
         public AnimationClipData(AnimationClip animationClip = default, string targetStateName = default, float transitionDuration = 0.25f)
         {
             AnimationClip = animationClip;
-            TargetStateName = targetStateName ?? AnimatorStatesNames.Idle;
+            TargetStateName = targetStateName ?? AnimationStatesNames.Idle;
             TransitionDuration = transitionDuration;
         }
         
@@ -56,7 +56,7 @@ namespace Components.Animation
 
         private List<string> GetStatesNames()
         {
-            return AnimatorStatesNames.GetAnimatorNamesValues();
+            return AnimationStatesNames.GetAnimatorNamesValues();
         }
 #endif
     }

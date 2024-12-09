@@ -1,23 +1,22 @@
 using BehaviorDesigner.Runtime.Tasks;
+using Components.Movement.Interfaces;
+using UnityEngine;
 using UnityEngine.AI;
 
 namespace BT.Nodes.Actions
 {
     public class StopMoving : Action
     {
-        private NavMeshAgent _agent;
+        private IMovementProvider _movementProvider;
         
-        public void Initialize(NavMeshAgent agent)
+        public void Initialize(IMovementProvider movementProvider)
         {
-            _agent = agent;
+            _movementProvider = movementProvider;
         }
 
         public override TaskStatus OnUpdate()
         {
-            if (_agent.hasPath)
-            {
-                _agent.isStopped = true;
-            }
+            _movementProvider.StopMovement();
             return TaskStatus.Success;
         }
     }

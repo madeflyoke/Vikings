@@ -1,11 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using Components.BT.Actions.Interfaces;
+using Components.BT.Actions.Setups;
 using Components.Combat;
-using Components.Combat.Actions.Setups;
 using Components.Combat.Weapons;
 using Components.Combat.Weapons.Enums;
 using Components.Settings.Interfaces;
 using Sirenix.Serialization;
+using Sirenix.Utilities;
 using UnityEngine;
 
 namespace Components.Settings
@@ -13,7 +16,7 @@ namespace Components.Settings
     [Serializable]
     public class CombatComponentSettings : IComponentSettings
     {
-        [OdinSerialize] public List<CommonCombatActionSetup> CombatActionsSequence;
+        [OdinSerialize] public List<IBehaviorActionSetup> CombatActionsSequence;
 
 #if UNITY_EDITOR
 
@@ -23,9 +26,9 @@ namespace Components.Settings
         {
             if (CombatActionsSequence!=null && CombatActionsSequence.Count>0 && EDITOR_WeaponsConfig!=null)
             {
-                CombatActionsSequence.ForEach(x=>
+                CombatActionsSequence.FilterCast<CommonWeaponActionSetup>().ForEach(x=>
                 {
-                    if (x.Conditions != null)
+                    if (x.Conditions != null && x.Conditions.WeaponType!=WeaponType.NONE)
                     {
                         x.EDITOR_finalDamage = x.AttackDamageMultiplier *
                                                EDITOR_WeaponsConfig.GetWeaponData(x.Conditions.WeaponType).Stats

@@ -9,7 +9,7 @@ namespace Components.Combat.Weapons
     {
         public WeaponType Type;
         public Weapon Prefab;
-        public WeaponStats Stats => _stats.Clone();
+        public WeaponStats Stats => _stats.Copy();
         [SerializeField] private WeaponStats _stats;
     }
 }

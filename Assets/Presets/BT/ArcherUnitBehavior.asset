@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b23f08d2ae4cba14087c1ed36193d82b, type: 3}
+  m_Name: ArcherUnitBehavior
+  m_EditorClassIdentifier: 
+  mBehaviorSource:
+    behaviorName: Behavior
+    behaviorDescription: 
+    mTaskData:
+      types: []
+      parentIndex: 
+      startIndex: 
+      variableStartIndex: 
+      JSONSerialization: '{"EntryTask":{"Type":"BehaviorDesigner.Runtime.Tasks.EntryTask","NodeData":{"Offset":"(234.041672,-0.00833511353)"},"ID":0,"Name":"Entry","Instant":true},"RootTask":{"Type":"BehaviorDesigner.Runtime.Tasks.Repeater","NodeData":{"Offset":"(-0.124950409,128.7779)"},"ID":1,"Name":"Repeater","Instant":true,"SharedIntcount":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":null,"Int32mValue":0},"SharedBoolrepeatForever":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":true},"SharedBoolendOnFailure":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":false},"Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.Selector","NodeData":{"Offset":"(-4.95830727,131.007553)"},"ID":2,"Name":"Selector","Instant":true,"AbortTypeabortType":"Both","Children":[{"Type":"BT.Nodes.Conditionals.InPreparingProcess","NodeData":{"Offset":"(-1220,221.764771)"},"ID":3,"Name":"In
+        Preparing Process","Instant":true},{"Type":"BehaviorDesigner.Runtime.Tasks.Inverter","NodeData":{"Offset":"(-983.8422,228.123276)"},"ID":4,"Name":"Inverter","Instant":true,"Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.Selector","NodeData":{"Offset":"(2.96779633,110.149353)"},"ID":5,"Name":"Selector","Instant":true,"AbortTypeabortType":"LowerPriority","Children":[{"Type":"BT.Nodes.Actions.SelfValidate","NodeData":{"Offset":"(-66.95648,130)"},"ID":6,"Name":"Self
+        Validate","Instant":true},{"Type":"BT.Nodes.Actions.SetDeath","NodeData":{"Offset":"(69.5652,130.869568)"},"ID":7,"Name":"Set
+        Death","Instant":true}]}]},{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(-390.0119,331.698853)"},"ID":8,"Name":"FindAndChaseTargetSequence","Instant":true,"AbortTypeabortType":"Both","Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.Selector","NodeData":{"Offset":"(-290.0356,178.441666)"},"ID":9,"Name":"TargetCheckSelector","Instant":true,"AbortTypeabortType":"Both","Children":[{"Type":"BT.Nodes.Conditionals.ValidateDamageableTarget","NodeData":{"Offset":"(-644.365,140)"},"ID":10,"Name":"Validate
+        Damageable Target","Instant":true},{"Type":"BehaviorDesigner.Runtime.Tasks.Inverter","NodeData":{"Offset":"(-439.4189,138.750031)"},"ID":11,"Name":"Inverter","Instant":true,"Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(-61.2181854,115.750488)"},"ID":12,"Name":"Sequence","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"BT.Nodes.Actions.StopMoving","NodeData":{"Offset":"(-65.78945,106.84211)"},"ID":13,"Name":"Stop
+        Moving","Instant":true},{"Type":"BT.Nodes.Actions.Animation.SetAnimation","NodeData":{"Offset":"(68.94733,111.578369)"},"ID":14,"Name":"Set
+        Idle Animation","Instant":true}]}]},{"Type":"BehaviorDesigner.Runtime.Tasks.UntilSuccess","NodeData":{"Offset":"(-173.726746,150)"},"ID":15,"Name":"Until
+        Success","Instant":true,"Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(65.78944,96.84211)"},"ID":16,"Name":"Sequence","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"BT.Nodes.Actions.FindClosestDamageableTarget","NodeData":{"Offset":"(-115.706543,131.739136)"},"ID":17,"Name":"Find
+        Closest Damageable Target","Instant":true},{"Type":"BT.Nodes.Conditionals.ValidateDamageableTarget","NodeData":{"Offset":"(105.796967,134.583267)"},"ID":18,"Name":"Validate
+        Damageable Target","Instant":true}]}]}]},{"Type":"BehaviorDesigner.Runtime.Tasks.Inverter","NodeData":{"Offset":"(-47.776638,185.385574)"},"ID":19,"Name":"Inverter","Instant":true,"Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(3.74995422,117.082336)"},"ID":20,"Name":"CheckRangeAndStopSequence","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"BT.Nodes.Conditionals.IsTargetWithinRange","NodeData":{"Offset":"(-109.027756,139.669113)"},"ID":21,"Name":"Is
+        Target Within Range","Instant":true},{"Type":"BT.Nodes.Actions.StopMoving","NodeData":{"Offset":"(56.868557,141.092926)"},"ID":22,"Name":"Stop
+        Moving","Instant":true}]}]},{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(350.918854,179.008728)"},"ID":23,"Name":"MoveTowardsTargetSequence","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"BT.Nodes.Actions.FindTargetClosestPoint","NodeData":{"Offset":"(-134.093109,136.208069)"},"ID":24,"Name":"Find
+        Target Closest Point","Instant":true},{"Type":"BT.Nodes.Actions.SetClosestNavMeshPoint","NodeData":{"Offset":"(-22.5669212,234.782166)"},"ID":25,"Name":"Set
+        Closest Nav Mesh Point","Instant":true},{"Type":"BT.Nodes.Actions.MoveToPoint","NodeData":{"Offset":"(90.39946,140.715225)"},"ID":26,"Name":"Move
+        To Point","Instant":true},{"Type":"BT.Nodes.Actions.Animation.SetAnimation","NodeData":{"Offset":"(188.7877,234.545517)"},"ID":27,"Name":"Set
+        Movement Animation","Instant":true}]}]},{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(567.839539,232.174133)"},"ID":28,"Name":"CombatSequence","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.Parallel","NodeData":{"Offset":"(-0.829431534,132.7436)"},"ID":29,"Name":"CombatParallel","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.Inverter","NodeData":{"Offset":"(-163.093,114.061218)"},"ID":30,"Name":"Inverter","Instant":true,"Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.UntilFailure","NodeData":{"Offset":"(0.4347763,113.478271)"},"ID":31,"Name":"Until
+        Failure","Instant":true,"Children":[{"Type":"BT.Nodes.Conditionals.IsTargetOutOfRangeNotified","NodeData":{"Offset":"(0,100)"},"ID":32,"Name":"Is
+        Target Out Of Range Notified","Instant":true}]}]},{"Type":"BehaviorDesigner.Runtime.Tasks.Repeater","NodeData":{"Offset":"(-1.881506,123.30954)"},"ID":33,"Name":"Repeater","Instant":true,"SharedIntcount":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":null,"Int32mValue":0},"SharedBoolrepeatForever":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":true},"SharedBoolendOnFailure":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":true},"Children":[{"Type":"BT.Nodes.Actions.RotateTo","NodeData":{"Offset":"(-4.760086,113.188843)"},"ID":34,"Name":"RotateToDamageable","Instant":true}]},{"Type":"BehaviorDesigner.Runtime.Tasks.Repeater","NodeData":{"Offset":"(171.862091,125.1515)"},"ID":35,"Name":"Repeater","Instant":true,"SharedIntcount":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":null,"Int32mValue":0},"SharedBoolrepeatForever":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":true},"SharedBoolendOnFailure":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":true},"Children":[{"Type":"BT.Nodes.Actions.ProcessActionsInterrupted","NodeData":{"Offset":"(2.35652733,115.104675)"},"ID":36,"Name":"ProcessCombatActions","Instant":true}]}]}]}]}]},"Variables":[{"Type":"BT.Shared.Containers.DamageableTargetSharedContainerVariable","Name":"DamageableTargetContainer","IsShared":true,"DamageableTargetSharedContainermValue":{"SharedDamageableTargetDamageable":{"Type":"BT.Shared.SharedDamageable","Name":null},"SharedTransformTargetTr":{"Type":"BehaviorDesigner.Runtime.SharedTransform","Name":null}}},{"Type":"BT.Shared.Containers.SelfGeneralDataSharedContainerVariable","Name":"SelfGeneralContainer","IsShared":true,"SelfGeneralDataSharedContainermValue":{"SharedDamageableSelfDamageable":{"Type":"BT.Shared.SharedDamageable","Name":null},"SharedTransformSelfTransform":{"Type":"BehaviorDesigner.Runtime.SharedTransform","Name":null}}},{"Type":"BT.Shared.Containers.MovementSharedContainerVariable","Name":"MovementContainer","IsShared":true,"MovementSharedContainermValue":{"SharedVector3CurrentDestinationPoint":{"Type":"BehaviorDesigner.Runtime.SharedVector3","Name":null,"Vector3mValue":"(0,0,0)"}}}]}'
+      fieldSerializationData:
+        typeName: []
+        fieldNameHash: 
+        startIndex: 
+        dataPosition: 
+        unityObjects: []
+        byteData: 
+        byteDataArray: 
+      Version: 1.7.7

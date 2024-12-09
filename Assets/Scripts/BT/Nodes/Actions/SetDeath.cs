@@ -1,28 +1,29 @@
 using BehaviorDesigner.Runtime.Tasks;
 using Components.Animation;
 using Components.Animation.Interfaces;
+using Components.Movement.Interfaces;
 using UnityEngine.AI;
 using Utility;
 
 namespace BT.Nodes.Actions
 {
-    public class SetDeath : Action, IAnimationCallerHolder
+    public class SetDeath : Action
     {
-        public AnimationCaller AnimationCaller { get; private set; }
-        private NavMeshAgent _agent;
+        private IAnimationPlayer _animationPlayer;
+        private IMovementProvider _movementProvider;
         
-        public SetDeath Initialize(NavMeshAgent agent)
+        public SetDeath Initialize(IMovementProvider movementProvider,IAnimationPlayer animationPlayer)
         {
-            AnimationCaller = new AnimationCaller();
-            _agent = agent;
+            _animationPlayer = animationPlayer;
+            _movementProvider = movementProvider;
             return this;
         }
         
         public override void OnStart()
         {
-            AnimationCaller.CallOnAnimationWithCallback?.Invoke(AnimationCaller,new AnimationClipData(targetStateName:AnimatorStatesNames.Death),null);
-            _agent.isStopped = true;
-            _agent.enabled = false;
+            _animationPlayer.PlayCustomAnimation(new AnimationClipData(targetStateName:AnimationStatesNames.Death));
+            _movementProvider.StopMovement();
+            _movementProvider.SetRelatedComponentActive(false);
         }
 
         public override TaskStatus OnUpdate()
